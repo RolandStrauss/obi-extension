@@ -37,7 +37,7 @@ env.addFilter("typename", (obj: any) => {
 
 export class lbtConfiguration {
 
-  public static currentPanel: lbtSourceConfiguration | undefined;
+  public static currentPanel: lbtConfiguration | undefined;
   private readonly _panel: WebviewPanel;
   private _disposables: Disposable[] = [];
   private static _context: vscode.ExtensionContext;
@@ -70,21 +70,21 @@ export class lbtConfiguration {
    */
   public static async render(context: vscode.ExtensionContext, extensionUri: Uri, source_config: string) {
 
-    lbtSourceConfiguration._context = context;
-    lbtSourceConfiguration._extensionUri = extensionUri;
-    lbtSourceConfiguration.source_config = lbtTools.convert_local_filepath_2_lbt_filepath(source_config);
+    lbtConfiguration._context = context;
+    lbtConfiguration._extensionUri = extensionUri;
+    lbtConfiguration.source_config = lbtTools.convert_local_filepath_2_lbt_filepath(source_config);
 
-    if (lbtSourceConfiguration.currentPanel) {
-      lbtSourceConfiguration.currentPanel.dispose();
+    if (lbtConfiguration.currentPanel) {
+      lbtConfiguration.currentPanel.dispose();
     }
     // If a webview panel does not already exist create and show a new one
     const panel = this.createNewPanel(extensionUri);
 
-    panel.webview.html = await lbtSourceConfiguration.generate_html(extensionUri, panel.webview);
+    panel.webview.html = await lbtConfiguration.generate_html(extensionUri, panel.webview);
 
     panel.webview.onDidReceiveMessage(this.onReceiveMessage);
 
-    lbtSourceConfiguration.currentPanel = new lbtSourceConfiguration(panel, extensionUri);
+    lbtConfiguration.currentPanel = new lbtConfiguration(panel, extensionUri);
 
   }
 
@@ -100,7 +100,7 @@ export class lbtConfiguration {
     let source_config: SourceConfig|undefined;
 
     if (source_configs)
-      source_config = source_configs[lbtSourceConfiguration.source_config];
+      source_config = source_configs[lbtConfiguration.source_config];
 
     const html = env.render('controller/config_source_details.html',
       {
@@ -108,8 +108,8 @@ export class lbtConfiguration {
         config_css: getUri(webview, extensionUri, ["asserts/css", "config.css"]),
         main_java_script: getUri(webview, extensionUri, ["out", "source_config.js"]),
         icons: {debug_start: '$(preview)'},
-        source: lbtSourceConfiguration.source_config,
-        source_file: DirTool.get_encoded_file_URI(path.join(config.general['source-dir']||'src', lbtSourceConfiguration.source_config)),
+        source: lbtConfiguration.source_config,
+        source_file: DirTool.get_encoded_file_URI(path.join(config.general['source-dir']||'src', lbtConfiguration.source_config)),
         source_config_file: DirTool.get_encoded_file_URI(Constants.LBT_SOURCE_CONFIG_FILE),
         source_config: source_config
       }
@@ -123,12 +123,12 @@ export class lbtConfiguration {
 
   public static async update(): Promise<void> {
 
-    const panel = lbtSourceConfiguration.currentPanel;
+    const panel = lbtConfiguration.currentPanel;
 
     if (!panel)
       return;
 
-    panel._panel.webview.html = await lbtSourceConfiguration.generate_html(lbtSourceConfiguration._extensionUri, lbtSourceConfiguration.currentPanel?._panel.webview);
+    panel._panel.webview.html = await lbtConfiguration.generate_html(lbtConfiguration._extensionUri, lbtConfiguration.currentPanel?._panel.webview);
 
   }
 
@@ -149,11 +149,11 @@ export class lbtConfiguration {
     switch (command) {
 
       case "add_source_cmd":
-        lbtSourceConfiguration.add_source_cmd(message.key, message.value);
+        lbtConfiguration.add_source_cmd(message.key, message.value);
         break;
 
       case "delete_source_cmd":
-        lbtSourceConfiguration.delete_source_cmd(message.key);
+        lbtConfiguration.delete_source_cmd(message.key);
         break;
 
       case "add_source_setting":
@@ -163,19 +163,19 @@ export class lbtConfiguration {
             message.value = message.value.split(/\r?\n/);
             break;
         }
-        lbtSourceConfiguration.add_source_setting(message.key, message.value);
+        lbtConfiguration.add_source_setting(message.key, message.value);
         break;
 
       case "delete_source_setting":
-        lbtSourceConfiguration.delete_source_setting(message.key);
+        lbtConfiguration.delete_source_setting(message.key);
         break;
 
       case "save_config":
-        lbtSourceConfiguration.save_config(message.settings, message.source_cmds, message.steps);
+        lbtConfiguration.save_config(message.settings, message.source_cmds, message.steps);
         break;
 
       case "reload":
-        lbtSourceConfiguration.update();
+        lbtConfiguration.update();
         break;
     }
     return;
@@ -185,26 +185,28 @@ export class lbtConfiguration {
 
   private static delete_source_setting(key:string) {
     let source_configs: SourceConfigList|undefined = AppConfig.get_source_configs();
-    const source_name:string = lbtSourceConfiguration.source_config;
+    const source_name:string = lbtConfiguration.source_config;
+    const ws = Workspace.get_workspace();
 
     if (source_configs && source_configs[source_name] && source_configs[source_name].settings){
       delete source_configs[source_name].settings[key];
     }
 
-    DirTool.write_toml(path.join(Workspace.get_workspace(), Constants.LBT_SOURCE_CONFIG_FILE), source_configs || {});
+    DirTool.write_toml(path.join(ws || '', Constants.LBT_SOURCE_CONFIG_FILE), source_configs || {});
   }
 
 
 
   private static delete_source_cmd(key:string) {
     let source_configs: SourceConfigList|undefined = AppConfig.get_source_configs();
-    const source_name:string = lbtSourceConfiguration.source_config;
+    const source_name:string = lbtConfiguration.source_config;
+    const ws = Workspace.get_workspace();
 
     if (source_configs && source_configs[source_name] && source_configs[source_name]['source-cmds']){
       delete source_configs[source_name]['source-cmds'][key];
     }
 
-    DirTool.write_toml(path.join(Workspace.get_workspace(), Constants.LBT_SOURCE_CONFIG_FILE), source_configs || {});
+    DirTool.write_toml(path.join(ws || '', Constants.LBT_SOURCE_CONFIG_FILE), source_configs || {});
   }
 
 
@@ -212,7 +214,8 @@ export class lbtConfiguration {
   private static add_source_cmd(key:string, value:string) {
     let source_configs: SourceConfigList|undefined = AppConfig.get_source_configs();
     let source_config: SourceConfig = {"source-cmds": {key: value}, settings: {}, steps: []};
-    const source_name:string = lbtSourceConfiguration.source_config;
+    const source_name:string = lbtConfiguration.source_config;
+    const ws = Workspace.get_workspace();
 
     if (!source_configs || !source_configs[source_name]){
       source_configs = {source_name : source_config};
@@ -225,7 +228,7 @@ export class lbtConfiguration {
       source_configs[source_name]['source-cmds'][key] = value;
     }
 
-    DirTool.write_toml(path.join(Workspace.get_workspace(), Constants.LBT_SOURCE_CONFIG_FILE), source_configs);
+    DirTool.write_toml(path.join(ws || '', Constants.LBT_SOURCE_CONFIG_FILE), source_configs);
   }
 
 
@@ -233,7 +236,8 @@ export class lbtConfiguration {
   private static add_source_setting(key:string, value:string) {
     let source_configs: SourceConfigList|undefined = AppConfig.get_source_configs();
     let source_config: SourceConfig = {"source-cmds": {}, settings: {key: value}, steps: []};
-    const source_name:string = lbtSourceConfiguration.source_config;
+    const source_name:string = lbtConfiguration.source_config;
+    const ws = Workspace.get_workspace();
 
     if (!source_configs || !source_configs[source_name]){
       source_configs = {source_name : source_config};
@@ -246,7 +250,7 @@ export class lbtConfiguration {
       source_configs[source_name].settings[key] = value;
     }
 
-    DirTool.write_toml(path.join(Workspace.get_workspace(), Constants.LBT_SOURCE_CONFIG_FILE), source_configs);
+    DirTool.write_toml(path.join(ws || '', Constants.LBT_SOURCE_CONFIG_FILE), source_configs);
   }
 
 
@@ -255,14 +259,15 @@ export class lbtConfiguration {
 
     let source_configs: SourceConfigList|undefined = AppConfig.get_source_configs();
     let source_config: SourceConfig = {"source-cmds": source_cmds, settings: settings, steps: steps};
-    const source_name:string = lbtSourceConfiguration.source_config;
+    const source_name:string = lbtConfiguration.source_config;
+    const ws = Workspace.get_workspace();
 
     if (!source_configs)
       source_configs = {source_name : source_config};
     else
       source_configs[source_name] = source_config;
 
-    DirTool.write_toml(path.join(Workspace.get_workspace(), Constants.LBT_SOURCE_CONFIG_FILE), source_configs);
+    DirTool.write_toml(path.join(ws || '', Constants.LBT_SOURCE_CONFIG_FILE), source_configs);
 
     vscode.window.showInformationMessage('Source configuration saved');
 
@@ -296,7 +301,7 @@ export class lbtConfiguration {
    * Cleans up and disposes of webview resources when the webview panel is closed.
    */
   public dispose() {
-    lbtSourceConfiguration.currentPanel = undefined;
+    lbtConfiguration.currentPanel = undefined;
 
     // Dispose of the current webview panel
     this._panel.dispose();

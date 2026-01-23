@@ -407,7 +407,9 @@ export class AppConfig {
   public static get_profile_app_config_list(): { alias: string; file: string }[] {
 
     let configs: { alias: string; file: string }[] = [{'alias': 'Default User Config', 'file': Constants.LBT_APP_CONFIG_USER}];
-    const files = DirTool.list_dir(path.join(Workspace.get_workspace(), Constants.LBT_APP_CONFIG_DIR));
+    const ws = Workspace.get_workspace();
+    if (!ws) return configs;
+    const files = DirTool.list_dir(path.join(ws, Constants.LBT_APP_CONFIG_DIR));
 
     for (const file of files) {
       if (file.endsWith('.toml') && (file.startsWith('.user-app-config') && file != Constants.LBT_APP_CONFIG && file != Constants.LBT_APP_CONFIG_USER)) {
@@ -451,7 +453,8 @@ export class AppConfig {
 
   public static get_current_profile_app_config_file(): string {
 
-    return path.join(Constants.LBT_APP_CONFIG_DIR, AppConfig.get_current_profile_app_config_name());
+    const profileName = AppConfig.get_current_profile_app_config_name();
+    return profileName ? path.join(Constants.LBT_APP_CONFIG_DIR, profileName) : Constants.LBT_APP_CONFIG_DIR;
   }
 
 
@@ -469,7 +472,8 @@ export class AppConfig {
 
   public static get_source_configs(): SourceConfigList|undefined {
 
-    const source_config: SourceConfigList|undefined = DirTool.get_toml(path.join(Workspace.get_workspace(), Constants.LBT_SOURCE_CONFIG_FILE));
+    const ws = Workspace.get_workspace();
+    const source_config: SourceConfigList|undefined = ws ? DirTool.get_toml(path.join(ws, Constants.LBT_SOURCE_CONFIG_FILE)) : undefined;
 
     return source_config;
   }

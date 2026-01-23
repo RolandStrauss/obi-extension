@@ -87,7 +87,8 @@ export class DeploymentConfig {
 
 
   public static get_deployment_config() : Config {
-    const toml_file: string = path.join(Workspace.get_workspace(), Constants.DEPLOYMENT_CONFIG_FILE);
+    const ws = Workspace.get_workspace();
+    const toml_file: string = path.join(ws || '', Constants.DEPLOYMENT_CONFIG_FILE);
     const config: Config|undefined = DirTool.get_toml(toml_file);
     if (!config) {
       return {"i-releaser": {}};
@@ -165,7 +166,8 @@ export class DeploymentConfig {
 
   private static save_config(data : Config) {
 
-    const toml_file: string = path.join(Workspace.get_workspace(), Constants.DEPLOYMENT_CONFIG_FILE);
+    const ws = Workspace.get_workspace();
+    const toml_file: string = path.join(ws || '', Constants.DEPLOYMENT_CONFIG_FILE);
     data['i-releaser']['auth-token']
     lbtTools.ext_context.secrets.store('lbt|deployment|http_auth_token', data['i-releaser']['auth-token'] || '');
     delete data['i-releaser']['auth-token'];

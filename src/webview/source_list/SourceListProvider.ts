@@ -160,10 +160,10 @@ export class SourceListProvider implements vscode.TreeDataProvider<SourceListIte
     if (!source_list)
       throw new Error('Canceled by user. No source filter name provided');
 
-
+    const ws = Workspace.get_workspace();
     const data: source.IQualifiedSource[] = [{ "source-lib": '*', "source-file": '*', 'source-member': '*', "use-regex": false, "show-empty-folders": true }];
 
-    DirTool.write_file(path.join(Workspace.get_workspace(), Constants.SOURCE_FILTER_FOLDER_NAME, `${source_list}.json`), JSON.stringify(data, undefined, 2));
+    DirTool.write_file(path.join(ws || '', Constants.SOURCE_FILTER_FOLDER_NAME, `${source_list}.json`), JSON.stringify(data, undefined, 2));
 
     return `${source_list}.json`;
   }
@@ -182,8 +182,9 @@ export class SourceListProvider implements vscode.TreeDataProvider<SourceListIte
     if (!source_file_folder || !item.label)
       throw new Error('Canceled by user. No source folder name provided');
 
+    const ws = Workspace.get_workspace();
     const src_folder = app_config.general['source-dir']||'src';
-    const new_folder = path.join(Workspace.get_workspace(), src_folder, item.label, source_file_folder);
+    const new_folder = path.join(ws || '', src_folder, item.label, source_file_folder);
 
     // Create the new directory if it doesn't exist
     if (!DirTool.dir_exists(new_folder)) {
@@ -216,8 +217,9 @@ export class SourceListProvider implements vscode.TreeDataProvider<SourceListIte
     if (!source_member || !item.src_lib)
       throw new Error('Canceled by user. No source member name provided');
 
+    const ws = Workspace.get_workspace();
     const src_folder = app_config.general['source-dir']||'src';
-    const new_file = path.join(Workspace.get_workspace(), src_folder, item.src_lib, item.label, source_member);
+    const new_file = path.join(ws || '', src_folder, item.src_lib, item.label, source_member);
     DirTool.write_file(new_file, '');
     vscode.window.showTextDocument(vscode.Uri.file(new_file));
 
@@ -266,7 +268,7 @@ export class SourceListProvider implements vscode.TreeDataProvider<SourceListIte
 
       const source_infos: source.ISourceInfos = await lbtTools.get_source_infos();
       if (source_infos[`${source_path}/${member}`]) {
-        description = typeof source_infos[`${source_path}/${member}`].description === 'string' ? source_infos[`${source_path}/${member}`].description : '';
+        description = typeof source_infos[`${source_path}/${member}`].description === 'string' ? source_infos[`${source_path}/${member}`].description as string : '';
       }
     }
 
@@ -290,10 +292,12 @@ export class SourceListProvider implements vscode.TreeDataProvider<SourceListIte
 
     const app_config = AppConfig.get_app_config();
 
-    if (item instanceof SourceListItem) {
-      if (!item.src_lib || !item.src_file || !item.src_member) {
-        throw new Error('Source member information missing');
-      }
+    if (!(item instanceof SourceListItem)) {
+      throw new Error('Item must be a SourceListItem');
+    }
+
+    if (!item.src_lib || !item.src_file || !item.src_member) {
+      throw new Error('Source member information missing');
     }
 
     const new_name: string | undefined = await vscode.window.showInputBox({
@@ -313,13 +317,14 @@ export class SourceListProvider implements vscode.TreeDataProvider<SourceListIte
       throw new Error('Canceled by user. No source name provided');
     }
 
-    const from_path = path.join(Workspace.get_workspace(), item.member_path, item.src_member);
-    const to_path = path.join(Workspace.get_workspace(),item.member_path, new_name)
+    const ws = Workspace.get_workspace();
+    const from_path = path.join(ws || '', item.member_path, item.src_member);
+    const to_path = path.join(ws || '', item.member_path, new_name)
     fs.renameSync(from_path, to_path);
 
     const source_infos: source.ISourceInfos = await lbtTools.get_source_infos();
     if (source_infos[`${item.member_path_lbt}/${item.src_member}`]) {
-        const description: string = typeof source_infos[`${item.member_path_lbt}/${item.src_member}`].description === 'string' ? source_infos[`${item.member_path_lbt}/${item.src_member}`].description : '';
+        const description: string = typeof source_infos[`${item.member_path_lbt}/${item.src_member}`].description === 'string' ? source_infos[`${item.member_path_lbt}/${item.src_member}`].description as string : '';
         lbtTools.update_source_infos(item.member_path_lbt, new_name, description);
     }
 
@@ -332,13 +337,16 @@ export class SourceListProvider implements vscode.TreeDataProvider<SourceListIte
 
     const app_config = AppConfig.get_app_config();
 
-    if (item instanceof SourceListItem) {
-      if (!item.src_lib || !item.src_file || !item.src_member) {
-        throw new Error('Source member information missing');
-      }
+    if (!(item instanceof SourceListItem)) {
+      throw new Error('Item must be a SourceListItem');
     }
 
-    const from_path = path.join(Workspace.get_workspace(), item.member_path, item.src_member);
+    if (!item.src_lib || !item.src_file || !item.src_member) {
+      throw new Error('Source member information missing');
+    }
+
+    const ws = Workspace.get_workspace();
+    const from_path = path.join(ws || '', item.member_path, item.src_member);
     fs.unlinkSync(from_path);
 
     return;
@@ -383,7 +391,8 @@ export class SourceListProvider implements vscode.TreeDataProvider<SourceListIte
 
       if (SourceListConfig.currentPanel && SourceListConfig.source_list_file == item.source_list)
         SourceListConfig.currentPanel.dispose();
-      fs.rmSync(path.join(Workspace.get_workspace(), Constants.SOURCE_FILTER_FOLDER_NAME, item.source_list));
+      const ws = Workspace.get_workspace();
+      fs.rmSync(path.join(ws || '', Constants.SOURCE_FILTER_FOLDER_NAME, item.source_list));
       this.refresh();
     });
 
@@ -541,8 +550,8 @@ export class SourceListItem extends vscode.TreeItem {
     }
 
     this.iconPath = {
-      light: path.join(__filename, '..', '..', '..', '..', 'asserts', 'img', 'light', icon),
-      dark: path.join(__filename, '..', '..', '..', '..', 'asserts', 'img', 'dark', icon)
+      light: vscode.Uri.file(path.join(__filename, '..', '..', '..', '..', 'asserts', 'img', 'light', icon)),
+      dark: vscode.Uri.file(path.join(__filename, '..', '..', '..', '..', 'asserts', 'img', 'dark', icon))
     };
 
     if (list_level != 'source-member')

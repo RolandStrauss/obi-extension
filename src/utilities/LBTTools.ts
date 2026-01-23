@@ -735,6 +735,7 @@ export class lbtTools {
         lbtTools.add_all_dependend_sources(dependend_sources, k);
       }
     }
+    return dependend_sources;
   }
 
 
@@ -1219,7 +1220,7 @@ export class lbtTools {
           isMatch = wc_lib(src_lib.toLowerCase()) && wc_file(src_file.toLowerCase()) && wc_mbr(src_mbr.toLowerCase());
         }
         if (isMatch)
-          filtered_sources.push({ "source-lib": src_lib, "source-file": src_file, "source-member": src_mbr});
+          filtered_sources.push({ "source-lib": src_lib, "source-file": src_file, "source-member": src_mbr, "use-regex": false, "show-empty-folders": false});
       }
     }
 

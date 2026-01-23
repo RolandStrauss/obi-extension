@@ -81,8 +81,9 @@ export class SourceListConfig {
   private static async generate_html(extensionUri: Uri, webview: Webview): Promise<string> {
 
     const config = AppConfig.get_app_config();
+    const ws = Workspace.get_workspace();
 
-    const source_list: source.IQualifiedSource[] = DirTool.get_json(path.join(Workspace.get_workspace(), Constants.SOURCE_FILTER_FOLDER_NAME, SourceListConfig.source_list_file)) || [];
+    const source_list: source.IQualifiedSource[] = DirTool.get_json(path.join(ws || '', Constants.SOURCE_FILTER_FOLDER_NAME, SourceListConfig.source_list_file)) || [];
 
     nunjucks.configure(Constants.HTML_TEMPLATE_DIR);
     const html = nunjucks.render('source_list/source-filter-config.html',
@@ -142,7 +143,7 @@ export class SourceListConfig {
         break;
 
       case "add_filter":
-        SourceListConfig.add_filter(message.lib, message.file, message.member, message.regex);
+        SourceListConfig.add_filter(message.lib, message.file, message.member, message.regex, message.show_empty_folders || false);
         SourceListConfig.update();
         break;
     }
@@ -153,7 +154,8 @@ export class SourceListConfig {
 
   private static delete_filter(lib: string, file: string, member: string) {
 
-    const json_file: string = path.join(Workspace.get_workspace(), Constants.SOURCE_FILTER_FOLDER_NAME, SourceListConfig.source_list_file);
+    const ws = Workspace.get_workspace();
+    const json_file: string = path.join(ws || '', Constants.SOURCE_FILTER_FOLDER_NAME, SourceListConfig.source_list_file);
     const sl: source.IQualifiedSource[] = DirTool.get_json(json_file) || [];
 
     for (let i=0; i<sl.length; i++) {
@@ -169,7 +171,8 @@ export class SourceListConfig {
 
   private static add_filter(lib: string, file: string, member: string, regex: boolean, show_empty_folders: boolean) {
 
-    const json_file: string = path.join(Workspace.get_workspace(), Constants.SOURCE_FILTER_FOLDER_NAME, SourceListConfig.source_list_file);
+    const ws = Workspace.get_workspace();
+    const json_file: string = path.join(ws || '', Constants.SOURCE_FILTER_FOLDER_NAME, SourceListConfig.source_list_file);
     const sl: source.IQualifiedSource[] = DirTool.get_json(json_file) || [];
 
     // check if it already exist
@@ -187,7 +190,8 @@ export class SourceListConfig {
 
   private static save_filter(filter: source.IQualifiedSource[]) {
 
-    const json_file: string = path.join(Workspace.get_workspace(), Constants.SOURCE_FILTER_FOLDER_NAME, SourceListConfig.source_list_file);
+    const ws = Workspace.get_workspace();
+    const json_file: string = path.join(ws || '', Constants.SOURCE_FILTER_FOLDER_NAME, SourceListConfig.source_list_file);
 
     DirTool.write_file(json_file, JSON.stringify(filter, undefined, 2));
   }

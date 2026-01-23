@@ -511,4 +511,22 @@ export class lbtCommands {
 
   }
 
+  public static show_build_summary(file?: string) {
+    // Display build summary panel for specified file or current selection
+    if (!file) return;
+    // TODO: Implement build summary display logic
+  }
+
+  public static delete_compile_list_item(level?: string, source?: string) {
+    // Remove item from compile list
+    if (!level || !source) return;
+    // TODO: Implement compile list item deletion
+  }
+
+  public static delete_compile_list_level(level?: string) {
+    // Remove entire level from compile list
+    if (!level) return;
+    // TODO: Implement compile list level deletion
+  }
+
 }

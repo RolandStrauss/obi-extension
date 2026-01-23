@@ -99,7 +99,8 @@ export class lbtSourceDependency {
 
     const source_configs: SourceConfigList|undefined = AppConfig.get_source_configs();
     const config: AppConfig = AppConfig.get_app_config();
-    const source_dir = path.join(Workspace.get_workspace(), config.general['source-dir'] || 'src');
+    const ws = Workspace.get_workspace();
+    const source_dir = ws ? path.join(ws, config.general['source-dir'] || 'src') : '';
 
     let source_config: SourceConfig|undefined;
 
@@ -107,7 +108,7 @@ export class lbtSourceDependency {
       source_config = source_configs[lbtSourceDependency.source];
 
     const local_source_list: string[] = await LocalSourceList.get_source_list();
-    const dependencies: {['source']: string[]} = lbtTools.get_dependency_list() || {};
+    const dependencies: any = lbtTools.get_dependency_list() || {};
     let dependencies_1: string[] = [];
     let dependencies_2: string[] = [];
 
@@ -116,7 +117,7 @@ export class lbtSourceDependency {
     }
 
     for (const [source, deps] of Object.entries(dependencies)) {
-      if (deps.includes(lbtSourceDependency.source)) {
+      if ((deps as string[]).includes(lbtSourceDependency.source)) {
         dependencies_2.push({"source": source, "file": DirTool.get_encoded_file_URI(path.join(config.general['source-dir'] || 'src', source))} as any);
       }
     }

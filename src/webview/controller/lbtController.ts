@@ -56,7 +56,9 @@ export class lbtController implements vscode.WebviewViewProvider {
     if (AppConfig.attributes_missing())
       return;
 
-    const compile_list_file_path: string = path.join(Workspace.get_workspace(), config.general['compile-list']);
+    const ws = Workspace.get_workspace();
+    if (!ws) return;
+    const compile_list_file_path: string = path.join(ws, config.general['compile-list']);
     // if compile-script changed, refresh the view
     fs.watchFile(compile_list_file_path, {interval: 1000}, function (event, filename) {
       lbtController.update_build_summary_timestamp();
@@ -82,7 +84,7 @@ export class lbtController implements vscode.WebviewViewProvider {
   public static check_lbt_response() {
 
     const ws = Workspace.get_workspace();
-    const lbt_status_file = path.join(ws, Constants.LBT_STATUS_FILE);
+    const lbt_status_file = ws ? path.join(ws, Constants.LBT_STATUS_FILE) : '';
 
     if (DirTool.file_exists(lbt_status_file)) {
       const status = DirTool.get_json(lbt_status_file);
@@ -101,7 +103,10 @@ export class lbtController implements vscode.WebviewViewProvider {
 
             const cmd = 'git pull';
             try {
-              await SystemCmdExecution.run_system_cmd(config.general['local-lbt-dir'], cmd, 'update_lbt');
+              const localLbtDir = config.general['local-lbt-dir'];
+              if (localLbtDir) {
+                await SystemCmdExecution.run_system_cmd(localLbtDir, cmd, 'update_lbt');
+              }
               vscode.window.showInformationMessage('lbt backend updated successfully.');
             } catch (error: any) {
               if (error.signal === 'SIGTERM') {

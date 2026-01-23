@@ -112,12 +112,13 @@ export class BuildSummary {
 
   public static get_compile_list(): {} {
     let compile_list: {}|undefined;
-    if (BuildSummary._current_compile_list) {
-      compile_list = DirTool.get_json(path.join(Workspace.get_workspace(), BuildSummary._current_compile_list));
+    const ws = Workspace.get_workspace();
+    if (BuildSummary._current_compile_list && ws) {
+      compile_list = DirTool.get_json(path.join(ws, BuildSummary._current_compile_list));
     } else {
       compile_list = lbtTools.get_compile_list(Workspace.get_workspace_uri());
     }
-    return compile_list;
+    return compile_list || {};
   }
 
 
@@ -181,8 +182,9 @@ export class BuildSummary {
 
   private static get_object_list(workspaceUri: Uri): {}|undefined {
 
-    const changed_object_list = path.join(Workspace.get_workspace(), Constants.CHANGED_OBJECT_LIST);
-    const dependend_object_list = path.join(Workspace.get_workspace(), Constants.DEPENDEND_OBJECT_LIST);
+    const ws = Workspace.get_workspace();
+    const changed_object_list = ws ? path.join(ws, Constants.CHANGED_OBJECT_LIST) : '';
+    const dependend_object_list = ws ? path.join(ws, Constants.DEPENDEND_OBJECT_LIST) : '';
 
     if (!DirTool.file_exists(changed_object_list) || !DirTool.file_exists(dependend_object_list)) {
       logger.info(`${changed_object_list}: ${DirTool.file_exists(changed_object_list)}`);
@@ -263,6 +265,3 @@ export class BuildSummary {
   }
 
 }
-
-
-

@@ -9,6 +9,7 @@ import { lbtTools } from '../../utilities/LBTTools';
 import { AppConfig } from '../controller/AppConfig';
 import { Workspace } from '../../utilities/Workspace';
 import * as source from '../../lbt/Source';
+import { lbtCommands } from '../../lbt/LBTCommands';
 
 /*
 https://medium.com/@andy.neale/nunjucks-a-javascript-template-engine-7731d23eb8cc
@@ -86,6 +87,15 @@ export class BuildHistory {
     }
   }
 
+  /**
+   * Updates the build history panel display
+   */
+  public static update() {
+    // Refresh the current panel if it exists
+    if (BuildHistory.currentPanel) {
+      // Placeholder for update logic - can be expanded later
+      // to refresh the webview content from the build history
+    }
+  }
+
 }
-
-

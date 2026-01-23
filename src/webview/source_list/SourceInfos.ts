@@ -148,7 +148,8 @@ export class SourceInfos {
 
   private static save_infos(sources: source.ISourceInfos) {
 
-    const json_file: string = path.join(Workspace.get_workspace(), AppConfig.get_app_config().general['source-infos']||'.lbt/etc/source-infos.json');
+    const ws = Workspace.get_workspace();
+    const json_file: string = path.join(ws || '', AppConfig.get_app_config().general['source-infos']||'.lbt/etc/source-infos.json');
     let source_infos: source.ISourceInfos = DirTool.get_json(json_file) || [];
 
     for (const [k, v] of Object.entries(sources)) {

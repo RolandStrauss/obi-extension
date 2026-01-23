@@ -57,7 +57,7 @@ function main() {
   for (let i = 0; i < buttons.length; i++) {
     const el = buttons[i];
     el.addEventListener("click", () => {
-      delete_global_cmd(el.getAttribute('project_user'), el.getAttribute('key')?.split('|')[2]); 
+      delete_global_cmd(el.getAttribute('project_user'), el.getAttribute('key')?.split('|')[2]);
       reload();
     });
   }
@@ -74,7 +74,7 @@ function main() {
   for (let i = 0; i < buttons.length; i++) {
     const el = buttons[i];
     el.addEventListener("click", () => {
-      delete_compile_cmd(el.getAttribute('project_user'), el.getAttribute('key')?.split('|')[2]); 
+      delete_compile_cmd(el.getAttribute('project_user'), el.getAttribute('key')?.split('|')[2]);
       reload();
     });
   }
@@ -90,7 +90,7 @@ function main() {
   for (let i = 0; i < buttons.length; i++) {
     const el = buttons[i];
     el.addEventListener("click", () => {
-      delete_global_step(el.getAttribute('project_user'), el.getAttribute('key')?.split('|')[2]); 
+      delete_global_step(el.getAttribute('project_user'), el.getAttribute('key')?.split('|')[2]);
       reload();
     });
   }
@@ -99,7 +99,7 @@ function main() {
   // Add new attributes for language settings
   const new_language_button = document.getElementById('add_language_settings');
   new_language_button?.addEventListener('click', () => {
-    const lang: string = document.getElementById('add_language_settings_name')?.value;
+    const lang: string = (document.getElementById('add_language_settings_name') as HTMLInputElement)?.value ?? '';
     const config: string = new_language_button.getAttribute('config') ?? '';
     add_language_settings(config, lang);
     reload();
@@ -109,7 +109,7 @@ function main() {
   new_property_buttons.forEach((e) => {
     e.addEventListener('click', () => {
       const attr: string = e.getAttribute('id_of_property') ?? '';
-      const value: string = document.getElementById(attr)?.value;
+      const value: string = (document.getElementById(attr) as HTMLInputElement)?.value ?? '';
       const config: string = e.getAttribute('config') ?? '';
       const attr_arr = attr.split('|');
       add_language_attribute(config, attr_arr[0], value);
@@ -119,7 +119,7 @@ function main() {
 
 
   const app_elements = document.getElementsByTagName(`vscode-text-field`);
-  
+
   for (let i = 0; i < app_elements.length; i++) {
 
     if (app_elements[i].getAttribute('regex_validator'))
@@ -157,11 +157,11 @@ function main() {
     for (let i = 0; i < buttons.length; i++) {
       const el = buttons[i];
       el.addEventListener("click", () => {
-        delete_source_config(el.getAttribute('key')); 
+        delete_source_config(el.getAttribute('key'));
         reload();
       });
     }
-  
+
   });
 
 
@@ -172,7 +172,7 @@ function main() {
   window.addEventListener('message', receive_message);
 
   check_error_text();
-  
+
   // Show configuration loaded message in the UI instead of alert
   showAlert('Configuration reloaded.', 'success');
 }
@@ -221,7 +221,7 @@ function delete_source_config(key: string|null) {
 
 
 function delete_global_cmd(config: string, key: string) {
-  
+
   save_config(config);
 
   console.log(`Delete command ${key} for ${config}`);
@@ -239,7 +239,7 @@ function delete_global_cmd(config: string, key: string) {
 
 
 function delete_compile_cmd(config: string, key: string) {
-  
+
   save_config(config);
 
   console.log(`Delete command ${key} for ${config}`);
@@ -257,7 +257,7 @@ function delete_compile_cmd(config: string, key: string) {
 
 
 function delete_global_step(config: string, key: string) {
-  
+
   save_config(config);
 
   console.log(`Delete command ${key} for ${config}`);
@@ -274,7 +274,7 @@ function delete_global_step(config: string, key: string) {
 
 
 function add_global_cmd(e: HTMLElement) {
-  
+
   const config: string = e.getAttribute('config') ?? '';
 
   save_config(config);
@@ -297,7 +297,7 @@ function add_global_cmd(e: HTMLElement) {
 
 
 function add_compile_cmd(e: HTMLElement) {
-  
+
   const config: string = e.getAttribute('config') ?? '';
 
   save_config(config);
@@ -319,7 +319,7 @@ function add_compile_cmd(e: HTMLElement) {
 
 
 function add_global_step(e: HTMLElement) {
-  
+
   const config: string = e.getAttribute('config') ?? '';
 
   save_config(config);
@@ -343,7 +343,7 @@ function add_global_step(e: HTMLElement) {
 
 
 function add_language_attribute(class_prefix: string, language: string, attribute: string) {
-  
+
   save_config(class_prefix);
   console.log(`saved ${language}, ${attribute}`);
 
@@ -362,7 +362,7 @@ function add_language_attribute(class_prefix: string, language: string, attribut
 
 
 function add_language_settings(class_prefix: string, language: string) {
-  
+
   save_config(class_prefix);
 
   vscode.postMessage({
@@ -379,7 +379,7 @@ function add_language_settings(class_prefix: string, language: string) {
 
 
 function vaidate (element: HTMLInputElement): void {
-  
+
   const attr: string|null = element.getAttribute('regex_validator');
   const hint = (document.getElementById(`hint_${element.id}`) as HTMLLabelElement);
   hint.style.visibility = "hidden";
@@ -468,7 +468,7 @@ function check_input(element: Element) {
 
   element.classList.remove('missing_value');
 
-  const elem_value: string = element.value;
+  const elem_value: string = (element as HTMLInputElement).value;
   let found_missing = false;
 
   // Array
@@ -477,7 +477,7 @@ function check_input(element: Element) {
 
     found_missing = true;
     for (let i=0; i < list_values.length; i++) {
-      
+
       if (list_values[i].length == 0)
         continue;
       found_missing = false;
@@ -514,7 +514,7 @@ function check_input(element: Element) {
   if (elem_value.length == 0) {
     set_element_missing_value(element);
   }
-  
+
 }
 
 
@@ -556,7 +556,7 @@ function save_global_cmds(class_prefix:string) {
 
   const app_elements = document.getElementsByClassName(`${class_prefix}_save_app_global_cmds`);
   for (let i = 0; i < app_elements.length; i++) {
-    
+
     const el2: string[] = app_elements[i].id.split('|');
     const key = el2[3];
     const value = (document.getElementById(`${class_prefix}|global|cmds|${key}|value`) as TextField).value;
@@ -580,7 +580,7 @@ function save_global_step(class_prefix:string) {
 
   const app_elements = document.getElementsByClassName(`${class_prefix}_save_app_global_step`);
   for (let i = 0; i < app_elements.length; i++) {
-    
+
     const key = (document.getElementById(app_elements[i].id) as TextField).value;
     const value = (document.getElementById(`${class_prefix}|global|steps|${key}|value`) as TextField).value;
 
@@ -602,7 +602,7 @@ function save_compile_cmds(class_prefix:string) {
 
   const app_elements = document.getElementsByClassName(`${class_prefix}_save_app_compile_cmd`);
   for (let i = 0; i < app_elements.length; i++) {
-    
+
     const el2: string[] = app_elements[i].id.split('|');
     const key = el2[3];
     const value = (document.getElementById(`${class_prefix}|global|compile-cmds|${key}|value`) as TextField).value;
@@ -640,7 +640,7 @@ function save_config(class_prefix:string) {
   let json_string: string = '';
 
   for (let i = 0; i < app_elements.length; i++) {
-    
+
     let item = {};
     const el2: string[] = app_elements[i].id.split('|');
 
@@ -652,7 +652,7 @@ function save_config(class_prefix:string) {
       json_string = `${json_string} { "${el2[i]}"`;
     }
 
-    const elem_value = app_elements[i].value.replaceAll('\\', '\\\\').replaceAll('"', '\\\"');
+    const elem_value = (app_elements[i] as HTMLInputElement).value.replaceAll('\\', '\\\\').replaceAll('"', '\\\"');
 
     if (elem_value.length == 0 || elem_value == 'NaN')
       continue;
@@ -662,11 +662,11 @@ function save_config(class_prefix:string) {
     if (app_elements[i].getAttribute('type') == 'number') {
       json_value = elem_value;
     }
-    
+
     // Checkbox element
     if (app_elements[i].classList.contains('type_checkbox')) {
       json_value = 'false';
-      if (app_elements[i].checked)
+      if ((app_elements[i] as HTMLInputElement).checked)
         json_value = 'true';
     }
 
@@ -676,7 +676,7 @@ function save_config(class_prefix:string) {
       const list_values = elem_value.split('\n');
 
       for (let i=0; i < list_values.length; i++) {
-        
+
         if (list_values[i].length == 0)
           continue;
 
@@ -731,11 +731,9 @@ function save_config(class_prefix:string) {
 function receive_message(e: MessageEvent) {
 
   switch (e.data.command) {
-    
+
     case 'finished_saving_config':
       showAlert('Configuration reloaded.', 'success');
       break;
   }
 }
-
-

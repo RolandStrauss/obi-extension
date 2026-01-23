@@ -55,9 +55,9 @@ export function getBuildOrder(
 
   addBuildCmds(newTargetTree, appConfig, extended_sources_config);
 
-  newTargetTree = { timestamp: new Date().toISOString(), compiles: newTargetTree };
+  const result: any = { timestamp: new Date().toISOString(), compiles: newTargetTree };
 
-  return newTargetTree;
+  return result;
 }
 
 export function getTargetsDependedObjects(
@@ -247,4 +247,3 @@ export function getCopySources(
 
   return Array.from(allDependencies).filter(dep => dep.toLowerCase().endsWith('.cpy'));
 }
-
