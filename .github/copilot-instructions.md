@@ -1,4 +1,11 @@
-# ldm Extension - AI Coding Agent Instructions
+---
+applyTo: '**'
+description: 'General Copilot and code review instructions for all workspaces. LDM-specific guidance has been migrated to lancelot_built_tool.instructions.md.'
+---
+
+# LDM Extension - AI Coding Agent Instructions
+
+General workspace instructions for GitHub Copilot. **For LDM (Lancelot Development Manager) extension development**, always reference `instructions/lancelot_built_tool.instructions.md` first.
 
 ## Project Overview
 
@@ -177,10 +184,10 @@ User triggers build
     ↓
 ldmCommands.show_changes() / run_build()
     ↓
-createBuildList(source?) in src/ldm/compile_list/
+createBuildList(source?) in src/obi/compile_list/
     ↓
 1. getFiles() - Scan source directory
-2. getChangedSources() - Hash comparison
+2. getChangedSources() - Hash comparison (SHA-256)
 3. getBuildOrder() - Resolve dependencies
 4. orderBuilds() - Sort by object type priority
     ↓
@@ -196,9 +203,10 @@ BuildSummary panel displays results
 ```
 
 **Key Files**:
-- `src/ldm/compile_list/createBuildList.ts` - Main orchestration
-- `src/ldm/compile_list/modules/dependency.ts` - Dependency resolution
-- `src/ldm/compile_list/modules/build_cmds.ts` - Object type ordering
+- `src/obi/compile_list/createBuildList.ts` - Main orchestration
+- `src/obi/compile_list/modules/dependency.ts` - Dependency resolution
+- `src/obi/compile_list/modules/build_cmds.ts` - Object type ordering
+- `src/obi/OBICommands.ts` - Command handlers for build operations
 
 ### Hash-Based Change Detection
 
@@ -531,3 +539,16 @@ Single persistent SSH connection reused across operations. Connection timeout: 3
 - **ldm Documentation**: `andreas-prouza/ibm-i-build-ldm` - Comprehensive ldm documentation
 
 When making changes that affect build orchestration, configuration management, or SSH communication, consider impact on these integration points.
+
+## Related Instruction Files
+
+- **LDM Extension**: `instructions/lancelot_built_tool.instructions.md` - Primary development instructions
+- **TypeScript**: `instructions/typescript-5-es2022.instructions.md`
+- **Security**: `instructions/security-and-owasp.instructions.md`
+- **Performance**: `instructions/performance-optimization.instructions.md`
+- **Testing**: `instructions/playwright-typescript.instructions.md`
+- **Auto Versioning**: `instructions/auto-version-increment.instructions.md`
+- **i18n**: `instructions/i18n.instructions.md`
+- **IBM i Integration**: `instructions/ibm-i-extension-management.instructions.md`
+- **SQLRPGLE**: `instructions/ibmi-sqlrpgle.instructions.md`
+- **DB2**: `instructions/ibmi-db2.instructions.md`

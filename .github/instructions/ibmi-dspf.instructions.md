@@ -3,12 +3,12 @@
 ## Purpose
 
 - Teach contributors how to modernize IBM i Display Files (DSPF) without losing the discipline required for secure releases, telemetry, and documentation.
-- Align DSPF work with the broader IBM i guidance (`instructions/ibm-i-extension-management.instructions.md`, `instructions/lancelot.instructions.md`) while obeying the agentskills.io/VS Code Copilot skill spec.
+- Align DSPF work with the broader IBM i guidance (`instructions/ibm-i-extension-management.instructions.md`, `instructions/lancelot_built_tool.instructions.md`) while obeying the agentskills.io/VS Code Copilot skill spec.
 
 ## When to follow this guidance
 
-- Changes touch Display File sources (`src/ibmi/dspf/`, `ibmi-scripts/`, or any DDS assets imported as part of the extension).  
-- You are documenting or automating DSPF compile/deploy/render flows, especially when they surface in release notes, telemetry, or the VSIX package.  
+- Changes touch Display File sources (`src/ibmi/dspf/`, `ibmi-scripts/`, or any DDS assets imported as part of the extension).
+- You are documenting or automating DSPF compile/deploy/render flows, especially when they surface in release notes, telemetry, or the VSIX package.
 - DSPF modernization work requires security controls (auditing, exit programs, protected hosts) or instrumentation (`trackEvent`, `Logger`) that must be consistently recorded.
 
 ## Release & packaging hygiene

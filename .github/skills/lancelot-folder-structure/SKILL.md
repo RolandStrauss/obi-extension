@@ -138,7 +138,7 @@ docs/
 │   ├── test.yml
 │   └── release.yml
 ├── instructions/             # Copilot instructions
-│   ├── lancelot.instructions.md
+│   ├── lancelot_built_tool.instructions.md
 │   ├── typescript-5-es2022.instructions.md
 │   └── security-and-owasp.instructions.md
 └── skills/                   # Copilot Agent Skills
@@ -466,7 +466,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      
+
       - name: Check for misplaced files
         run: |
           # Fail if .ts files in root
@@ -474,7 +474,7 @@ jobs:
             echo "ERROR: TypeScript files in root"
             exit 1
           fi
-          
+
           # Fail if VSIX in root
           if find . -maxdepth 1 -name "*.vsix"; then
             echo "ERROR: VSIX in root"
@@ -560,6 +560,6 @@ git commit -m "chore: reorganize project structure
 
 ## References
 
-- Lancelot Instructions: `.github/instructions/lancelot.instructions.md` (Rules #23-30)
+- Lancelot Instructions: `.github/instructions/lancelot_built_tool.instructions.md` (Rules #23-30)
 - VS Code Extension Guidelines: https://code.visualstudio.com/api/references/extension-guidelines
 - TypeScript Project Structure: https://www.typescriptlang.org/docs/handbook/project-references.html

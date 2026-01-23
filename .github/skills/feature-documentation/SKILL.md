@@ -641,6 +641,6 @@ code --list-extensions | grep lancelot
 
 ## References
 
-- Lancelot Instructions: `.github/instructions/lancelot.instructions.md` (Rule #74)
+- Lancelot Instructions: `.github/instructions/lancelot_built_tool.instructions.md` (Rule #74)
 - Markdown Guidelines: `.github/instructions/markdown.instructions.md`
 - VS Code Extension Guide: https://code.visualstudio.com/api/references/extension-guidelines

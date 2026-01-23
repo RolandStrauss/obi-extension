@@ -820,7 +820,7 @@ UI Update (Webview)
 
 - **IFS:** Integrated File System (IBM i file system)
 - **LIBL:** Library List (IBM i compilation search path)
-- **ldm:** Lancelot Developemnt Manager
+- **ldm:** Lancelot Development Manager
 - **PDM:** Programming Development Manager (legacy IBM i tool)
 - **RPGLE:** RPG IV (programming language for IBM i)
 - **SEU:** Source Entry Utility (legacy IBM i editor)

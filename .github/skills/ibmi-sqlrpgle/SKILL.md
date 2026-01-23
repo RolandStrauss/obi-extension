@@ -11,7 +11,7 @@ metadata:
 
 ## Overview
 
-SQLRPGLE is a key technology for the IBM i-integrated features of Lancelot. This skill teaches Copilot how to support SQLRPGLE-focused workstreams such as compile/deploy automation, release documentation, secure configuration, and telemetry. Always align SQLRPGLE guidance to the companion `instructions/ibmi-sqlrpgle.instructions.md` and the broader IBM i instructions (`instructions/ibm-i-extension-management.instructions.md` and `instructions/lancelot.instructions.md`).
+SQLRPGLE is a key technology for the IBM i-integrated features of Lancelot. This skill teaches Copilot how to support SQLRPGLE-focused workstreams such as compile/deploy automation, release documentation, secure configuration, and telemetry. Always align SQLRPGLE guidance to the companion `instructions/ibmi-sqlrpgle.instructions.md` and the broader IBM i instructions (`instructions/ibm-i-extension-management.instructions.md` and `instructions/lancelot_built_tool.instructions.md`).
 
 ## When to activate this skill
 

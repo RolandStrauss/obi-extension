@@ -97,5 +97,5 @@ Apply these instructions when:
 ## References
 
 - IBM Db2 for i documentation (link in docs recommended for maintainers)
-- Project-level instructions: `instructions/lancelot.instructions.md`, `instructions/security-and-owasp.instructions.md`
+- Project-level instructions: `instructions/lancelot_built_tool.instructions.md`, `instructions/security-and-owasp.instructions.md`
 - VS Code Extension API docs (SecretStorage, Telemetry, Packaging)

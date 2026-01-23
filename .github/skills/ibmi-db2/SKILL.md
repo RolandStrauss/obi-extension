@@ -66,11 +66,11 @@ The skill must NOT:
 Design and implementation guidance
 ---------------------------------
 
-Follow project-level guidelines in `instructions/lancelot.instructions.md`, `instructions/security-and-owasp.instructions.md`, and `.github/instructions/ibmi-db2.instructions.md` when using this skill. Additional guidance:
+Follow project-level guidelines in `instructions/lancelot_built_tool.instructions.md`, `instructions/security-and-owasp.instructions.md`, and `.github/instructions/ibmi-db2.instructions.md` when using this skill. Additional guidance:
 
 - Use strict TypeScript types for any DB models and avoid `any`.
 - Use localized strings for UI text (update `package.nls.json` and provide context for translators).
-- When adding webviews or UI showing DB data, follow the webview accessibility guidance in `instructions/lancelot.instructions.md` (avoid setting `aria-hidden` on `body`, prefer inert or sibling-level `aria-hidden`).
+- When adding webviews or UI showing DB data, follow the webview accessibility guidance in `instructions/lancelot_built_tool.instructions.md` (avoid setting `aria-hidden` on `body`, prefer inert or sibling-level `aria-hidden`).
 
 Testing guidance
 ----------------
@@ -103,7 +103,7 @@ References and Resources
 
 - Agents Skills spec: <https://agentskills.io/specification>
 - VS Code agent skills guidance: <https://code.visualstudio.com/docs/copilot/customization/agent-skills>
-- Project-level instructions: `.github/instructions/lancelot.instructions.md`
+- Project-level instructions: `.github/instructions/lancelot_built_tool.instructions.md`
 
 Maintenance
 -----------

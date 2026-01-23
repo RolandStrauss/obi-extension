@@ -5,7 +5,7 @@ applyTo: '**'
 
 # IBM i SQLRPGLE Instructions
 
-Use this document whenever SQLRPGLE sources, deployment scripts, or telemetry events change so that SQLRPGLE-specific guidance stays aligned with the broader IBM i policies in `instructions/ibm-i-extension-management.instructions.md` and `instructions/lancelot.instructions.md`.
+Use this document whenever SQLRPGLE sources, deployment scripts, or telemetry events change so that SQLRPGLE-specific guidance stays aligned with the broader IBM i policies in `instructions/ibm-i-extension-management.instructions.md` and `instructions/lancelot_built_tool.instructions.md`.
 
 ## Purpose
 
