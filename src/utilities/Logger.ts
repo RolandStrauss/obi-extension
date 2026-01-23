@@ -6,7 +6,7 @@ import { Constants } from '../Constants';
 import * as fs from 'fs';
 
 
-const outputChannel = vscode.window.createOutputChannel(`OBI`);
+const outputChannel = vscode.window.createOutputChannel(`ldm`);
 
 let ws: string = '';
 if (vscode.workspace.workspaceFolders)
@@ -52,9 +52,9 @@ export const logger = winston.createLogger({
 });
 
 
-if (fs.existsSync(path.join(ws, Constants.OBI_APP_CONFIG_FILE))) {
-  logger.add(new winston.transports.File({ dirname: path.join(ws, '.obi', 'log'), filename: 'error.log', level: 'error' }));
-  logger.add(new winston.transports.File({ dirname: path.join(ws, '.obi', 'log'), filename: 'combined.log' }));
+if (fs.existsSync(path.join(ws, Constants.ldm_APP_CONFIG_FILE))) {
+  logger.add(new winston.transports.File({ dirname: path.join(ws, '.ldm', 'log'), filename: 'error.log', level: 'error' }));
+  logger.add(new winston.transports.File({ dirname: path.join(ws, '.ldm', 'log'), filename: 'combined.log' }));
 }
 
 //

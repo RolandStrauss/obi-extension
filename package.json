@@ -1,6 +1,6 @@
 {
-  "name": "obi",
-  "displayName": "Object Builder for IBM i (OBI)",
+  "name": "ldm",
+  "displayName": "Lancelot Development Manager (LDM)",
   "description": "Automated build tool for IBM i",
   "publisher": "andreas-prouza",
   "version": "0.6.12",
@@ -20,7 +20,7 @@
   },
   "license": "MIT",
   "repository": {
-    "url": "https://github.com/andreas-prouza/obi-extension"
+    "url": "https://github.com/andreas-prouza/ldm-extension"
   },
   "engines": {
     "vscode": "^1.66.0"
@@ -35,176 +35,176 @@
   "contributes": {
     "commands": [
       {
-        "command": "obi.show_changes",
-        "title": "%obi.show_changes%",
+        "command": "ldm.show_changes",
+        "title": "%ldm.show_changes%",
         "icon": "$(check-all)",
-        "when": "obi.contains_obi_project && obi.valid-config"
+        "when": "ldm.contains_ldm_project && ldm.valid-config"
       },
       {
-        "command": "obi.show_single_changes",
-        "title": "%obi.show_single_changes%",
+        "command": "ldm.show_single_changes",
+        "title": "%ldm.show_single_changes%",
         "icon": "$(check)",
-        "when": "obi.contains_obi_project && obi.valid-config"
+        "when": "ldm.contains_ldm_project && ldm.valid-config"
       },
       {
-        "command": "obi.run_build",
-        "title": "%obi.run_build%",
+        "command": "ldm.run_build",
+        "title": "%ldm.run_build%",
         "icon": "$(run-all)",
-        "when": "obi.contains_obi_project && obi.valid-config"
+        "when": "ldm.contains_ldm_project && ldm.valid-config"
       },
       {
-        "command": "obi.run_single_build",
-        "title": "%obi.run_single_build%",
+        "command": "ldm.run_single_build",
+        "title": "%ldm.run_single_build%",
         "icon": "$(run)",
-        "when": "obi.contains_obi_project && obi.valid-config"
+        "when": "ldm.contains_ldm_project && ldm.valid-config"
       },
       {
-        "command": "obi.source-filter.update",
-        "title": "%obi.source-filter.update%",
+        "command": "ldm.source-filter.update",
+        "title": "%ldm.source-filter.update%",
         "icon": "$(refresh)",
-        "when": "obi.contains_obi_project && obi.valid-config"
+        "when": "ldm.contains_ldm_project && ldm.valid-config"
       },
       {
-        "command": "obi.source-filter.add",
-        "title": "%obi.source-filter.add%",
+        "command": "ldm.source-filter.add",
+        "title": "%ldm.source-filter.add%",
         "icon": "$(add)",
-        "when": "obi.contains_obi_project && obi.valid-config"
+        "when": "ldm.contains_ldm_project && ldm.valid-config"
       },
       {
-        "command": "obi.get-remote-compiled-object-list",
-        "title": "%obi.get-remote-compiled-object-list%",
+        "command": "ldm.get-remote-compiled-object-list",
+        "title": "%ldm.get-remote-compiled-object-list%",
         "icon": "$(arrow-circle-down)",
-        "when": "obi.contains_obi_project && obi.valid-config && false"
+        "when": "ldm.contains_ldm_project && ldm.valid-config && false"
       },
       {
-        "command": "obi.copy-profile-config",
-        "title": "%obi.copy-profile-config%",
+        "command": "ldm.copy-profile-config",
+        "title": "%ldm.copy-profile-config%",
         "icon": "$(person-add)",
-        "when": "obi.contains_obi_project && obi.valid-config"
+        "when": "ldm.contains_ldm_project && ldm.valid-config"
       },
       {
-        "command": "obi.reset-compiled-object-list",
-        "title": "%obi.reset-compiled-object-list%",
+        "command": "ldm.reset-compiled-object-list",
+        "title": "%ldm.reset-compiled-object-list%",
         "icon": "$(extensions)",
-        "when": "obi.contains_obi_project && obi.valid-config"
+        "when": "ldm.contains_ldm_project && ldm.valid-config"
       },
       {
-        "command": "obi.get-remote-source-list",
-        "title": "%obi.get-remote-source-list%",
+        "command": "ldm.get-remote-source-list",
+        "title": "%ldm.get-remote-source-list%",
         "icon": "$(arrow-down)",
-        "when": "obi.contains_obi_project && obi.valid-config && false"
+        "when": "ldm.contains_ldm_project && ldm.valid-config && false"
       },
       {
-        "command": "obi.check-remote-sources",
-        "title": "%obi.check-remote-sources%",
+        "command": "ldm.check-remote-sources",
+        "title": "%ldm.check-remote-sources%",
         "icon": "$(tasklist)",
-        "when": "obi.contains_obi_project && obi.valid-config && false"
+        "when": "ldm.contains_ldm_project && ldm.valid-config && false"
       },
       {
-        "command": "obi.controller.config",
-        "title": "%obi.controller.config%",
+        "command": "ldm.controller.config",
+        "title": "%ldm.controller.config%",
         "icon": "$(settings-gear)",
-        "when": "obi.contains_obi_project"
+        "when": "ldm.contains_ldm_project"
       },
       {
-        "command": "obi.controller.dependency-list",
-        "title": "%obi.controller.dependency-list%",
+        "command": "ldm.controller.dependency-list",
+        "title": "%ldm.controller.dependency-list%",
         "icon": "$(outline-view-icon)",
-        "when": "obi.contains_obi_project && obi.valid-config"
+        "when": "ldm.contains_ldm_project && ldm.valid-config"
       },
       {
-        "command": "obi.source.edit-compile-config",
-        "title": "%obi.source.edit-compile-config%",
+        "command": "ldm.source.edit-compile-config",
+        "title": "%ldm.source.edit-compile-config%",
         "icon": "$(settings-gear)",
-        "when": "obi.contains_obi_project"
+        "when": "ldm.contains_ldm_project"
       },
       {
-        "command": "obi.transfer-all",
-        "title": "%obi.transfer-all%",
+        "command": "ldm.transfer-all",
+        "title": "%ldm.transfer-all%",
         "icon": "$(cloud-upload)",
-        "when": "obi.contains_obi_project && obi.valid-config"
+        "when": "ldm.contains_ldm_project && ldm.valid-config"
       },
       {
-        "command": "obi.source-filter.show-view",
-        "title": "%obi.source-filter.show-view%",
+        "command": "ldm.source-filter.show-view",
+        "title": "%ldm.source-filter.show-view%",
         "icon": "$(preview)",
-        "when": "obi.contains_obi_project && obi.valid-config"
+        "when": "ldm.contains_ldm_project && ldm.valid-config"
       },
       {
-        "command": "obi.source-filter.edit-config",
-        "title": "%obi.source-filter.edit-config%",
+        "command": "ldm.source-filter.edit-config",
+        "title": "%ldm.source-filter.edit-config%",
         "icon": "$(settings-gear)",
-        "when": "obi.contains_obi_project && obi.valid-config"
+        "when": "ldm.contains_ldm_project && ldm.valid-config"
       },
       {
-        "command": "obi.source-filter.delete-config",
-        "title": "%obi.source-filter.delete-config%",
+        "command": "ldm.source-filter.delete-config",
+        "title": "%ldm.source-filter.delete-config%",
         "icon": "$(trash)",
-        "when": "obi.contains_obi_project && obi.valid-config"
+        "when": "ldm.contains_ldm_project && ldm.valid-config"
       },
       {
-        "command": "obi.source-filter.view-source-infos",
-        "title": "%obi.source-filter.view-source-infos%",
+        "command": "ldm.source-filter.view-source-infos",
+        "title": "%ldm.source-filter.view-source-infos%",
         "icon": "$(preview)",
-        "when": "obi.contains_obi_project && obi.valid-config"
+        "when": "ldm.contains_ldm_project && ldm.valid-config"
       },
       {
-        "command": "obi.source-filter.maintain-source-infos",
-        "title": "%obi.source-filter.maintain-source-infos%",
+        "command": "ldm.source-filter.maintain-source-infos",
+        "title": "%ldm.source-filter.maintain-source-infos%",
         "icon": "$(settings-gear)",
-        "when": "obi.contains_obi_project && obi.valid-config"
+        "when": "ldm.contains_ldm_project && ldm.valid-config"
       },
       {
-        "command": "obi.source-filter.add-source-file",
-        "title": "%obi.source-filter.add-source-file%",
+        "command": "ldm.source-filter.add-source-file",
+        "title": "%ldm.source-filter.add-source-file%",
         "icon": "$(add)",
-        "when": "obi.contains_obi_project && obi.valid-config"
+        "when": "ldm.contains_ldm_project && ldm.valid-config"
       },
       {
-        "command": "obi.source-filter.add-source-member",
-        "title": "%obi.source-filter.add-source-member%",
+        "command": "ldm.source-filter.add-source-member",
+        "title": "%ldm.source-filter.add-source-member%",
         "icon": "$(add)",
-        "when": "obi.contains_obi_project && obi.valid-config"
+        "when": "ldm.contains_ldm_project && ldm.valid-config"
       },
       {
-        "command": "obi.source-filter.change-source-description",
-        "title": "%obi.source-filter.change-source-description%",
+        "command": "ldm.source-filter.change-source-description",
+        "title": "%ldm.source-filter.change-source-description%",
         "icon": "$(preview)",
-        "when": "obi.contains_obi_project && obi.valid-config"
+        "when": "ldm.contains_ldm_project && ldm.valid-config"
       },
       {
-        "command": "obi.source-filter.rename-source-member",
-        "title": "%obi.source-filter.rename-source-member%",
-        "when": "obi.contains_obi_project && obi.valid-config"
+        "command": "ldm.source-filter.rename-source-member",
+        "title": "%ldm.source-filter.rename-source-member%",
+        "when": "ldm.contains_ldm_project && ldm.valid-config"
       },
       {
-        "command": "obi.source-filter.delete-source-member",
-        "title": "%obi.source-filter.delete-source-member%",
-        "when": "obi.contains_obi_project && obi.valid-config"
+        "command": "ldm.source-filter.delete-source-member",
+        "title": "%ldm.source-filter.delete-source-member%",
+        "when": "ldm.contains_ldm_project && ldm.valid-config"
       },
       {
-        "command": "obi.source.maintain-source-dependency",
-        "title": "%obi.source.maintain-source-dependency%",
+        "command": "ldm.source.maintain-source-dependency",
+        "title": "%ldm.source.maintain-source-dependency%",
         "icon": "$(combine)",
-        "when": "obi.contains_obi_project && obi.valid-config"
+        "when": "ldm.contains_ldm_project && ldm.valid-config"
       },
       {
-        "command": "obi.deployment.maintain",
-        "title": "%obi.deployment.maintain%",
+        "command": "ldm.deployment.maintain",
+        "title": "%ldm.deployment.maintain%",
         "icon": "$(settings-gear)",
-        "when": "1==2 && obi.contains_obi_project && obi.valid-config"
+        "when": "1==2 && ldm.contains_ldm_project && ldm.valid-config"
       },
       {
-        "command": "obi.build-history.update",
+        "command": "ldm.build-history.update",
         "title": "Update Build History"
       },
       {
-        "command": "obi.build-history.delete-item",
+        "command": "ldm.build-history.delete-item",
         "title": "Delete Build History Item",
         "icon": "$(trash)"
       },
       {
-        "command": "obi.build-history.delete-date",
+        "command": "ldm.build-history.delete-date",
         "title": "Delete Build History for Date",
         "icon": "$(trash)"
       }
@@ -212,151 +212,151 @@
     "menus": {
       "view/title": [
         {
-          "command": "obi.source-filter.add",
-          "when": "obi.contains_obi_project && obi.valid-config && view == obi.source-filter",
+          "command": "ldm.source-filter.add",
+          "when": "ldm.contains_ldm_project && ldm.valid-config && view == ldm.source-filter",
           "group": "navigation@1"
         },
         {
-          "command": "obi.source-filter.view-source-infos",
-          "when": "obi.contains_obi_project && obi.valid-config && view == obi.source-filter",
+          "command": "ldm.source-filter.view-source-infos",
+          "when": "ldm.contains_ldm_project && ldm.valid-config && view == ldm.source-filter",
           "group": "navigation@2"
         },
         {
-          "command": "obi.source-filter.maintain-source-infos",
-          "when": "obi.contains_obi_project && obi.valid-config && view == obi.source-filter",
+          "command": "ldm.source-filter.maintain-source-infos",
+          "when": "ldm.contains_ldm_project && ldm.valid-config && view == ldm.source-filter",
           "group": "navigation@3"
         },
         {
-          "command": "obi.source-filter.update",
-          "when": "obi.contains_obi_project && obi.valid-config && view == obi.source-filter",
+          "command": "ldm.source-filter.update",
+          "when": "ldm.contains_ldm_project && ldm.valid-config && view == ldm.source-filter",
           "group": "navigation@5"
         },
         {
-          "command": "obi.get-remote-source-list",
-          "when": "false && obi.contains_obi_project && (view == obi.controller || (!obi.valid-config && view == obi-config-invalid))",
+          "command": "ldm.get-remote-source-list",
+          "when": "false && ldm.contains_ldm_project && (view == ldm.controller || (!ldm.valid-config && view == ldm-config-invalid))",
           "group": "navigation@20"
         },
         {
-          "command": "obi.get-remote-compiled-object-list",
-          "when": "false && obi.contains_obi_project && (view == obi.controller || (!obi.valid-config && view == obi-config-invalid))",
+          "command": "ldm.get-remote-compiled-object-list",
+          "when": "false && ldm.contains_ldm_project && (view == ldm.controller || (!ldm.valid-config && view == ldm-config-invalid))",
           "group": "navigation@30"
         },
         {
-          "command": "obi.reset-compiled-object-list",
-          "when": "obi.contains_obi_project && (view == obi.controller || (!obi.valid-config && view == obi-config-invalid))",
+          "command": "ldm.reset-compiled-object-list",
+          "when": "ldm.contains_ldm_project && (view == ldm.controller || (!ldm.valid-config && view == ldm-config-invalid))",
           "group": "navigation@40"
         },
         {
-          "command": "obi.check-remote-sources",
-          "when": "false && obi.contains_obi_project && (view == obi.controller || (!obi.valid-config && view == obi-config-invalid))",
+          "command": "ldm.check-remote-sources",
+          "when": "false && ldm.contains_ldm_project && (view == ldm.controller || (!ldm.valid-config && view == ldm-config-invalid))",
           "group": "navigation@50"
         },
         {
-          "command": "obi.transfer-all",
-          "when": "obi.contains_obi_project && (view == obi.controller || (!obi.valid-config && view == obi-config-invalid))",
+          "command": "ldm.transfer-all",
+          "when": "ldm.contains_ldm_project && (view == ldm.controller || (!ldm.valid-config && view == ldm-config-invalid))",
           "group": "navigation@60"
         },
         {
-          "command": "obi.controller.dependency-list",
-          "when": "obi.contains_obi_project && (view == obi.controller || (!obi.valid-config && view == obi-config-invalid))",
+          "command": "ldm.controller.dependency-list",
+          "when": "ldm.contains_ldm_project && (view == ldm.controller || (!ldm.valid-config && view == ldm-config-invalid))",
           "group": "navigation@65"
         },
         {
-          "command": "obi.controller.config",
-          "when": "obi.contains_obi_project && (view == obi.controller || (!obi.valid-config && view == obi-config-invalid))",
+          "command": "ldm.controller.config",
+          "when": "ldm.contains_ldm_project && (view == ldm.controller || (!ldm.valid-config && view == ldm-config-invalid))",
           "group": "navigation@70"
         },
         {
-          "command": "obi.deployment.maintain",
-          "when": "obi.contains_obi_project && obi.valid-config && view == obi.deployment",
+          "command": "ldm.deployment.maintain",
+          "when": "ldm.contains_ldm_project && ldm.valid-config && view == ldm.deployment",
           "group": "navigation@1"
         }
       ],
       "editor/title/context": [
         {
-          "command": "obi.source.edit-compile-config",
-          "when": "obi.contains_obi_project"
+          "command": "ldm.source.edit-compile-config",
+          "when": "ldm.contains_ldm_project"
         },
         {
-          "command": "obi.source-filter.change-source-description",
-          "when": "obi.contains_obi_project"
+          "command": "ldm.source-filter.change-source-description",
+          "when": "ldm.contains_ldm_project"
         },
         {
-          "command": "obi.source.maintain-source-dependency",
-          "when": "obi.contains_obi_project"
+          "command": "ldm.source.maintain-source-dependency",
+          "when": "ldm.contains_ldm_project"
         }
       ],
       "explorer/context": [
         {
-          "command": "obi.source.edit-compile-config",
-          "when": "obi.contains_obi_project"
+          "command": "ldm.source.edit-compile-config",
+          "when": "ldm.contains_ldm_project"
         },
         {
-          "command": "obi.source-filter.change-source-description",
-          "when": "obi.contains_obi_project"
+          "command": "ldm.source-filter.change-source-description",
+          "when": "ldm.contains_ldm_project"
         },
         {
-          "command": "obi.source.maintain-source-dependency",
-          "when": "obi.contains_obi_project"
+          "command": "ldm.source.maintain-source-dependency",
+          "when": "ldm.contains_ldm_project"
         }
       ],
       "view/item/context": [
         {
-          "command": "obi.source-filter.show-view",
-          "when": "obi.contains_obi_project && view == obi.source-filter && viewItem == source-list",
+          "command": "ldm.source-filter.show-view",
+          "when": "ldm.contains_ldm_project && view == ldm.source-filter && viewItem == source-list",
           "group": "inline@0"
         },
         {
-          "command": "obi.source-filter.edit-config",
-          "when": "obi.contains_obi_project && view == obi.source-filter && viewItem == source-list",
+          "command": "ldm.source-filter.edit-config",
+          "when": "ldm.contains_ldm_project && view == ldm.source-filter && viewItem == source-list",
           "group": "inline@2"
         },
         {
-          "command": "obi.source-filter.delete-config",
-          "when": "obi.contains_obi_project && view == obi.source-filter && viewItem == source-list",
+          "command": "ldm.source-filter.delete-config",
+          "when": "ldm.contains_ldm_project && view == ldm.source-filter && viewItem == source-list",
           "group": "inline@3"
         },
         {
-          "command": "obi.source.edit-compile-config",
-          "when": "obi.contains_obi_project && view == obi.source-filter && viewItem == obi-source",
+          "command": "ldm.source.edit-compile-config",
+          "when": "ldm.contains_ldm_project && view == ldm.source-filter && viewItem == ldm-source",
           "group": "inline@0"
         },
         {
-          "command": "obi.source.maintain-source-dependency",
-          "when": "obi.contains_obi_project && view == obi.source-filter && viewItem == obi-source",
+          "command": "ldm.source.maintain-source-dependency",
+          "when": "ldm.contains_ldm_project && view == ldm.source-filter && viewItem == ldm-source",
           "group": "inline@1"
         },
         {
-          "command": "obi.source-filter.change-source-description",
-          "when": "obi.contains_obi_project && view == obi.source-filter && viewItem == obi-source",
+          "command": "ldm.source-filter.change-source-description",
+          "when": "ldm.contains_ldm_project && view == ldm.source-filter && viewItem == ldm-source",
           "group": "inline@1"
         },
         {
-          "command": "obi.source-filter.rename-source-member",
-          "when": "obi.contains_obi_project && view == obi.source-filter && viewItem == obi-source"
+          "command": "ldm.source-filter.rename-source-member",
+          "when": "ldm.contains_ldm_project && view == ldm.source-filter && viewItem == ldm-source"
         },
         {
-          "command": "obi.source-filter.delete-source-member",
-          "when": "obi.contains_obi_project && view == obi.source-filter && viewItem == obi-source"
+          "command": "ldm.source-filter.delete-source-member",
+          "when": "ldm.contains_ldm_project && view == ldm.source-filter && viewItem == ldm-source"
         },
         {
-          "command": "obi.source-filter.add-source-member",
-          "when": "obi.contains_obi_project && view == obi.source-filter && viewItem == source-file",
+          "command": "ldm.source-filter.add-source-member",
+          "when": "ldm.contains_ldm_project && view == ldm.source-filter && viewItem == source-file",
           "group": "inline@0"
         },
         {
-          "command": "obi.source-filter.add-source-file",
-          "when": "obi.contains_obi_project && view == obi.source-filter && viewItem == source-lib",
+          "command": "ldm.source-filter.add-source-file",
+          "when": "ldm.contains_ldm_project && view == ldm.source-filter && viewItem == source-lib",
           "group": "inline@0"
         },
         {
-          "command": "obi.build-history.delete-item",
-          "when": "view == obi.build-history && viewItem == buildHistoryFile",
+          "command": "ldm.build-history.delete-item",
+          "when": "view == ldm.build-history && viewItem == buildHistoryFile",
           "group": "inline"
         },
         {
-          "command": "obi.build-history.delete-date",
-          "when": "view == obi.build-history && viewItem == buildHistoryDate",
+          "command": "ldm.build-history.delete-date",
+          "when": "view == ldm.build-history && viewItem == buildHistoryDate",
           "group": "inline"
         }
       ]
@@ -364,55 +364,55 @@
     "viewsContainers": {
       "activitybar": [
         {
-          "id": "obi-bar",
+          "id": "ldm-bar",
           "title": "Object Builder for i",
           "icon": "$(code)"
         }
       ]
     },
     "views": {
-      "obi-bar": [
+      "ldm-bar": [
         {
           "type": "webview",
-          "id": "obi.controller",
-          "name": "OBI Build",
-          "when": "obi.contains_obi_project && obi.valid-config"
+          "id": "ldm.controller",
+          "name": "ldm Build",
+          "when": "ldm.contains_ldm_project && ldm.valid-config"
         },
         {
           "type": "tree",
-          "id": "obi.build-history",
+          "id": "ldm.build-history",
           "name": "Build history",
-          "when": "obi.contains_obi_project && obi.valid-config"
+          "when": "ldm.contains_ldm_project && ldm.valid-config"
         },
         {
           "type": "tree",
-          "id": "obi.source-filter",
+          "id": "ldm.source-filter",
           "name": "%Source filters%",
-          "when": "obi.contains_obi_project && obi.valid-config"
+          "when": "ldm.contains_ldm_project && ldm.valid-config"
         },
         {
           "type": "webview",
-          "id": "obi.quick-settings",
+          "id": "ldm.quick-settings",
           "name": "%Quick settings%",
-          "when": "false && obi.contains_obi_project && obi.valid-config"
+          "when": "false && ldm.contains_ldm_project && ldm.valid-config"
         },
         {
           "type": "webview",
-          "id": "obi.deployment",
+          "id": "ldm.deployment",
           "name": "%deployment%",
-          "when": "1==2 && obi.contains_obi_project && obi.valid-config"
+          "when": "1==2 && ldm.contains_ldm_project && ldm.valid-config"
         },
         {
           "type": "webview",
-          "id": "obi-welcome",
+          "id": "ldm-welcome",
           "name": "%Welcome%",
-          "when": "obi.contains_obi_project == false"
+          "when": "ldm.contains_ldm_project == false"
         },
         {
           "type": "webview",
-          "id": "obi-config-invalid",
+          "id": "ldm-config-invalid",
           "name": "%Invalid config%",
-          "when": "obi.contains_obi_project && !obi.valid-config"
+          "when": "ldm.contains_ldm_project && !ldm.valid-config"
         }
       ]
     }

@@ -4,7 +4,7 @@ import { getUri } from "../../utilities/getUri";
 import { DirTool } from '../../utilities/DirTool';
 import * as path from 'path';
 import { Constants } from '../../Constants';
-import { OBITools } from '../../utilities/OBITools';
+import { ldmTools } from '../../utilities/ldmTools';
 import { AppConfig, ConfigCompileSettings, SourceConfig, SourceConfigList } from './AppConfig';
 import { Workspace } from '../../utilities/Workspace';
 import { LocalSourceList } from '../../utilities/LocalSourceList';
@@ -34,9 +34,9 @@ env.addFilter("typename", (obj: any) => {
 
 
 
-export class OBISourceDependency {
+export class ldmSourceDependency {
 
-  public static currentPanel: OBISourceDependency | undefined;
+  public static currentPanel: ldmSourceDependency | undefined;
   private readonly _panel: WebviewPanel;
   private _disposables: Disposable[] = [];
   private static _context: vscode.ExtensionContext;
@@ -55,7 +55,7 @@ export class OBISourceDependency {
     this._panel = panel;
 
     LocalSourceList.load_source_list();
-    
+
     // Set an event listener to listen for when the panel is disposed (i.e. when the user closes
     // the panel or when the panel is closed programmatically)
     this._panel.onDidDispose(() => this.dispose(), null, this._disposables);
@@ -71,24 +71,24 @@ export class OBISourceDependency {
    */
   public static async render(context: vscode.ExtensionContext, extensionUri: Uri, source_config: string) {
 
-    OBISourceDependency._context = context;
-    OBISourceDependency._extensionUri = extensionUri;
-    OBISourceDependency.source = source_config;
+    ldmSourceDependency._context = context;
+    ldmSourceDependency._extensionUri = extensionUri;
+    ldmSourceDependency.source = source_config;
 
-    if (OBISourceDependency.currentPanel) {
-      OBISourceDependency.currentPanel.dispose();
+    if (ldmSourceDependency.currentPanel) {
+      ldmSourceDependency.currentPanel.dispose();
     }
 
 
     // If a webview panel does not already exist create and show a new one
     const panel = this.createNewPanel(extensionUri);
 
-    panel.webview.html = await OBISourceDependency.generate_html(extensionUri, panel.webview);
-    
+    panel.webview.html = await ldmSourceDependency.generate_html(extensionUri, panel.webview);
+
     panel.webview.onDidReceiveMessage(this.onReceiveMessage);
 
-    OBISourceDependency.currentPanel = new OBISourceDependency(panel, extensionUri);
-  
+    ldmSourceDependency.currentPanel = new ldmSourceDependency(panel, extensionUri);
+
   }
 
 
@@ -102,38 +102,38 @@ export class OBISourceDependency {
     const source_dir = path.join(Workspace.get_workspace(), config.general['source-dir'] || 'src');
 
     let source_config: SourceConfig|undefined;
-    
+
     if (source_configs)
-      source_config = source_configs[OBISourceDependency.source];
+      source_config = source_configs[ldmSourceDependency.source];
 
     const local_source_list: string[] = await LocalSourceList.get_source_list();
-    const dependencies: {['source']: string[]} = OBITools.get_dependency_list() || {};
+    const dependencies: {['source']: string[]} = ldmTools.get_dependency_list() || {};
     let dependencies_1: string[] = [];
     let dependencies_2: string[] = [];
 
-    for (const dep of dependencies[OBISourceDependency.source] || []) {
+    for (const dep of dependencies[ldmSourceDependency.source] || []) {
       dependencies_1.push({"source": dep, "file": DirTool.get_encoded_file_URI(path.join(config.general['source-dir'] || 'src', dep))} as any);
     }
 
     for (const [source, deps] of Object.entries(dependencies)) {
-      if (deps.includes(OBISourceDependency.source)) {
+      if (deps.includes(ldmSourceDependency.source)) {
         dependencies_2.push({"source": source, "file": DirTool.get_encoded_file_URI(path.join(config.general['source-dir'] || 'src', source))} as any);
       }
     }
-    
-    const html = env.render('source_list/maintain-source-dependency.html', 
+
+    const html = env.render('source_list/maintain-source-dependency.html',
       {
-        global_stuff: OBITools.get_global_stuff(webview, extensionUri),
+        global_stuff: ldmTools.get_global_stuff(webview, extensionUri),
         config_css: getUri(webview, extensionUri, ["asserts/css", "config.css"]),
         main_java_script: getUri(webview, extensionUri, ["out", "source_dependency.js"]),
         icons: {debug_start: '$(preview)'},
         src_folder: DirTool.get_encoded_file_URI(source_dir),
-        source: OBISourceDependency.source,
+        source: ldmSourceDependency.source,
         source_list: local_source_list,
         dependency_list_1: dependencies_1,
         dependency_list_2: dependencies_2,
-        source_file: DirTool.get_encoded_file_URI(path.join(config.general['source-dir']||'src', OBISourceDependency.source)),
-        source_config_file: DirTool.get_encoded_file_URI(Constants.OBI_SOURCE_CONFIG_FILE),
+        source_file: DirTool.get_encoded_file_URI(path.join(config.general['source-dir']||'src', ldmSourceDependency.source)),
+        source_config_file: DirTool.get_encoded_file_URI(Constants.ldm_SOURCE_CONFIG_FILE),
         source_config: source_config
       }
     );
@@ -146,13 +146,13 @@ export class OBISourceDependency {
 
   public static async update(): Promise<void> {
 
-    const panel = OBISourceDependency.currentPanel;
-    
+    const panel = ldmSourceDependency.currentPanel;
+
     if (!panel)
       return;
 
-    panel._panel.webview.html = await OBISourceDependency.generate_html(OBISourceDependency._extensionUri, OBISourceDependency.currentPanel?._panel.webview);
-    
+    panel._panel.webview.html = await ldmSourceDependency.generate_html(ldmSourceDependency._extensionUri, ldmSourceDependency.currentPanel?._panel.webview);
+
   }
 
 
@@ -172,23 +172,23 @@ export class OBISourceDependency {
     switch (command) {
 
       case "add_dependency_1":
-        OBISourceDependency.add_dependency(1, message.source);
+        ldmSourceDependency.add_dependency(1, message.source);
         break;
 
       case "add_dependency_2":
-        OBISourceDependency.add_dependency(2, message.source);
+        ldmSourceDependency.add_dependency(2, message.source);
         break;
 
       case "delete_dependency_1":
-        OBISourceDependency.delete_dependency(1, message.source);
+        ldmSourceDependency.delete_dependency(1, message.source);
         break;
 
       case "delete_dependency_2":
-        OBISourceDependency.delete_dependency(2, message.source);
+        ldmSourceDependency.delete_dependency(2, message.source);
         break;
 
       case "reload":
-        OBISourceDependency.update();
+        ldmSourceDependency.update();
         break;
     }
     return;
@@ -198,41 +198,41 @@ export class OBISourceDependency {
 
   private static add_dependency(type: number, new_source: string): void {
 
-    let dependency_list: {['source']: string[]} = OBITools.get_dependency_list();
+    let dependency_list: {['source']: string[]} = ldmTools.get_dependency_list();
 
     // Add dependency to current source
     if (type == 1) {
-      if (!dependency_list[OBISourceDependency.source])
-        dependency_list[OBISourceDependency.source] = [];
-      dependency_list[OBISourceDependency.source].push(new_source);
+      if (!dependency_list[ldmSourceDependency.source])
+        dependency_list[ldmSourceDependency.source] = [];
+      dependency_list[ldmSourceDependency.source].push(new_source);
     }
 
     // Add current source as dependency to other source
     if (type == 2) {
       if (!dependency_list[new_source])
         dependency_list[new_source] = [];
-      dependency_list[new_source].push(OBISourceDependency.source);
+      dependency_list[new_source].push(ldmSourceDependency.source);
     }
 
-    OBITools.save_dependency_list(dependency_list);
+    ldmTools.save_dependency_list(dependency_list);
   }
 
 
 
   private static delete_dependency(type: number, source: string): void {
-    let dependency_list: {['source']: string[]} = OBITools.get_dependency_list();
+    let dependency_list: {['source']: string[]} = ldmTools.get_dependency_list();
 
     let key: string;
     let value: string;
 
     if (type == 1) {
-      key = OBISourceDependency.source;
+      key = ldmSourceDependency.source;
       value = source;
     }
 
     if (type == 2) {
       key = source;
-      value = OBISourceDependency.source;
+      value = ldmSourceDependency.source;
     }
 
     if (dependency_list[key]) {
@@ -242,15 +242,15 @@ export class OBISourceDependency {
       }
     }
 
-    OBITools.save_dependency_list(dependency_list);
+    ldmTools.save_dependency_list(dependency_list);
   }
 
 
 
   private static createNewPanel(extensionUri : Uri) {
     return window.createWebviewPanel(
-      'obi_source_dependency', // Identifies the type of the webview. Used internally
-      'OBI source dependency', // Title of the panel displayed to the user
+      'ldm_source_dependency', // Identifies the type of the webview. Used internally
+      'ldm source dependency', // Title of the panel displayed to the user
       // The editor column the panel should be displayed in
       ViewColumn.One,
       // Extra panel configurations
@@ -273,7 +273,7 @@ export class OBISourceDependency {
    * Cleans up and disposes of webview resources when the webview panel is closed.
    */
   public dispose() {
-    OBISourceDependency.currentPanel = undefined;
+    ldmSourceDependency.currentPanel = undefined;
 
     // Dispose of the current webview panel
     this._panel.dispose();

@@ -1,17 +1,17 @@
 # Product Requirements Document (PRD)
-## Object Builder for IBM i (OBI) - VS Code Extension
+## Lancelot Development Manager (LDM) - VS Code Extension
 
 **Document Version:** 1.0  
 **Date:** January 23, 2026  
 **Product Version:** 0.6.10 (Beta)  
-**Project Repository:** andreas-prouza/obi-extension  
+**Project Repository:** andreas-prouza/ldm-extension  
 **Status:** Beta Release - Production Release Planned
 
 ---
 
 ## Executive Summary
 
-The Object Builder for IBM i (OBI) is a comprehensive VS Code extension that automates the build process for IBM i applications. The extension provides a modern, local-first development experience for IBM i developers, allowing them to work with source code locally while maintaining integration with IBM i systems through automated build processes. Currently in Beta (v0.6.10), the product is approaching production readiness with significant functionality already implemented.
+The Lancelot Development Manager (LDM) is a comprehensive VS Code extension that automates the build process for IBM i applications. The extension provides a modern, local-first development experience for IBM i developers, allowing them to work with source code locally while maintaining integration with IBM i systems through automated build processes. Currently in Beta (v0.6.10), the product is approaching production readiness with significant functionality already implemented.
 
 ### Business Value Proposition
 
@@ -49,7 +49,7 @@ To provide the most intuitive and efficient build automation tool for IBM i deve
 - Build history tracking
 
 #### User Interface ✅
-- Activity bar integration with custom OBI view
+- Activity bar integration with custom ldm view
 - Controller panel for build operations
 - Source filter management (tree view)
 - Build history viewer
@@ -109,7 +109,7 @@ The core build engine that determines what needs to be compiled and in what orde
 - Build retry mechanism
 
 #### Technical Implementation
-- Location: `src/obi/compile_list/`
+- Location: `src/ldm/compile_list/`
 - Key modules: `createBuildList.ts`, dependency modules
 - Dependencies: SSH2, node-ssh, hasha
 
@@ -345,7 +345,7 @@ Override global build settings on a per-source basis.
 
 **Deliverables:**
 - Pre-commit build validation
-- Git hooks for OBI
+- Git hooks for ldm
 - Merge conflict resolution helpers
 
 #### 3.3 Team Collaboration Features
@@ -366,15 +366,15 @@ Override global build settings on a per-source basis.
 ### Component Overview
 
 ```
-obi-extension/
+ldm-extension/
 ├── Extension Core (extension.ts)
 │   ├── Activation & lifecycle management
 │   ├── Command registration
 │   └── Context management
 │
-├── OBI Commands Layer (src/obi/)
-│   ├── OBICommands.ts - Command execution
-│   ├── OBIStatus.ts - Status tracking
+├── ldm Commands Layer (src/ldm/)
+│   ├── ldmCommands.ts - Command execution
+│   ├── ldmStatus.ts - Status tracking
 │   ├── Source.ts - Source model
 │   └── compile_list/ - Build list generation
 │
@@ -388,7 +388,7 @@ obi-extension/
 │
 ├── Utilities Layer (src/utilities/)
 │   ├── SSH_Tasks.ts - SSH communication
-│   ├── OBITools.ts - Core utilities
+│   ├── ldmTools.ts - Core utilities
 │   ├── GitTool.ts - Git integration
 │   ├── LocalSourceList.ts - Source caching
 │   └── Logger.ts - Logging framework
@@ -427,7 +427,7 @@ obi-extension/
 
 ### Key Design Patterns
 
-1. **Command Pattern**: All OBI operations exposed as VS Code commands
+1. **Command Pattern**: All ldm operations exposed as VS Code commands
 2. **Observer Pattern**: Event-driven updates for UI refresh
 3. **Factory Pattern**: Webview creation and management
 4. **Singleton Pattern**: Configuration and logger instances
@@ -440,7 +440,7 @@ User Action (UI)
     ↓
 VS Code Command
     ↓
-OBICommands (Business Logic)
+ldmCommands (Business Logic)
     ↓
 SSH_Tasks (Communication Layer)
     ↓
@@ -665,7 +665,7 @@ UI Update (Webview)
 - SSH server enabled
 - Bash shell available
 - IFS access permissions
-- OBI backend installed (separate repo: andreas-prouza/obi)
+- ldm backend installed (separate repo: andreas-prouza/ldm)
 
 **Third-Party Libraries**
 - node-ssh: SSH communication
@@ -683,7 +683,7 @@ UI Update (Webview)
 - Debug adapters (future)
 
 **IBM i Backend**
-- OBI Python/Shell scripts (andreas-prouza/obi repo)
+- ldm Python/Shell scripts (andreas-prouza/ldm repo)
 - IBM i build commands (CRTBNDRPG, CRTSQLRPGI, etc.)
 - IFS file system
 - Job logs and spool files
@@ -697,21 +697,21 @@ UI Update (Webview)
 **1. IBM Rational Developer for i (RDi)**
 - **Strengths:** Official IBM product, comprehensive, enterprise support
 - **Weaknesses:** Expensive ($2,000+/seat), Eclipse-based (older UX), heavyweight
-- **OBI Advantage:** Free, modern VS Code interface, Git-native
+- **ldm Advantage:** Free, modern VS Code interface, Git-native
 
 **2. Code for IBM i (VS Code Extension)**
 - **Strengths:** Popular, free, modern interface
 - **Weaknesses:** Individual file compilation, no automated dependency management
-- **OBI Advantage:** Full build automation, dependency tracking, project-based workflow
+- **ldm Advantage:** Full build automation, dependency tracking, project-based workflow
 
 **3. Traditional PDM/SEU**
 - **Strengths:** Familiar to existing developers, no setup required
 - **Weaknesses:** Green screen, no modern features, no Git integration
-- **OBI Advantage:** All modern development practices, GUI, local development
+- **ldm Advantage:** All modern development practices, GUI, local development
 
 ### Market Positioning
 
-**OBI's Unique Value Proposition:**
+**ldm's Unique Value Proposition:**
 1. **Only solution** providing full build automation with dependency management in VS Code
 2. **Git-native workflow** enabling modern DevOps practices
 3. **Free and open-source** with enterprise-ready features
@@ -754,7 +754,7 @@ UI Update (Webview)
 
 **Version Support Matrix**
 
-| OBI Version | VS Code Version | IBM i Version | Support Status |
+| ldm Version | VS Code Version | IBM i Version | Support Status |
 |-------------|-----------------|---------------|----------------|
 | 1.0.x | 1.66+ | 7.3+ | Planned GA (Q1 2026) |
 | 0.6.x | 1.66+ | 7.3+ | Current Beta |
@@ -820,18 +820,18 @@ UI Update (Webview)
 
 - **IFS:** Integrated File System (IBM i file system)
 - **LIBL:** Library List (IBM i compilation search path)
-- **OBI:** Object Builder for i
+- **ldm:** Object Builder for i
 - **PDM:** Programming Development Manager (legacy IBM i tool)
 - **RPGLE:** RPG IV (programming language for IBM i)
 - **SEU:** Source Entry Utility (legacy IBM i editor)
-- **Source Filter:** OBI's mechanism for organizing and selecting sources
+- **Source Filter:** ldm's mechanism for organizing and selecting sources
 - **Source Member:** Individual source file in IBM i terminology
 
 ### Appendix B: Configuration File Structure
 
 ```
 project/
-├── .obi/
+├── .ldm/
 │   ├── config/
 │   │   ├── app-config.toml (project config)
 │   │   └── user-config.toml (user overrides)
@@ -911,9 +911,9 @@ project/
 
 ### Appendix F: References & Links
 
-- **Extension Repository:** https://github.com/andreas-prouza/obi-extension
-- **Backend Repository:** https://github.com/andreas-prouza/obi
-- **Documentation:** https://github.com/andreas-prouza/ibm-i-build-obi
+- **Extension Repository:** https://github.com/andreas-prouza/ldm-extension
+- **Backend Repository:** https://github.com/andreas-prouza/ldm
+- **Documentation:** https://github.com/andreas-prouza/ibm-i-build-ldm
 - **VS Code Marketplace:** (to be published at GA)
 - **Support Site:** https://www.prouza.at
 

@@ -1,4 +1,4 @@
-# OBI Extension - AI Coding Agent Instructions
+# ldm Extension - AI Coding Agent Instructions
 
 ## Project Overview
 
@@ -8,10 +8,10 @@ This is a **VS Code extension** for automating IBM i builds. It provides a local
 
 ## Critical File Paths (Constants.ts)
 
-All OBI project files live under `.obi/` in the user's workspace. Key paths are defined in `src/Constants.ts`:
+All ldm project files live under `.ldm/` in the user's workspace. Key paths are defined in `src/Constants.ts`:
 
 ```typescript
-.obi/
+.ldm/
 ├── etc/
 │   ├── app-config.toml           // Project config
 │   ├── .user-app-config.toml     // User-specific overrides
@@ -61,10 +61,10 @@ npm run watch     # TypeScript watch mode (does NOT use esbuild)
 // src/extension.ts
 activate() → {
   1. Initialize Logger & LocaleText (i18n)
-  2. Check for .obi/ directory existence → set 'obi.contains_obi_project' context
-  3. If no .obi/: Show Welcome screen → EXIT
-  4. Run OBITools.self_check() → validate/migrate configs
-  5. Validate AppConfig → set 'obi.valid-config' context
+  2. Check for .ldm/ directory existence → set 'ldm.contains_ldm_project' context
+  3. If no .ldm/: Show Welcome screen → EXIT
+  4. Run ldmTools.self_check() → validate/migrate configs
+  5. Validate AppConfig → set 'ldm.valid-config' context
   6. If invalid: Show ConfigInvalid screen → EXIT
   7. Register all command handlers
   8. Register TreeView providers (SourceList, BuildHistory)
@@ -74,9 +74,9 @@ activate() → {
 ```
 
 **Key Context Variables** (control UI visibility in `package.json`):
-- `obi.contains_obi_project` - .obi/ directory exists
-- `obi.valid-config` - Configuration is complete
-- `obi.run_native` - No local OBI Python installation
+- `ldm.contains_ldm_project` - .ldm/ directory exists
+- `ldm.valid-config` - Configuration is complete
+- `ldm.run_native` - No local ldm Python installation
 
 ## Configuration System
 
@@ -95,7 +95,7 @@ Final Config = deepmerge(
 
 ### Configuration Validation
 
-The extension validates config on every change via `fs.watchFile()` in `OBITools.reload_obi_extension_on_config_change()`. Invalid config triggers a full extension reload.
+The extension validates config on every change via `fs.watchFile()` in `ldmTools.reload_ldm_extension_on_config_change()`. Invalid config triggers a full extension reload.
 
 ## Webview Pattern
 
@@ -122,7 +122,7 @@ class MyWebviewPanel {
 
     // Use getUri() for all resource URLs
     return nunjucks.render('path/to/template.html', {
-      global_stuff: OBITools.get_global_stuff(webview, extensionUri),
+      global_stuff: ldmTools.get_global_stuff(webview, extensionUri),
       main_java_script: getUri(webview, extensionUri, ["out", "script.js"]),
       ...data
     });
@@ -133,7 +133,7 @@ class MyWebviewPanel {
 **Critical Functions**:
 - `getUri()` - Converts paths to `vscode-resource://` URIs with proper CSP nonces
 - `getNonce()` - Generates CSP nonce for inline scripts
-- `OBITools.get_global_stuff()` - Provides common assets (Bootstrap, CSS, etc.)
+- `ldmTools.get_global_stuff()` - Provides common assets (Bootstrap, CSS, etc.)
 
 ### Webview ↔ Extension Communication
 
@@ -175,30 +175,30 @@ The extension uses `ssh-concurrency` config (default: 5) to parallelize file tra
 ```
 User triggers build
     ↓
-OBICommands.show_changes() / run_build()
+ldmCommands.show_changes() / run_build()
     ↓
-createBuildList(source?) in src/obi/compile_list/
+createBuildList(source?) in src/ldm/compile_list/
     ↓
 1. getFiles() - Scan source directory
 2. getChangedSources() - Hash comparison
 3. getBuildOrder() - Resolve dependencies
 4. orderBuilds() - Sort by object type priority
     ↓
-Write to .obi/tmp/compile-list.json
+Write to .ldm/tmp/compile-list.json
     ↓
 SSH_Tasks transfers source files to IFS
     ↓
-SSH_Tasks executes remote OBI Python/shell scripts
+SSH_Tasks executes remote ldm Python/shell scripts
     ↓
-Download build logs to .obi/build-output/
+Download build logs to .ldm/build-output/
     ↓
 BuildSummary panel displays results
 ```
 
 **Key Files**:
-- `src/obi/compile_list/createBuildList.ts` - Main orchestration
-- `src/obi/compile_list/modules/dependency.ts` - Dependency resolution
-- `src/obi/compile_list/modules/build_cmds.ts` - Object type ordering
+- `src/ldm/compile_list/createBuildList.ts` - Main orchestration
+- `src/ldm/compile_list/modules/dependency.ts` - Dependency resolution
+- `src/ldm/compile_list/modules/build_cmds.ts` - Object type ordering
 
 ### Hash-Based Change Detection
 
@@ -209,11 +209,11 @@ Build state stored in `object-builds.json`:
 }
 ```
 
-Only sources with changed hashes or new sources are compiled. Reset via `obi.reset-compiled-object-list` command.
+Only sources with changed hashes or new sources are compiled. Reset via `ldm.reset-compiled-object-list` command.
 
 ## Dependency System
 
-Stored in `.obi/etc/dependency.json`:
+Stored in `.ldm/etc/dependency.json`:
 ```json
 {
   "program.rpgle.pgm": ["file.pf.file", "screen.dspf.file"],
@@ -227,11 +227,11 @@ Stored in `.obi/etc/dependency.json`:
 3. Sorts by dependency order (prerequisites first)
 4. Further sorts by object type priority (files before programs)
 
-Edit dependencies via `obi.source.maintain-source-dependency` command (opens webview UI).
+Edit dependencies via `ldm.source.maintain-source-dependency` command (opens webview UI).
 
 ## Source Organization
 
-### Source Filters (`.obi/source-list/*.json`)
+### Source Filters (`.ldm/source-list/*.json`)
 
 ```json
 {
@@ -261,11 +261,11 @@ Strings defined in `package.nls.json` (English) and `package.nls.<lang>.json`:
 
 ```json
 {
-  "obi.run_build": "OBI: Run build"
+  "ldm.run_build": "ldm: Run build"
 }
 ```
 
-In TypeScript: `LocaleText.get('obi.run_build')`
+In TypeScript: `LocaleText.get('ldm.run_build')`
 
 **Command Titles**: VS Code automatically loads correct `package.nls.<lang>.json` based on `vscode.env.language`.
 
@@ -307,19 +307,19 @@ Quick Settings will provide rapid access to frequently used configuration option
 - Webview provider: `src/webview/quick_settings/QuickSettings.ts`
 - Registered in extension.ts but disabled via context variable
 
-### Lancelot Integration (Local OBI Mode)
+### Lancelot Integration (Local ldm Mode)
 
 **Status**: Planned integration
 **Integration Point**: Project Lancelot extension (`C:\Roland_Batcave\Repos\GitHub\Lancelot-extension`)
 
-Local OBI Mode allows running OBI build scripts locally on the developer's machine instead of via SSH to IBM i:
-- Uses local Python environment to execute OBI backend scripts
+Local ldm Mode allows running ldm build scripts locally on the developer's machine instead of via SSH to IBM i:
+- Uses local Python environment to execute ldm backend scripts
 - Faster build iteration for development/testing
 - Reduces network latency for small builds
 - Integrates with Lancelot extension for enhanced IBM i development workflow
 
-**Detection**: `OBITools.without_local_obi()` checks for local OBI Python installation
-**Context Variable**: `obi.run_native` indicates local mode is active
+**Detection**: `ldmTools.without_local_ldm()` checks for local ldm Python installation
+**Context Variable**: `ldm.run_native` indicates local mode is active
 
 **Lancelot Integration Benefits**:
 - Unified IBM i development experience
@@ -382,7 +382,7 @@ Use VS Code's "Run Extension" (F5) - launches extension development host.
 3. Select correct webview context in Console dropdown
 
 ### SSH Commands
-All SSH output logged via Winston logger to `.obi/log/main.log` in workspace.
+All SSH output logged via Winston logger to `.ldm/log/main.log` in workspace.
 
 ## Common Patterns
 
@@ -390,7 +390,7 @@ All SSH output logged via Winston logger to `.obi/log/main.log` in workspace.
 
 ```typescript
 // WRONG - loads single file
-const config = DirTool.read_toml(Constants.OBI_APP_CONFIG_FILE);
+const config = DirTool.read_toml(Constants.ldm_APP_CONFIG_FILE);
 
 // CORRECT - merges project + user config
 const config = AppConfig.get_app_config();
@@ -432,7 +432,7 @@ IBM i IFS paths are Unix-style even when extension runs on Windows.
 1. **Register in extension.ts**:
 ```typescript
 context.subscriptions.push(
-  vscode.commands.registerCommand('obi.my-command', () => {
+  vscode.commands.registerCommand('ldm.my-command', () => {
     MyHandler.execute();
   })
 );
@@ -442,8 +442,8 @@ context.subscriptions.push(
 ```json
 {
   "commands": [{
-    "command": "obi.my-command",
-    "title": "%obi.my-command%",
+    "command": "ldm.my-command",
+    "title": "%ldm.my-command%",
     "icon": "$(icon-name)"
   }]
 }
@@ -452,7 +452,7 @@ context.subscriptions.push(
 3. **Add i18n strings** to `package.nls.json`:
 ```json
 {
-  "obi.my-command": "OBI: My Command Description"
+  "ldm.my-command": "ldm: My Command Description"
 }
 ```
 
@@ -461,8 +461,8 @@ context.subscriptions.push(
 {
   "menus": {
     "view/title": [{
-      "command": "obi.my-command",
-      "when": "obi.contains_obi_project && obi.valid-config && view == obi.controller",
+      "command": "ldm.my-command",
+      "when": "ldm.contains_ldm_project && ldm.valid-config && view == ldm.controller",
       "group": "navigation@10"
     }]
   }
@@ -486,7 +486,7 @@ When adding UI elements, always check required `when` clauses in `package.json`.
 ## Performance Considerations
 
 ### Source List Caching
-`LocalSourceList.load_source_list()` caches source directory structure. Refresh via `obi.source-filter.update` command.
+`LocalSourceList.load_source_list()` caches source directory structure. Refresh via `ldm.source-filter.update` command.
 
 ### Large Projects
 Build list generation is synchronous and can block on large codebases (10,000+ files). Consider progress notifications for long operations.
@@ -496,12 +496,12 @@ Single persistent SSH connection reused across operations. Connection timeout: 3
 
 ## External Dependencies
 
-**Backend OBI**: Extension depends on separate Python/shell scripts on IBM i:
-- Repository: `andreas-prouza/obi`
-- Version check: `Constants.OBI_BACKEND_VERSION`
+**Backend ldm**: Extension depends on separate Python/shell scripts on IBM i:
+- Repository: `andreas-prouza/ldm`
+- Version check: `Constants.ldm_BACKEND_VERSION`
 - Installation: User must clone and run `setup.sh` on IBM i
 
-**Transfer on Update**: `OBITools.self_check()` copies templates to `.obi/etc/` on extension version changes.
+**Transfer on Update**: `ldmTools.self_check()` copies templates to `.ldm/etc/` on extension version changes.
 
 ## Development Roadmap
 
@@ -514,7 +514,7 @@ Single persistent SSH connection reused across operations. Connection timeout: 3
 ### Q2 2026: Advanced Features (v1.1-1.2)
 - **Enable Deployment Module** - Full release management
 - **Quick Settings Panel** - Rapid configuration access
-- **Lancelot Integration** - Local OBI mode with enhanced workflow
+- **Lancelot Integration** - Local ldm mode with enhanced workflow
 - Automatic dependency detection
 - Build analytics and reporting
 
@@ -526,8 +526,8 @@ Single persistent SSH connection reused across operations. Connection timeout: 3
 
 ## Related Projects
 
-- **OBI Backend**: `andreas-prouza/obi` - Python/shell scripts for IBM i
+- **ldm Backend**: `andreas-prouza/ldm` - Python/shell scripts for IBM i
 - **Project Lancelot**: `C:\Roland_Batcave\Repos\GitHub\Lancelot-extension` - Companion IBM i development extension
-- **OBI Documentation**: `andreas-prouza/ibm-i-build-obi` - Comprehensive OBI documentation
+- **ldm Documentation**: `andreas-prouza/ibm-i-build-ldm` - Comprehensive ldm documentation
 
 When making changes that affect build orchestration, configuration management, or SSH communication, consider impact on these integration points.

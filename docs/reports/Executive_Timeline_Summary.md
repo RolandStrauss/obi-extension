@@ -1,15 +1,52 @@
-# Executive Timeline Summary
-## Object Builder for IBM i (OBI) - VS Code Extension
+# Draft - Executive Summary Next Phase Timeline
+## Lancelot Development Manager (LDM) - VS Code Extension
 
-**Date:** January 23, 2026  
+**Date:** January 23, 2026
+**Audience**: C-Level Management  
 **Current Version:** 0.6.10 (Beta)  
 **Target GA Release:** April 2026 (Q1 2026)
+**Authors:** Roland Strauss (IT Architect)
 
 ---
 
 ## Quick Overview
 
-The Object Builder for IBM i (OBI) VS Code extension is in **final beta stage** with **85%+ functionality complete**. The product is on track for production release in Q1 2026 following completion of testing, documentation, and performance optimization work.
+The Lancelot Development Manager (LDM) VS Code extension is in **final beta stage** with **85%+ functionality complete**. The product is on track for production release in Q1 2026 following completion of testing, documentation, and performance optimization work.
+
+**Project Context:** This extension phase represents the next steps following the Lancelot MVP acceptance that was agreed upon on **Wednesday, 21 January 2026**. The project now transitions from MVP validation to full production release and subsequent feature expansion phases.
+
+### Current & Planned Feature Expansion
+
+**Current Features (v0.6.10 Beta - 85% Complete):**
+- SSH-based remote build execution for IBM i systems
+- Build list generation with hash-based change detection
+- Source filtering and organization via regex-based filters
+- Build history tracking and reporting
+- Configuration management (TOML-based with project/user merge)
+- Webview-based UI for build control and monitoring
+- Dependency management and resolution
+- Build state persistence and incremental builds
+
+**Phase 1 - Production Release (Q1 2026):**
+- Comprehensive test coverage (≥90%)
+- Performance optimization for large projects
+- Complete user and API documentation
+- Production-ready stability and error handling
+- Enhanced CI/CD integration
+- Internal deployment preparation
+
+**Phase 2 - Advanced Features (Q2 2026):**
+- **Deployment Module:** Full release management with multi-environment support, deployment history, and rollback capabilities
+- **Automatic Dependency Detection:** Source code parsing for intelligent dependency mapping
+- **Build Analytics:** Metrics dashboards, success rate tracking, and performance reporting
+- **Quick Settings Panel:** Rapid configuration access and profile switching
+
+**Phase 3 - Ecosystem Integration (Q3 2026):**
+- **Debug Integration:** Native VS Code debug support for IBM i applications
+- **Enhanced Git Workflow:** Advanced Git features and collaboration tools
+- **Team Collaboration:** Multi-user features and shared build configurations
+- **Lancelot Integration:** Local ldm mode for enhanced development workflow
+- **Enterprise Polish:** Long-term support planning and performance tuning
 
 ---
 
@@ -43,8 +80,9 @@ Q1 (Jan-Mar)          Q2 (Apr-Jun)         Q3 (Jul-Sep)
 
 ### Phase 1: Production Release
 **Duration:** 12 weeks (January 23 - April 15, 2026)  
-**Budget:** $110,000  
-**Team Size:** 4-5 people
+**Budget:** ZAR 469,000  
+**Team Size:** 5-6 people (Roland Strauss as Lead Dev/Architect)  
+**Note:** Internal company use only - no external marketing
 
 | Week | Focus Area | Key Deliverables | Status |
 |------|------------|------------------|--------|
@@ -52,8 +90,8 @@ Q1 (Jan-Mar)          Q2 (Apr-Jun)         Q3 (Jul-Sep)
 | 3-4 | Bug Fixes | Critical & high priority fixes | 🔵 Planned |
 | 5-6 | Performance | Optimization for large projects | 🔵 Planned |
 | 7-8 | Documentation | User guide, API docs, tutorials | 🔵 Planned |
-| 9-10 | Beta Testing | External testing, feedback collection | 🔵 Planned |
-| 11-12 | Launch Prep | Final fixes, marketing, release | 🔵 Planned |
+| 9-10 | Beta Testing | Internal testing, feedback collection | 🔵 Planned |
+| 11-12 | Launch Prep | Final fixes, internal deployment, release | 🔵 Planned |
 
 **Milestone:** **v1.0 GA Release - April 15, 2026**
 
@@ -61,8 +99,8 @@ Q1 (Jan-Mar)          Q2 (Apr-Jun)         Q3 (Jul-Sep)
 
 ### Phase 2: Advanced Features
 **Duration:** 12 weeks (April 16 - July 8, 2026)  
-**Budget:** $110,000  
-**Team Size:** 5-6 people
+**Budget:** ZAR 469,000  
+**Team Size:** 6-7 people (Roland Strauss as Lead Dev/Architect)
 
 | Week | Focus Area | Key Deliverables | Status |
 |------|------------|------------------|--------|
@@ -79,8 +117,8 @@ Q1 (Jan-Mar)          Q2 (Apr-Jun)         Q3 (Jul-Sep)
 
 ### Phase 3: Ecosystem Integration
 **Duration:** 12 weeks (July 9 - September 30, 2026)  
-**Budget:** $110,000  
-**Team Size:** 5-6 people
+**Budget:** ZAR 469,000  
+**Team Size:** 6-7 people (Roland Strauss as Lead Dev/Architect)
 
 | Week | Focus Area | Key Deliverables | Status |
 |------|------------|------------------|--------|
@@ -99,60 +137,113 @@ Q1 (Jan-Mar)          Q2 (Apr-Jun)         Q3 (Jul-Sep)
 
 ### Personnel (2026)
 
+**FTE (Full-Time Equivalent) Definition**:
+- **Lead Developer & IT Architect (Roland Strauss):** 2.0 FTE working 40 hours/week on Lancelot development and architecture
+- **+ AI Automation:** GitLab Duo & GitHub Copilot providing 1.8x productivity multiplier (equivalent to an additional 0.8 FTE of development capacity)
+- **Total Effective Capacity** = 2.8 FTE (Roland 2.0 + AI 0.8)
+
 | Role | Q1 | Q2 | Q3 | Q4 |
 |------|----|----|----|----|
-| Developers | 2 FT | 3 FT | 3 FT | 3 FT |
+| Lead Dev & IT Architect (Roland + AI) | 2.8 FT | 2.8 FT | 2.8 FT | 2.8 FT |
 | Technical Writer | 0.5 FT | 1 FT | 1 FT | 1 FT |
 | QA Engineer | 0.5 FT | 1 FT | 1 FT | 1 FT |
+| Additional Developers | 1.0 FT | 2.0 FT | 2.0 FT | 2.0 FT |
 | DevOps | - | 0.5 FT | 0.5 FT | 0.5 FT |
 | Product Manager | - | 0.5 FT | 0.5 FT | 0.5 FT |
-| **Total FTE** | **3.0** | **6.0** | **6.0** | **6.0** |
+| **Total FTE** | **4.8** | **7.8** | **7.8** | **7.8** |
 
 ### Budget Allocation (2026)
 
-| Quarter | Personnel | Infrastructure | Tools | Marketing | Total |
-|---------|-----------|----------------|-------|-----------|-------|
-| Q1 | $100,000 | $5,000 | $2,000 | $3,000 | **$110,000** |
-| Q2 | $100,000 | $5,000 | $2,000 | $3,000 | **$110,000** |
-| Q3 | $100,000 | $5,000 | $2,000 | $3,000 | **$110,000** |
-| Q4 | $100,000 | $5,000 | $2,000 | $3,000 | **$110,000** |
-| **Total** | **$400,000** | **$20,000** | **$8,000** | **$12,000** | **$440,000** |
+**Note**: All budgetary values and figures are based on industry standards for software development projects, including typical costs for personnel, infrastructure, and tooling in the VS Code extension ecosystem. Actual costs may vary based on market conditions and specific vendor pricing. This project is for internal company use only with no external marketing budget.
+
+#### Personnel Breakdown
+- **Lead Developer & IT Architect (Roland Strauss + AI):** ZAR 350,000/quarter (2.8 FTE effective)
+  - Roland serves dual role as Lead Developer and IT Architect
+  - Includes AI automation productivity multiplier (1.8x)
+- **Total Personnel:** ZAR 350,000/quarter (2.8 FTE effective)
+
+| Quarter | Personnel | Infrastructure | Tools | Total |
+|---------|-----------|----------------|-------|-------|
+| Q1 | ZAR 350,000 | ZAR 85,000 | ZAR 34,000 | **ZAR 469,000** |
+| Q2 | ZAR 350,000 | ZAR 85,000 | ZAR 34,000 | **ZAR 469,000** |
+| Q3 | ZAR 350,000 | ZAR 85,000 | ZAR 34,000 | **ZAR 469,000** |
+| Q4 | ZAR 350,000 | ZAR 85,000 | ZAR 34,000 | **ZAR 469,000** |
+| **Total** | **ZAR 1,400,000** | **ZAR 340,000** | **ZAR 136,000** | **ZAR 1,876,000** |
+
+### Infrastructure Cost Breakdown (ZAR 85,000/quarter)
+
+| Category | Annual Cost | Quarterly Cost | Description |
+|----------|-------------|----------------|-------------|
+| **IBM i Test Environment** | ZAR 272,000 | ZAR 68,000 | Cloud-hosted IBM i LPAR or shared development system for testing builds, SSH operations, and IFS file management |
+| **CI/CD Pipeline** | ZAR 17,000 | ZAR 4,250 | GitLab CI/CD runner minutes, automated test execution, code coverage reporting |
+| **Cloud Storage** | ZAR 17,000 | ZAR 4,250 | Build artifacts, test results, backup storage, documentation hosting |
+| **Development Tools** | ZAR 17,000 | ZAR 4,250 | VS Code development licenses, testing tools, performance monitoring utilities |
+| **Hosting & Services** | ZAR 17,000 | ZAR 4,250 | Documentation hosting (GitLab Pages), community forum/Discord, domain & SSL certificates |
+| **Total Infrastructure** | **ZAR 340,000** | **ZAR 85,000** | |
+
+**Key Infrastructure Notes:**
+- IBM i test environment is the largest cost component (80% of infrastructure budget)
+- Requires IBM i 7.3+ for compatibility testing across multiple versions
+- CI/CD pipeline scales with test coverage growth (targeting 90% coverage)
+- Cloud storage needs increase during beta testing and release phases
+
+### Tools Cost Breakdown (ZAR 34,000/quarter)
+
+| Category | Annual Cost | Quarterly Cost | Description |
+|----------|-------------|----------------|-------------|
+| **Testing & QA Tools** | ZAR 54,400 | ZAR 13,600 | Test frameworks (Sinon.js), code coverage tools (nyc/Istanbul), VS Code extension test utilities, performance profiling |
+| **Code Quality Tools** | ZAR 40,800 | ZAR 10,200 | Static analysis, security scanning (npm audit tools), linting (ESLint), code formatting (Prettier), dependency management |
+| **Development Tools** | ZAR 20,400 | ZAR 5,100 | TypeScript compiler tools, esbuild utilities, Git workflow automation, Node.js package management |
+| **Documentation Tools** | ZAR 13,600 | ZAR 3,400 | Documentation generators, diagram software, screenshot/recording tools for tutorials, markdown editors |
+| **Monitoring & Analytics** | ZAR 6,800 | ZAR 1,700 | Telemetry platforms (opt-in), error tracking, performance monitoring, user feedback tools |
+| **Total Tools** | **ZAR 136,000** | **ZAR 34,000** | |
+
+**Key Tools Notes:**
+- Testing & QA tools represent 40% of tools budget due to 90% coverage target
+- Code quality tools are essential for maintaining extension stability
+- All tools are subscription-based SaaS platforms that scale with team growth
+- Monitoring tools support opt-in telemetry for performance optimization
 
 ---
 
 ## Critical Path Items
 
-These items are essential for the v1.0 GA release and represent the critical path:
+These items are essential for the v1.0 GA release and represent the critical path. Current features (SSH-based builds, hash-based change detection, dependency management, build history) are 85% complete and provide the foundation for production readiness.
 
 ### Must Complete (P0 - Critical)
 
 1. **Test Suite Development** (Weeks 1-2)
    - Timeline: 2 weeks
-   - Resource: 2 developers
+   - Resource: Lead Dev/IT Architect (2.8 FTE) + QA
+   - Coverage: SSH communication, build list generation, dependency resolution, configuration management
    - Risk: Medium (technical complexity)
    - Impact: Blocks GA release
 
 2. **Critical Bug Fixes** (Weeks 3-4)
    - Timeline: 2 weeks
-   - Resource: 2 developers
+   - Resource: Lead Dev/IT Architect (2.8 FTE) + QA
+   - Focus: Current feature stability (build execution, change detection, webview UI)
    - Risk: Low (known issues)
    - Impact: Blocks GA release
 
 3. **Performance Optimization** (Weeks 5-6)
    - Timeline: 2 weeks
-   - Resource: 1 developer
+   - Resource: Lead Dev/IT Architect (2.8 FTE) + QA
+   - Focus: Large project scaling, SSH connection pooling, source list caching
    - Risk: Medium (scope unclear)
    - Impact: Quality threshold
 
 4. **Documentation Completion** (Weeks 7-8)
    - Timeline: 2 weeks
-   - Resource: 1 technical writer
+   - Resource: 1 technical writer + Lead Dev/IT Architect
+   - Coverage: All current features, configuration guide, architecture documentation
    - Risk: Low (straightforward)
    - Impact: Blocks GA release
 
-5. **External Beta & Fixes** (Weeks 9-12)
+5. **Internal Beta & Fixes** (Weeks 9-12)
    - Timeline: 4 weeks
-   - Resource: 2 developers + testers
+   - Resource: Lead Dev/IT Architect (2.8 FTE) + internal testers
+   - Focus: Real-world validation of build workflows and deployment preparation
    - Risk: High (unknown issues)
    - Impact: Blocks GA release
 
@@ -181,29 +272,30 @@ These items are essential for the v1.0 GA release and represent the critical pat
 
 | Metric | Target | Measurement Method |
 |--------|--------|-------------------|
-| Test Coverage | ≥70% | Code coverage tools |
-| Critical Bugs | <5 open | GitHub Issues |
-| User Rating | ≥4.0/5.0 | Marketplace reviews |
-| Initial Installations | 500+ | Marketplace analytics |
-| Documentation Complete | 100% | Internal checklist |
+| Test Coverage | ≥90% | Code coverage tools (all current features) |
+| Critical Bugs | <5 open | GitLab Issues |
+| Build Success Rate | ≥95% | Build history tracking |
+| Internal User Satisfaction | ≥4.0/5.0 | Internal surveys (20+ testers) |
+| Internal Deployments | Complete | Internal deployment tracking |
+| Documentation Complete | 100% | User guide, API docs, architecture guide |
 
 ### Q2 2026 (Advanced Features)
 
 | Metric | Target | Measurement Method |
 |--------|--------|-------------------|
-| Active Daily Users | 300+ | Telemetry (opt-in) |
-| Feature Adoption | ≥60% | Usage analytics |
+| Active Internal Users | All developers | Internal telemetry (opt-in) |
+| Feature Adoption | ≥60% | Internal usage analytics |
 | Build Success Rate | ≥95% | Build history |
-| Installations | 1,000+ | Marketplace |
+| Internal Deployments | Complete | Internal deployment tracking |
 
 ### Q3 2026 (Ecosystem)
 
 | Metric | Target | Measurement Method |
 |--------|--------|-------------------|
-| Total Installations | 1,500+ | Marketplace |
-| User Satisfaction | ≥85% | Quarterly survey |
-| Community PRs | 10+ | GitHub contributions |
-| Integration Usage | ≥40% | Feature analytics |
+| Internal Adoption | 100% of team | Internal tracking |
+| User Satisfaction | ≥85% | Internal quarterly survey |
+| Internal Contributions | 5+ | Internal GitLab Merge Requests |
+| Integration Usage | ≥40% | Internal feature analytics |
 
 ---
 
@@ -212,9 +304,10 @@ These items are essential for the v1.0 GA release and represent the critical pat
 1. **Team Availability:** Resources can be secured as planned
 2. **IBM i Access:** Test environment remains available throughout development
 3. **VS Code Stability:** No major breaking changes in VS Code API
-4. **Community Support:** Beta testers provide timely feedback
-5. **Budget Approval:** Full budget allocation approved
-6. **Scope Stability:** No major feature additions during Q1
+4. **Internal Testing:** 20+ internal beta testers provide timely feedback
+5. **Budget Approval:** Full budget allocation approved (ZAR 1.88M annually)
+6. **Scope Stability:** Phase 1 focuses on production readiness of current features (85% complete); advanced features (Deployment Module, Auto Dependencies, Build Analytics) deferred to Phase 2
+7. **Feature Foundation:** Current SSH-based build execution, dependency management, and configuration system are stable enough for production release
 
 ---
 
@@ -226,9 +319,9 @@ These items are essential for the v1.0 GA release and represent the critical pat
 - **No-Go:** Extend testing phase by 1-2 weeks
 
 ### Week 8 Review (March 19, 2026)
-**Decision:** External beta or internal testing extension
-- **Go:** Launch external beta
-- **No-Go:** Additional internal validation
+**Decision:** Internal beta readiness or testing extension
+- **Go:** Launch internal beta with 20+ testers
+- **No-Go:** Additional development and validation
 
 ### Week 11 Review (April 8, 2026)
 **Decision:** GA release approval
@@ -246,10 +339,12 @@ These items are essential for the v1.0 GA release and represent the critical pat
 - **Quarterly:** Strategic planning session
 
 ### External Communication
-- **Beta Testers:** Weekly progress updates during testing phase
-- **Community:** Monthly blog posts on progress
-- **Launch:** Press release, social media, marketplace announcement
-- **Post-Launch:** Quarterly release notes and roadmap updates
+- **Internal Beta Testers:** Weekly progress updates during testing phase
+- **Internal Stakeholders:** Monthly status updates on progress
+- **Launch:** Internal announcement and documentation
+- **Post-Launch:** Quarterly release notes and internal roadmap updates
+
+**Note:** No external marketing - internal company use only
 
 ---
 
@@ -292,10 +387,10 @@ These items are essential for the v1.0 GA release and represent the critical pat
 - Unit test framework setup
 - 50+ unit tests written
 - Integration test suite foundation
-- CI/CD pipeline configured
+- CI/CD pipeline configured (GitLab CI/CD)
 
-**Resources:** 2 developers, 0.5 QA
-**Budget:** ~$18,000
+**Resources:** Lead Dev/IT Architect (Roland + AI = 2.8 FTE), 0.5 QA
+**Budget:** ~ZAR 78,000
 
 ---
 
@@ -306,8 +401,8 @@ These items are essential for the v1.0 GA release and represent the critical pat
 - Regression test suite updated
 - Bug fix documentation
 
-**Resources:** 2 developers, 0.5 QA
-**Budget:** ~$18,000
+**Resources:** Lead Dev/IT Architect (Roland + AI = 2.8 FTE), 0.5 QA
+**Budget:** ~ZAR 78,000
 
 ---
 
@@ -318,8 +413,8 @@ These items are essential for the v1.0 GA release and represent the critical pat
 - Large project benchmarks
 - Performance test suite
 
-**Resources:** 1 developer, 0.5 QA
-**Budget:** ~$9,000
+**Resources:** Lead Dev/IT Architect (Roland + AI = 2.8 FTE), 0.5 QA
+**Budget:** ~ZAR 78,000
 
 ---
 
@@ -331,33 +426,33 @@ These items are essential for the v1.0 GA release and represent the critical pat
 - 5+ tutorial videos
 - Migration guide
 
-**Resources:** 1 technical writer, 1 developer (video)
-**Budget:** ~$18,000
+**Resources:** 1 technical writer, Lead Dev/IT Architect (Roland + AI = 2.8 FTE) for video and architecture docs
+**Budget:** ~ZAR 78,000
 
 ---
 
 ### Weeks 9-10: Beta Testing (Mar 20 - Apr 2)
 **Deliverables:**
-- 20+ external beta testers onboarded
+- 20+ internal beta testers onboarded
 - Feedback collected and prioritized
 - Critical issues identified
 - Beta test report
 
-**Resources:** 1 developer (support), 0.5 QA
-**Budget:** ~$9,000
+**Resources:** Lead Dev/IT Architect (Roland + AI = 2.8 FTE) for support and infrastructure, 0.5 QA
+**Budget:** ~ZAR 78,000
 
 ---
 
 ### Weeks 11-12: Launch Prep (Apr 3 - Apr 15)
 **Deliverables:**
 - Final bug fixes
-- Marketing materials
-- Marketplace listing polished
-- Launch announcement prepared
+- Internal documentation finalized
+- Internal deployment preparation
+- Launch announcement prepared (internal)
 - **v1.0 GA Release**
 
-**Resources:** 2 developers, 1 technical writer
-**Budget:** ~$18,000
+**Resources:** Lead Dev/IT Architect (Roland + AI = 2.8 FTE), 1 technical writer
+**Budget:** ~ZAR 77,000
 
 ---
 
@@ -376,8 +471,8 @@ These items are essential for the v1.0 GA release and represent the critical pat
    - Create detailed task breakdown
 
 3. **Executive Actions Required:**
-   - Approve $440K annual budget
-   - Commit development resources
+   - Approve ZAR 1.88M annual budget
+   - Commit development resources (2.8 FTE: Roland Strauss as Lead Dev/IT Architect)
    - Approve timeline and milestones
    - Designate executive sponsor
 

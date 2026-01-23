@@ -3,23 +3,23 @@
 
 [general]
 local-base-dir = "."
-#remote-base-dir = "ibm-i-build-obi"
+#remote-base-dir = "ibm-i-build-ldm"
 source-dir = "src"
 check-remote-source-on-startup = false
-use-remote-obi = false
-#remote-obi-dir = "/home/prouzat1/obi"
+use-remote-ldm = false
+#remote-ldm-dir = "/home/prouzat1/ldm"
 supported-object-types = [ "pgm", "file", "srvpgm", "obj", "cpy" ]
 file-system-encoding = "utf-8"
 console-output-encoding = "utf-8"
-compiled-object-list = ".obi/etc/object-builds.json"
-remote-source-list=".obi/etc/source-list-remote.json"
-source-list=".obi/etc/source-list-local.json"
-source-infos=".obi/etc/source-infos.json"
-dependency-list = ".obi/etc/dependency.json"
-deployment-object-list = ".obi/build-output/object-list.txt"
-build-output-dir = ".obi/build-output/objects"
-compile-list = ".obi/build-output/compile-list.json"
-compiled-object-list-md = ".obi/build-output/compiled-object-list.md"
+compiled-object-list = ".ldm/etc/object-builds.json"
+remote-source-list=".ldm/etc/source-list-remote.json"
+source-list=".ldm/etc/source-list-local.json"
+source-infos=".ldm/etc/source-infos.json"
+dependency-list = ".ldm/etc/dependency.json"
+deployment-object-list = ".ldm/build-output/object-list.txt"
+build-output-dir = ".ldm/build-output/objects"
+compile-list = ".ldm/build-output/compile-list.json"
+compiled-object-list-md = ".ldm/build-output/compiled-object-list.md"
 max-threads = 20
 
 [global]
@@ -60,7 +60,7 @@ chg-src-ccsid = "cl -v \"CHGATR OBJ('\"'$(SOURCE_FILE_NAME)'\"') ATR(*CCSID) VAL
 replace-special-chars-in-file-name = "mv $(subst $$,'$$',$(subst #,#,$?)) $$(echo $(subst $$,'$$',$(subst #,\\#,$?)) | sed -e 's/'$$'\\302''//g'),"
 test-cmd = "echo 'Works as designed'"
 add-lible = "liblist -a '$(LIB)' 2> /dev/null"
-sql-set-target-lib = "export OBI_CONTENT=\"$(sed 's/$(SQL_TARGET_LIB)/$(TARGET_LIB)/g' $(SOURCE_FILE_NAME))\"; printf '%s' \"$OBI_CONTENT\" > $(SOURCE_FILE_NAME)"
+sql-set-target-lib = "export ldm_CONTENT=\"$(sed 's/$(SQL_TARGET_LIB)/$(TARGET_LIB)/g' $(SOURCE_FILE_NAME))\"; printf '%s' \"$ldm_CONTENT\" > $(SOURCE_FILE_NAME)"
 
 [global.compile-cmds]
 bnddir-rmv = "$(SET_LIBL); cl -v \"RMVBNDDIRE BNDDIR($(INCLUDE_BNDDIR)) OBJ(\"'*LIBL/$(OBJ_NAME)'\")\" "
