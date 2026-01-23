@@ -911,7 +911,7 @@ project/
 
 ### Appendix F: References & Links
 
-- **Extension Repository:** https://github.com/RolandStrauss/ldm-extension
+- **Extension Repository:** https://github.com/RolandStrauss/lbt-extension
 - **Backend Repository:** https://github.com/roland-strauss/ldm
 - **Documentation:** https://github.com/roland-strauss/ibm-i-build-ldm
 - **VS Code Marketplace:** (to be published at GA)

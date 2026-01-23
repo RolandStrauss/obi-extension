@@ -26,7 +26,7 @@ export class Workspace {
   public static get_workspace_uri(): vscode.Uri {
 
     if (!vscode.workspace.workspaceFolders)
-      throw new Error('No workspace available');
+      {throw new Error('No workspace available');}
 
     return vscode.workspace.workspaceFolders[0].uri;
   }

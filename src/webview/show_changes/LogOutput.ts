@@ -107,12 +107,12 @@ export class LogOutput {
       const i_sources = level_item['sources'];
 
       if (level != i_level)
-        continue;
+        {continue;}
 
       for (let i_source of i_sources) {
 
         if (i_source['source'] != source)
-          continue;
+          {continue;}
 
         return i_source['cmds'][cmd_index][log_type];
 

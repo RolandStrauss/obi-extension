@@ -172,7 +172,7 @@ export class BuildSummary {
     const panel = BuildSummary.currentPanel;
 
     if (!panel)
-      return;
+      {return;}
 
     panel._panel.webview.html = BuildSummary.generate_html(BuildSummary._extensionUri, BuildSummary.currentPanel?._panel.webview);
 

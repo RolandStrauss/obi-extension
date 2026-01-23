@@ -243,7 +243,7 @@ export class ConfigGlobal {
     steps?: IConfigCompileSteps) {
 
     if (settings?.general)
-      this.settings = new ConfigSettings(settings?.general, settings?.language);
+      {this.settings = new ConfigSettings(settings?.general, settings?.language);}
 
     this.cmds = cmds;
     this['compile-cmds'] = compile_cmds;
@@ -319,13 +319,13 @@ export class AppConfig {
     let error_messages: string = '';
 
     if (config.general['local-lbt-dir'] && !DirTool.dir_exists(config.general['local-lbt-dir']))
-      error_messages = `Config error: local lbt location '${config.general['local-lbt-dir']}' does not exist`
+      {error_messages = `Config error: local lbt location '${config.general['local-lbt-dir']}' does not exist`}
 
     if (config.general['local-lbt-dir'] && DirTool.dir_exists(config.general['local-lbt-dir']) && !lbtTools.get_local_lbt_python_path())
-      error_messages = `Local lbt error: Virtual environment is missing in '${config.general['local-lbt-dir']}'. Have you run the setup script?`
+      {error_messages = `Local lbt error: Virtual environment is missing in '${config.general['local-lbt-dir']}'. Have you run the setup script?`}
 
     if (error_messages.length > 0)
-      vscode.window.showErrorMessage(error_messages);
+      {vscode.window.showErrorMessage(error_messages);}
 
     return error_messages;
   }
@@ -341,7 +341,7 @@ export class AppConfig {
 
     if (!configs) {
       if (this._config && this._last_loading_time > (Date.now() - 2000)) // Reuse if only 2 seconds old
-        return this._config;
+        {return this._config;}
 
       configs = AppConfig.load_configs();
     }
@@ -399,7 +399,7 @@ export class AppConfig {
 
   private static get_string(value: string|undefined): string|undefined {
     if (!value || value.length == 0)
-      return undefined;
+      {return undefined;}
     return value.trim();
   }
 
@@ -408,7 +408,7 @@ export class AppConfig {
 
     let configs: { alias: string; file: string }[] = [{'alias': 'Default User Config', 'file': Constants.LBT_APP_CONFIG_USER}];
     const ws = Workspace.get_workspace();
-    if (!ws) return configs;
+    if (!ws) {return configs;}
     const files = DirTool.list_dir(path.join(ws, Constants.LBT_APP_CONFIG_DIR));
 
     for (const file of files) {
@@ -445,7 +445,7 @@ export class AppConfig {
     }
 
     if (workspace_settings.current_profile)
-      return workspace_settings.current_profile;
+      {return workspace_settings.current_profile;}
 
     return Constants.LBT_APP_CONFIG_USER;
   }
@@ -487,9 +487,9 @@ export class AppConfig {
             return AppConfig.empty(object[k]);
         }
         if (object[k] instanceof Array)
-          object[k] = [];
+          {object[k] = [];}
         if (typeof object[k] === 'string')
-          object[k] = '';
+          {object[k] = '';}
     });
   }
 

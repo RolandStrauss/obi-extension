@@ -82,7 +82,7 @@ export class I_Releaser implements vscode.WebviewViewProvider {
 	public static async refresh(): Promise<void> {
 		const i_releaser = I_Releaser.i_releaser;
 		if (i_releaser._view)
-			i_releaser._view.webview.html = await this.getHTML(i_releaser._view);
+			{i_releaser._view.webview.html = await this.getHTML(i_releaser._view);}
 	}
 
 

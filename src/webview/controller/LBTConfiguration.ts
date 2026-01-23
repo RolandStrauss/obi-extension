@@ -21,8 +21,8 @@ const env = nunjucks.configure(Constants.HTML_TEMPLATE_DIR);
 
 // Register "typename" filter on the environment
 env.addFilter("typename", (obj: any) => {
-  if (obj === null) return "null";
-  if (obj === undefined) return "undefined";
+  if (obj === null) {return "null";}
+  if (obj === undefined) {return "undefined";}
 
   // If it's a class instance or built-in
   if (obj.constructor && obj.constructor.name) {
@@ -100,7 +100,7 @@ export class lbtConfiguration {
     let source_config: SourceConfig|undefined;
 
     if (source_configs)
-      source_config = source_configs[lbtConfiguration.source_config];
+      {source_config = source_configs[lbtConfiguration.source_config];}
 
     const html = env.render('controller/config_source_details.html',
       {
@@ -126,7 +126,7 @@ export class lbtConfiguration {
     const panel = lbtConfiguration.currentPanel;
 
     if (!panel)
-      return;
+      {return;}
 
     panel._panel.webview.html = await lbtConfiguration.generate_html(lbtConfiguration._extensionUri, lbtConfiguration.currentPanel?._panel.webview);
 
@@ -142,7 +142,7 @@ export class lbtConfiguration {
     : undefined;
 
     if (!workspaceUri)
-      return;
+      {return;}
 
     const command = message.command;
 
@@ -263,9 +263,9 @@ export class lbtConfiguration {
     const ws = Workspace.get_workspace();
 
     if (!source_configs)
-      source_configs = {source_name : source_config};
+      {source_configs = {source_name : source_config};}
     else
-      source_configs[source_name] = source_config;
+      {source_configs[source_name] = source_config;}
 
     DirTool.write_toml(path.join(ws || '', Constants.LBT_SOURCE_CONFIG_FILE), source_configs);
 

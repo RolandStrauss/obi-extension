@@ -54,10 +54,12 @@ const nunjucks = require('nunjucks');
 const env = nunjucks.configure(Constants_1.Constants.HTML_TEMPLATE_DIR);
 // Register "typename" filter on the environment
 env.addFilter("typename", (obj) => {
-    if (obj === null)
+    if (obj === null) {
         return "null";
-    if (obj === undefined)
+    }
+    if (obj === undefined) {
         return "undefined";
+    }
     // If it's a class instance or built-in
     if (obj.constructor && obj.constructor.name) {
         return obj.constructor.name;
@@ -105,8 +107,9 @@ class lbtSourceDependency {
         const ws = Workspace_1.Workspace.get_workspace();
         const source_dir = ws ? path.join(ws, config.general['source-dir'] || 'src') : '';
         let source_config;
-        if (source_configs)
+        if (source_configs) {
             source_config = source_configs[lbtSourceDependency.source];
+        }
         const local_source_list = await LocalSourceList_1.LocalSourceList.get_source_list();
         const dependencies = LBTTools_1.lbtTools.get_dependency_list() || {};
         let dependencies_1 = [];
@@ -137,16 +140,18 @@ class lbtSourceDependency {
     }
     static async update() {
         const panel = lbtSourceDependency.currentPanel;
-        if (!panel)
+        if (!panel) {
             return;
+        }
         panel._panel.webview.html = await lbtSourceDependency.generate_html(lbtSourceDependency._extensionUri, lbtSourceDependency.currentPanel?._panel.webview);
     }
     static onReceiveMessage(message) {
         const workspaceUri = vscode.workspace.workspaceFolders && vscode.workspace.workspaceFolders.length > 0
             ? vscode.workspace.workspaceFolders[0].uri
             : undefined;
-        if (!workspaceUri)
+        if (!workspaceUri) {
             return;
+        }
         const command = message.command;
         switch (command) {
             case "add_dependency_1":
@@ -171,14 +176,16 @@ class lbtSourceDependency {
         let dependency_list = LBTTools_1.lbtTools.get_dependency_list();
         // Add dependency to current source
         if (type == 1) {
-            if (!dependency_list[lbtSourceDependency.source])
+            if (!dependency_list[lbtSourceDependency.source]) {
                 dependency_list[lbtSourceDependency.source] = [];
+            }
             dependency_list[lbtSourceDependency.source].push(new_source);
         }
         // Add current source as dependency to other source
         if (type == 2) {
-            if (!dependency_list[new_source])
+            if (!dependency_list[new_source]) {
                 dependency_list[new_source] = [];
+            }
             dependency_list[new_source].push(lbtSourceDependency.source);
         }
         LBTTools_1.lbtTools.save_dependency_list(dependency_list);

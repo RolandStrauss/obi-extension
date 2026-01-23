@@ -20,8 +20,8 @@ const env = nunjucks.configure(Constants.HTML_TEMPLATE_DIR);
 
 // Register "typename" filter on the environment
 env.addFilter("typename", (obj: any) => {
-  if (obj === null) return "null";
-  if (obj === undefined) return "undefined";
+  if (obj === null) {return "null";}
+  if (obj === undefined) {return "undefined";}
 
   // If it's a class instance or built-in
   if (obj.constructor && obj.constructor.name) {
@@ -105,7 +105,7 @@ export class lbtSourceDependency {
     let source_config: SourceConfig|undefined;
 
     if (source_configs)
-      source_config = source_configs[lbtSourceDependency.source];
+      {source_config = source_configs[lbtSourceDependency.source];}
 
     const local_source_list: string[] = await LocalSourceList.get_source_list();
     const dependencies: any = lbtTools.get_dependency_list() || {};
@@ -150,7 +150,7 @@ export class lbtSourceDependency {
     const panel = lbtSourceDependency.currentPanel;
 
     if (!panel)
-      return;
+      {return;}
 
     panel._panel.webview.html = await lbtSourceDependency.generate_html(lbtSourceDependency._extensionUri, lbtSourceDependency.currentPanel?._panel.webview);
 
@@ -166,7 +166,7 @@ export class lbtSourceDependency {
     : undefined;
 
     if (!workspaceUri)
-      return;
+      {return;}
 
     const command = message.command;
 
@@ -204,14 +204,14 @@ export class lbtSourceDependency {
     // Add dependency to current source
     if (type == 1) {
       if (!dependency_list[lbtSourceDependency.source])
-        dependency_list[lbtSourceDependency.source] = [];
+        {dependency_list[lbtSourceDependency.source] = [];}
       dependency_list[lbtSourceDependency.source].push(new_source);
     }
 
     // Add current source as dependency to other source
     if (type == 2) {
       if (!dependency_list[new_source])
-        dependency_list[new_source] = [];
+        {dependency_list[new_source] = [];}
       dependency_list[new_source].push(lbtSourceDependency.source);
     }
 

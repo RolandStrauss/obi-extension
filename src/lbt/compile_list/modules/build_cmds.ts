@@ -50,7 +50,7 @@ export function getSourceBuildCmds(source: string, appConfig: any, extended_sour
   for (const step of steps) {
     let cmd: string;
     if (typeof step === 'string') {
-      if (step.trim() === '') continue;
+      if (step.trim() === '') {continue;}
       cmd = getCmdFromStep(step, source, variableDict, appConfig, sourceConfig);
     } else if (typeof step === 'object' && step !== null) {
       varDictTmp = { ...variableDict, ...(step as any).properties };

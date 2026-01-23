@@ -128,7 +128,7 @@ export class DeploymentConfig {
     const panel = DeploymentConfig.currentPanel;
 
     if (!panel)
-      return;
+      {return;}
 
     panel._panel.webview.html = await DeploymentConfig.generate_html(DeploymentConfig._context, DeploymentConfig._extensionUri, DeploymentConfig.currentPanel?._panel.webview);
 
@@ -144,7 +144,7 @@ export class DeploymentConfig {
     : undefined;
 
     if (!workspaceUri)
-      return;
+      {return;}
 
     const command = message.command;
 

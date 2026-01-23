@@ -123,12 +123,12 @@ function main() {
   for (let i = 0; i < app_elements.length; i++) {
 
     if (app_elements[i].getAttribute('regex_validator'))
-      app_elements[i]?.addEventListener('change', () => {
+      {app_elements[i]?.addEventListener('change', () => {
         vaidate(app_elements[i] as HTMLInputElement);
-      });
+      });}
 
     if (!app_elements[i]?.classList.contains('mandatory'))
-      continue;
+      {continue;}
 
     app_elements[i]?.addEventListener('change', () => {
       check_input(app_elements[i]);
@@ -136,7 +136,7 @@ function main() {
 
       const panel = app_elements[i].getAttribute('panel');
       if (!panel)
-        return;
+        {return;}
       check_panel_missing(panel);
     } );
 
@@ -404,12 +404,12 @@ function save_configs() {
 
   const ssh_password = document.getElementById("user|SSH_PASSWORD") as HTMLInputElement;
   if (ssh_password.value.length > 0)
-    vscode.postMessage({
+    {vscode.postMessage({
       command: `save_ssh_password`,
       panel: panel,
       panel_tab: panel_tab,
       password: ssh_password.value
-    });
+    });}
 
   reload();
 
@@ -422,9 +422,9 @@ function check_missing_hint() {
   let missing_el: HTMLDivElement = document.getElementById('still_missing') as HTMLDivElement;
 
   if (missing_elements.length > 1)
-    missing_el.style.display = "";
+    {missing_el.style.display = "";}
   else
-    missing_el.style.display = "none";
+    {missing_el.style.display = "none";}
 }
 
 
@@ -432,9 +432,9 @@ function check_error_text() {
   let error_el: HTMLDivElement = document.getElementById('error_text') as HTMLDivElement;
 
   if (error_el.getAttribute('show') === 'true')
-    error_el.style.display = "";
+    {error_el.style.display = "";}
   else
-    error_el.style.display = "none";
+    {error_el.style.display = "none";}
 }
 
 
@@ -448,7 +448,7 @@ function check_panel_missing(panel: string) {
   for (let i = 0; i < missing_elements.length; i++) {
     const el = missing_elements[i];
     if (el.getAttribute('panel') != panel)
-      continue;
+      {continue;}
     found = true;
   }
 
@@ -458,7 +458,7 @@ function check_panel_missing(panel: string) {
   }
 
   if (!panel_el?.classList.contains('missing_value'))
-    panel_el?.classList.add('missing_value');
+    {panel_el?.classList.add('missing_value');}
   return;
 }
 
@@ -479,7 +479,7 @@ function check_input(element: Element) {
     for (let i=0; i < list_values.length; i++) {
 
       if (list_values[i].length == 0)
-        continue;
+        {continue;}
       found_missing = false;
       break;
     }
@@ -498,7 +498,7 @@ function check_input(element: Element) {
     found_missing = true;
     for (let i=0; i < list_values.length; i++) {
       if (list_values[i].length == 0)
-        continue;
+        {continue;}
 
       found_missing = false;
       break;
@@ -527,7 +527,7 @@ function check_inputs() {
     check_input(elements[i]);
     const panel = elements[i].getAttribute('panel');
     if (!panel)
-      return;
+      {return;}
     check_panel_missing(panel);
   }
 
@@ -544,9 +544,9 @@ function set_element_missing_value(element: Element) {
   const panel = element.getAttribute('panel');
   const panel_el = document.getElementById(panel);
   if (!panel)
-    return;
+    {return;}
   if (!panel_el?.classList.contains('missing_value'))
-    panel_el?.classList.add('missing_value');
+    {panel_el?.classList.add('missing_value');}
 }
 
 
@@ -648,14 +648,14 @@ function save_config(class_prefix:string) {
 
     for (let i=1; i < el2.length; i++) {
       if (i > 1)
-        json_string = `${json_string} :`;
+        {json_string = `${json_string} :`;}
       json_string = `${json_string} { "${el2[i]}"`;
     }
 
     const elem_value = (app_elements[i] as HTMLInputElement).value.replaceAll('\\', '\\\\').replaceAll('"', '\\\"');
 
     if (elem_value.length == 0 || elem_value == 'NaN')
-      continue;
+      {continue;}
 
     // Standard element
     let json_value = `"${elem_value.replaceAll('\n', '\\n')}"`;
@@ -667,7 +667,7 @@ function save_config(class_prefix:string) {
     if (app_elements[i].classList.contains('type_checkbox')) {
       json_value = 'false';
       if ((app_elements[i] as HTMLInputElement).checked)
-        json_value = 'true';
+        {json_value = 'true';}
     }
 
     // Array
@@ -678,10 +678,10 @@ function save_config(class_prefix:string) {
       for (let i=0; i < list_values.length; i++) {
 
         if (list_values[i].length == 0)
-          continue;
+          {continue;}
 
         if (i > 0)
-          json_value = `${json_value}, `;
+          {json_value = `${json_value}, `;}
         json_value = `${json_value} "${list_values[i]}"`;
       }
       json_value = `${json_value} ]`;
@@ -694,10 +694,10 @@ function save_config(class_prefix:string) {
 
       for (let i=0; i < list_values.length; i++) {
         if (list_values[i].length == 0)
-          continue;
+          {continue;}
 
         if (i > 0)
-          json_value = `${json_value}, `;
+          {json_value = `${json_value}, `;}
         json_value = `${json_value} "${list_values[i].split('=')[0].trim()}": "${list_values[i].split('=')[1].trim()}"`;
       }
       json_value = `${json_value} }`;

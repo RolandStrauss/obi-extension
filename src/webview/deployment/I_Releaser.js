@@ -83,8 +83,9 @@ class I_Releaser {
     }
     static async refresh() {
         const i_releaser = I_Releaser.i_releaser;
-        if (i_releaser._view)
+        if (i_releaser._view) {
             i_releaser._view.webview.html = await this.getHTML(i_releaser._view);
+        }
     }
     static async get_workflows() {
         const config = DeploymentConfig.DeploymentConfig.get_deployment_config();

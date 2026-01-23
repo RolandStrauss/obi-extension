@@ -49,15 +49,15 @@ export class lbtController implements vscode.WebviewViewProvider {
   public static set_build_watcher() {
 
     if (lbtController.is_config_watcher_set || !lbtTools.contains_lbt_project())
-      return;
+      {return;}
 
     const config = AppConfig.get_app_config();
 
     if (AppConfig.attributes_missing())
-      return;
+      {return;}
 
     const ws = Workspace.get_workspace();
-    if (!ws) return;
+    if (!ws) {return;}
     const compile_list_file_path: string = path.join(ws, config.general['compile-list']);
     // if compile-script changed, refresh the view
     fs.watchFile(compile_list_file_path, {interval: 1000}, function (event, filename) {
@@ -153,10 +153,10 @@ export class lbtController implements vscode.WebviewViewProvider {
       : undefined;
 
     if (!rootPath)
-      return;
+      {return;}
 
     if (AppConfig.attributes_missing())
-      return;
+      {return;}
 
     const compile_list = lbtTools.get_compile_list(rootPath);
 
@@ -297,17 +297,17 @@ export class lbtController implements vscode.WebviewViewProvider {
     let new_profile_config: string | undefined = await vscode.window.showInputBox({ title: `Copy profile config ${current_profile}`,
                                                         placeHolder: 'profile-name', validateInput(value) {
       if (value.trim() === '')
-        return 'Profile name cannot be empty';
+        {return 'Profile name cannot be empty';}
 
       value = value.replace(' ', '-');
       value = value.replace('.toml', '');
       value = Constants.LBT_APP_CONFIG_USER.replace('.toml', `-${value}.toml`);
       if (profile_list.some((profile: { file: string }) => profile.file === value))
-        return `Profile ${value} already exists`;
+        {return `Profile ${value} already exists`;}
       return null;
     }});
     if (!new_profile_config)
-      throw new Error('Canceled by user. No new profile name provided.');
+      {throw new Error('Canceled by user. No new profile name provided.');}
 
     new_profile_config = Constants.LBT_APP_CONFIG_USER.replace('.toml', `-${new_profile_config}.toml`);
     const new_profile_config_file = path.join(Constants.LBT_CONFIGS_DIR, new_profile_config);

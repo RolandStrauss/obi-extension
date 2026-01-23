@@ -80,8 +80,9 @@ function activate(context) {
     vscode.commands.executeCommand('setContext', 'lbt.contains_lbt_project', contains_lbt_project);
     const lbt_welcome_provider = new Welcome_1.Welcome(context.extensionUri);
     context.subscriptions.push(vscode.window.registerWebviewViewProvider(Welcome_1.Welcome.viewType, lbt_welcome_provider));
-    if (!contains_lbt_project)
+    if (!contains_lbt_project) {
         return;
+    }
     const lbt_config_invalid_provider = new ConfigInvalid_1.ConfigInvalid(context.extensionUri);
     context.subscriptions.push(vscode.window.registerWebviewViewProvider(ConfigInvalid_1.ConfigInvalid.viewType, lbt_config_invalid_provider));
     context.subscriptions.push(vscode.commands.registerCommand('lbt.controller.config', () => {
@@ -134,10 +135,12 @@ function activate(context) {
     context.subscriptions.push(vscode.commands.registerCommand('lbt.check-remote-sources', () => {
         // Only available with workspaces
         LBTTools_1.lbtTools.check_remote_sources().then((success) => {
-            if (success)
+            if (success) {
                 vscode.window.showInformationMessage('Remote source check succeeded');
-            else
+            }
+            else {
                 vscode.window.showWarningMessage('Remote source check failed');
+            }
         });
     }));
     const run_native = LBTTools_1.lbtTools.without_local_lbt();
@@ -190,10 +193,12 @@ function activate(context) {
     sourceListProvider.register(context);
     if (config.general['check-remote-source-on-startup'] && config.general['check-remote-source-on-startup'] === true) {
         LBTTools_1.lbtTools.check_remote_sources().then((success) => {
-            if (success)
+            if (success) {
                 vscode.window.showInformationMessage('Remote source check succeeded');
-            else
+            }
+            else {
                 vscode.window.showWarningMessage('Remote source check failed');
+            }
         });
     }
     context.subscriptions.push(vscode.commands.registerCommand('lbt.source-filter.maintain-source-infos', () => {
@@ -205,8 +210,9 @@ function activate(context) {
         SourceInfos_1.SourceInfos.render(context, false);
     }));
     vscode.commands.registerCommand('lbt.source.edit-compile-config', async (item) => {
-        if (item instanceof SourceListProvider_1.SourceListItem)
+        if (item instanceof SourceListProvider_1.SourceListItem) {
             LBTConfiguration_1.lbtConfiguration.render(context, context.extensionUri, `${item.src_lib}/${item.src_file}/${item.src_member}`);
+        }
         if (item instanceof vscode.Uri) {
             const config = AppConfig_1.AppConfig.get_app_config();
             const src_dir = config.general['source-dir'] || 'src';
@@ -222,8 +228,9 @@ function activate(context) {
         }
     });
     vscode.commands.registerCommand('lbt.source.maintain-source-dependency', async (item) => {
-        if (item instanceof SourceListProvider_1.SourceListItem)
+        if (item instanceof SourceListProvider_1.SourceListItem) {
             LBTSourceDependency_1.lbtSourceDependency.render(context, context.extensionUri, `${item.src_lib}/${item.src_file}/${item.src_member}`);
+        }
         if (item instanceof vscode.Uri) {
             const config = AppConfig_1.AppConfig.get_app_config();
             const src_dir = config.general['source-dir'] || 'src';

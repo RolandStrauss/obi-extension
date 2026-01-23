@@ -50,8 +50,9 @@ class DirTool {
         return path;
     }
     static *get_all_files_in_dir(rootdir, dir, file_extensions) {
-        if (!DirTool.dir_exists(path.join(rootdir, dir)))
+        if (!DirTool.dir_exists(path.join(rootdir, dir))) {
             return undefined;
+        }
         const fs = require('fs');
         const files = fs.readdirSync(path.join(rootdir, dir), { withFileTypes: true });
         for (const file of files) {
@@ -59,8 +60,9 @@ class DirTool {
                 yield* DirTool.get_all_files_in_dir(rootdir, path.join(dir, file.name), file_extensions);
             }
             else {
-                if (file_extensions.includes(file.name.split('.').pop()))
+                if (file_extensions.includes(file.name.split('.').pop())) {
                     yield path.join(dir, file.name);
+                }
             }
         }
     }
@@ -73,8 +75,9 @@ class DirTool {
      * @returns
      */
     static async get_all_files_in_dir2(rootdir, dir, file_extensions, replace_backslash = false) {
-        if (!DirTool.dir_exists(path.join(rootdir, dir)))
+        if (!DirTool.dir_exists(path.join(rootdir, dir))) {
             return undefined;
+        }
         let file_list = [];
         let call_list = [];
         const fs = require('fs');
@@ -87,16 +90,18 @@ class DirTool {
             else {
                 if (file_extensions.includes(file.name.split('.').pop())) {
                     file_path = path.join(dir, file.name);
-                    if (replace_backslash)
+                    if (replace_backslash) {
                         file_path = file_path.replace(/\\/g, '/');
+                    }
                     file_list.push(file_path);
                 }
             }
         }
         const results = await Promise.all(call_list);
         results.map((list) => {
-            if (list)
+            if (list) {
                 file_list = [...file_list, ...list];
+            }
         });
         return file_list;
     }
@@ -109,8 +114,9 @@ class DirTool {
      * @returns
      */
     static async get_all_files_in_dir3(rootdir, dir, file_extensions) {
-        if (!DirTool.dir_exists(path.join(rootdir, dir)))
+        if (!DirTool.dir_exists(path.join(rootdir, dir))) {
             return undefined;
+        }
         let file_list = [];
         let call_list = [];
         const fs = require('fs');
@@ -138,8 +144,9 @@ class DirTool {
         }
         const results = await Promise.all(call_list);
         results.map((list) => {
-            if (list)
+            if (list) {
                 file_list = [...file_list, ...list];
+            }
         });
         return file_list;
     }
@@ -150,18 +157,22 @@ class DirTool {
     }
     static file_exists(path) {
         path = DirTool.resolve_env_in_path(path);
-        if (!fs.existsSync(path))
+        if (!fs.existsSync(path)) {
             return false;
-        if (fs.lstatSync(path).isDirectory())
+        }
+        if (fs.lstatSync(path).isDirectory()) {
             return false;
+        }
         return true;
     }
     static dir_exists(path) {
         path = DirTool.resolve_env_in_path(path);
-        if (!fs.existsSync(path))
+        if (!fs.existsSync(path)) {
             return false;
-        if (fs.lstatSync(path).isDirectory())
+        }
+        if (fs.lstatSync(path).isDirectory()) {
             return true;
+        }
         return false;
     }
     static is_file(path) {
@@ -275,22 +286,25 @@ class DirTool {
         file = DirTool.resolve_env_in_path(file);
         Logger_1.logger.info(`Write data to ${file}`);
         try {
-            if (!DirTool.dir_exists(path.dirname(file)))
+            if (!DirTool.dir_exists(path.dirname(file))) {
                 fs.mkdirSync(path.dirname(file), { recursive: true });
+            }
             fs.writeFileSync(file, content, 'utf8');
         }
         catch (e) {
             Logger_1.logger.error(`Error write file: ${file}: ${e.message}`);
-            if (e.line)
+            if (e.line) {
                 Logger_1.logger.error(`Parsing toml content on line ${e.line}, column ${e.column}: ${e.message}`);
+            }
         }
         return;
     }
     static get_key_value_file(file) {
         file = DirTool.resolve_env_in_path(file);
         let key_values = {};
-        if (!DirTool.file_exists(file))
+        if (!DirTool.file_exists(file)) {
             return undefined;
+        }
         try {
             // Read the TOML file into a string
             const data = fs.readFileSync(file, 'utf8');
@@ -304,8 +318,9 @@ class DirTool {
     }
     static get_file_content(file) {
         file = DirTool.resolve_env_in_path(file);
-        if (!DirTool.file_exists(file))
+        if (!DirTool.file_exists(file)) {
             return undefined;
+        }
         try {
             // Read the TOML file into a string
             const data = fs.readFileSync(file, 'utf8');
@@ -324,16 +339,19 @@ class DirTool {
     static get_shell_config(file) {
         file = DirTool.resolve_env_in_path(file);
         const content_list = DirTool.get_key_value_file(file);
-        if (!content_list)
+        if (!content_list) {
             return undefined;
+        }
         let key_values = {};
         for (var i = 0; i < content_list.length; i++) {
             const line = content_list[i].trim().split('#');
-            if (line[0].length == 0)
+            if (line[0].length == 0) {
                 continue;
+            }
             const line2 = content_list[i].trim().split('source ');
-            if (line2[0].length == 0)
+            if (line2[0].length == 0) {
                 continue;
+            }
             const k_v = line[0].trim().split('=');
             key_values[k_v[0]] = k_v[1];
         }

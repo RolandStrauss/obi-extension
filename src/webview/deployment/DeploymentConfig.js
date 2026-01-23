@@ -107,16 +107,18 @@ class DeploymentConfig {
     }
     static async update() {
         const panel = DeploymentConfig.currentPanel;
-        if (!panel)
+        if (!panel) {
             return;
+        }
         panel._panel.webview.html = await DeploymentConfig.generate_html(DeploymentConfig._context, DeploymentConfig._extensionUri, DeploymentConfig.currentPanel?._panel.webview);
     }
     static onReceiveMessage(message) {
         const workspaceUri = vscode.workspace.workspaceFolders && vscode.workspace.workspaceFolders.length > 0
             ? vscode.workspace.workspaceFolders[0].uri
             : undefined;
-        if (!workspaceUri)
+        if (!workspaceUri) {
             return;
+        }
         const command = message.command;
         switch (command) {
             case "save":

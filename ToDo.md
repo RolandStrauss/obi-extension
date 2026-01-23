@@ -1,1 +1,0 @@
-* Update File HASH on Client side -> sed back!

@@ -60,14 +60,17 @@ class lbtController {
         lbtController.set_build_watcher();
     }
     static set_build_watcher() {
-        if (lbtController.is_config_watcher_set || !LBTTools_1.lbtTools.contains_lbt_project())
+        if (lbtController.is_config_watcher_set || !LBTTools_1.lbtTools.contains_lbt_project()) {
             return;
+        }
         const config = AppConfig_1.AppConfig.get_app_config();
-        if (AppConfig_1.AppConfig.attributes_missing())
+        if (AppConfig_1.AppConfig.attributes_missing()) {
             return;
+        }
         const ws = Workspace_1.Workspace.get_workspace();
-        if (!ws)
+        if (!ws) {
             return;
+        }
         const compile_list_file_path = path.join(ws, config.general['compile-list']);
         // if compile-script changed, refresh the view
         fs.watchFile(compile_list_file_path, { interval: 1000 }, function (event, filename) {
@@ -128,10 +131,12 @@ class lbtController {
         const rootPath = vscode.workspace.workspaceFolders && vscode.workspace.workspaceFolders.length > 0
             ? vscode.workspace.workspaceFolders[0].uri
             : undefined;
-        if (!rootPath)
+        if (!rootPath) {
             return;
-        if (AppConfig_1.AppConfig.attributes_missing())
+        }
+        if (AppConfig_1.AppConfig.attributes_missing()) {
             return;
+        }
         const compile_list = LBTTools_1.lbtTools.get_compile_list(rootPath);
         lbtController.view_object._view?.webview.postMessage({
             command: 'update_build_summary_timestamp',
@@ -231,17 +236,20 @@ class lbtController {
         const profile_list = AppConfig_1.AppConfig.get_profile_app_config_list();
         let new_profile_config = await vscode.window.showInputBox({ title: `Copy profile config ${current_profile}`,
             placeHolder: 'profile-name', validateInput(value) {
-                if (value.trim() === '')
+                if (value.trim() === '') {
                     return 'Profile name cannot be empty';
+                }
                 value = value.replace(' ', '-');
                 value = value.replace('.toml', '');
                 value = Constants_1.Constants.LBT_APP_CONFIG_USER.replace('.toml', `-${value}.toml`);
-                if (profile_list.some((profile) => profile.file === value))
+                if (profile_list.some((profile) => profile.file === value)) {
                     return `Profile ${value} already exists`;
+                }
                 return null;
             } });
-        if (!new_profile_config)
+        if (!new_profile_config) {
             throw new Error('Canceled by user. No new profile name provided.');
+        }
         new_profile_config = Constants_1.Constants.LBT_APP_CONFIG_USER.replace('.toml', `-${new_profile_config}.toml`);
         const new_profile_config_file = path.join(Constants_1.Constants.LBT_CONFIGS_DIR, new_profile_config);
         DirTool_1.DirTool.write_toml(path.join(Workspace_1.Workspace.get_workspace(), new_profile_config_file), AppConfig_1.AppConfig.get_user_app_config(Workspace_1.Workspace.get_workspace_uri()));

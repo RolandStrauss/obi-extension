@@ -44,8 +44,9 @@ class BuildHistoryProvider {
         this.workspaceRoot = '';
         this._onDidChangeTreeData = new vscode.EventEmitter();
         this.onDidChangeTreeData = this._onDidChangeTreeData.event;
-        if (workspaceRoot !== undefined)
+        if (workspaceRoot !== undefined) {
             this.workspaceRoot = workspaceRoot;
+        }
     }
     getTreeItem(element) {
         return element;

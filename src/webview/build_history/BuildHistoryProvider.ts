@@ -21,7 +21,7 @@ export class BuildHistoryProvider implements vscode.TreeDataProvider<BuildHistor
 
   constructor(workspaceRoot: string | undefined) {
     if (workspaceRoot !== undefined)
-      this.workspaceRoot = workspaceRoot
+      {this.workspaceRoot = workspaceRoot}
   }
 
 

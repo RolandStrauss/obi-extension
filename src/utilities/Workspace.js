@@ -54,8 +54,9 @@ class Workspace {
         return result;
     }
     static get_workspace_uri() {
-        if (!vscode.workspace.workspaceFolders)
+        if (!vscode.workspace.workspaceFolders) {
             throw new Error('No workspace available');
+        }
         return vscode.workspace.workspaceFolders[0].uri;
     }
     /**

@@ -111,7 +111,7 @@ export class SourceInfos {
     const panel = SourceInfos.currentPanel;
 
     if (!panel)
-      return;
+      {return;}
 
     //panel._panel.webview.html = await SourceInfos.generate_html(SourceInfos._extensionUri, SourceInfos.currentPanel?._panel.webview);
     SourceListProvider.source_list_provider.refresh();
@@ -129,7 +129,7 @@ export class SourceInfos {
     : undefined;
 
     if (!workspaceUri)
-      return;
+      {return;}
 
     const command = message.command;
 

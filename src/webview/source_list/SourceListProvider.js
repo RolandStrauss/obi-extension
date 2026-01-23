@@ -51,13 +51,15 @@ class SourceListProvider {
         this._onDidChangeTreeData = new vscode.EventEmitter();
         this.onDidChangeTreeData = this._onDidChangeTreeData.event;
         this.items = [];
-        if (workspaceRoot !== undefined)
+        if (workspaceRoot !== undefined) {
             this.workspaceRoot = workspaceRoot;
+        }
         SourceListProvider.source_list_provider = this;
     }
     getTreeItem(element) {
-        if (element.list_level != 'source-member')
+        if (element.list_level != 'source-member') {
             return element;
+        }
         return element;
     }
     getChildren(element) {
@@ -76,8 +78,9 @@ class SourceListProvider {
         for (let index = 0; index < source_list.length; index++) {
             const element = source_list[index];
             const file = path.join(this.workspaceRoot, Constants_1.Constants.SOURCE_FILTER_FOLDER_NAME, element);
-            if (!DirTool_1.DirTool.is_file(file))
+            if (!DirTool_1.DirTool.is_file(file)) {
                 continue;
+            }
             //lbtTools.get_filtered_sources_with_details(element).then((result) => {
             //  SourceListProvider.source_lists[element] = result;
             //});
@@ -135,12 +138,14 @@ class SourceListProvider {
     }
     async add_new_source_filter() {
         const source_list = await vscode.window.showInputBox({ title: `Name of source filter`, placeHolder: "source filter name", validateInput(value) {
-                if (value.replace(/[\/|\\:*?"<>]/g, " ") != value)
+                if (value.replace(/[\/|\\:*?"<>]/g, " ") != value) {
                     return "Not allowed characters: \\, /, |, :, *, ?, \", <, >";
+                }
                 return null;
             }, });
-        if (!source_list)
+        if (!source_list) {
             throw new Error('Canceled by user. No source filter name provided');
+        }
         const ws = Workspace_1.Workspace.get_workspace();
         const data = [{ "source-lib": '*', "source-file": '*', 'source-member': '*', "use-regex": false, "show-empty-folders": true }];
         DirTool_1.DirTool.write_file(path.join(ws || '', Constants_1.Constants.SOURCE_FILTER_FOLDER_NAME, `${source_list}.json`), JSON.stringify(data, undefined, 2));
@@ -150,12 +155,14 @@ class SourceListProvider {
     async add_new_source_file(item) {
         const app_config = AppConfig_1.AppConfig.get_app_config();
         const source_file_folder = await vscode.window.showInputBox({ title: `Name of source folder for ${item.src_lib}`, placeHolder: "qrpglesrc", validateInput(value) {
-                if (value.replace(/[\/|\\:*?"<>]/g, " ") != value)
+                if (value.replace(/[\/|\\:*?"<>]/g, " ") != value) {
                     return "Not allowed characters: \\, /, |, :, *, ?, \", <, >";
+                }
                 return null;
             }, });
-        if (!source_file_folder || !item.label)
+        if (!source_file_folder || !item.label) {
             throw new Error('Canceled by user. No source folder name provided');
+        }
         const ws = Workspace_1.Workspace.get_workspace();
         const src_folder = app_config.general['source-dir'] || 'src';
         const new_folder = path.join(ws || '', src_folder, item.label, source_file_folder);
@@ -171,8 +178,9 @@ class SourceListProvider {
         const source_member = await vscode.window.showInputBox({ title: `Name of source member for ${item.src_lib}/${item.label}`,
             placeHolder: "source member name",
             validateInput(value) {
-                if (value.replace(/[\/|\\:*?"<>]/g, " ") != value)
+                if (value.replace(/[\/|\\:*?"<>]/g, " ") != value) {
                     return "Not allowed characters: \\, /, |, :, *, ?, \", <, >";
+                }
                 const ext = path.extname(value).replace('.', '').toLowerCase();
                 if (app_config.general['supported-object-types'] && !app_config.general['supported-object-types'].includes(ext)) {
                     return `Extension ".${ext}" is not supported (supported: ${app_config.general['supported-object-types'].join(', ')})`;
@@ -180,8 +188,9 @@ class SourceListProvider {
                 return null;
             },
         });
-        if (!source_member || !item.src_lib)
+        if (!source_member || !item.src_lib) {
             throw new Error('Canceled by user. No source member name provided');
+        }
         const ws = Workspace_1.Workspace.get_workspace();
         const src_folder = app_config.general['source-dir'] || 'src';
         const new_file = path.join(ws || '', src_folder, item.src_lib, item.label, source_member);
@@ -248,8 +257,9 @@ class SourceListProvider {
             title: `Rename source member for ${item.src_member}`,
             value: item.src_member,
             validateInput(value) {
-                if (value.replace(/[\/|\\:*?"<>]/g, " ") != value)
+                if (value.replace(/[\/|\\:*?"<>]/g, " ") != value) {
                     return "Not allowed characters: \\, /, |, :, *, ?, \", <, >";
+                }
                 const ext = path.extname(value).replace('.', '').toLowerCase();
                 if (app_config.general['supported-object-types'] && !app_config.general['supported-object-types'].includes(ext)) {
                     return `Extension ".${ext}" is not supported (supported: ${app_config.general['supported-object-types'].join(', ')})`;
@@ -301,8 +311,9 @@ class SourceListProvider {
         vscode.commands.registerCommand('lbt.source-filter.add', () => {
             this.add_new_source_filter().then((source_list) => {
                 this.refresh();
-                if (source_list)
+                if (source_list) {
                     SourceListConfig_1.SourceListConfig.render(context, source_list);
+                }
             });
         });
         vscode.commands.registerCommand('lbt.source-filter.show-view', async (item) => {
@@ -312,8 +323,9 @@ class SourceListProvider {
             SourceListConfig_1.SourceListConfig.render(context, item.source_list);
         });
         vscode.commands.registerCommand('lbt.source-filter.delete-config', async (item) => {
-            if (SourceListConfig_1.SourceListConfig.currentPanel && SourceListConfig_1.SourceListConfig.source_list_file == item.source_list)
+            if (SourceListConfig_1.SourceListConfig.currentPanel && SourceListConfig_1.SourceListConfig.source_list_file == item.source_list) {
                 SourceListConfig_1.SourceListConfig.currentPanel.dispose();
+            }
             const ws = Workspace_1.Workspace.get_workspace();
             fs.rmSync(path.join(ws || '', Constants_1.Constants.SOURCE_FILTER_FOLDER_NAME, item.source_list));
             this.refresh();
@@ -343,8 +355,9 @@ class SourceListProvider {
         // setup: events
         tree.onDidChangeSelection(e => {
             Logger_1.logger.info(`onDidChangeSelection: ${e}`); // breakpoint here for debug
-            if (e.selection.length == 0)
+            if (e.selection.length == 0) {
                 return;
+            }
             Logger_1.logger.info(e); // breakpoint here for debug
         });
         tree.onDidCollapseElement(e => {
@@ -367,10 +380,12 @@ class SourceListProvider {
             const value = element[key];
             item = {};
             item[key] = value;
-            if (result.some(e => e[key] === value) || lib && lib != element['source-lib'] || file && file != element['source-file'])
+            if (result.some(e => e[key] === value) || lib && lib != element['source-lib'] || file && file != element['source-file']) {
                 continue;
-            if (key == 'source-member')
+            }
+            if (key == 'source-member') {
                 item['description'] = element.description;
+            }
             item[key] = element[key];
             result.push(item);
         }
@@ -397,8 +412,9 @@ class SourceListItem extends vscode.TreeItem {
                 this.tooltip = `${source_list}: ${src_lib}/${src_file}(${src_member})`;
                 break;
         }
-        if (typeof description !== 'undefined' && description?.length > 0)
+        if (typeof description !== 'undefined' && description?.length > 0) {
             this.tooltip += ` - ${description}`;
+        }
         this.description = description;
         this.source_list = source_list;
         this.list_level = list_level;
@@ -412,21 +428,24 @@ class SourceListItem extends vscode.TreeItem {
         if (vscode.workspace.workspaceFolders) {
             ws = vscode.workspace.workspaceFolders[0].uri.fsPath;
         }
-        if (['source-member', 'source_list'].indexOf(list_level) == -1)
+        if (['source-member', 'source_list'].indexOf(list_level) == -1) {
             return;
+        }
         if (list_level == 'source-member') {
             this.member_path_lbt = LBTTools_1.lbtTools.convert_local_filepath_2_lbt_filepath(path.join(this.src_lib || '', this.src_file || ''));
             this.member_path = path.join(AppConfig_1.AppConfig.get_app_config().general['source-dir'] || 'src', this.member_path_lbt);
             member_file_path = path.join(this.member_path, this.src_member || '');
-            if (!DirTool_1.DirTool.file_exists(path.join(ws, member_file_path)))
+            if (!DirTool_1.DirTool.file_exists(path.join(ws, member_file_path))) {
                 icon = 'error.svg';
+            }
         }
         this.iconPath = {
             light: vscode.Uri.file(path.join(__filename, '..', '..', '..', '..', 'asserts', 'img', 'light', icon)),
             dark: vscode.Uri.file(path.join(__filename, '..', '..', '..', '..', 'asserts', 'img', 'dark', icon))
         };
-        if (list_level != 'source-member')
+        if (list_level != 'source-member') {
             return;
+        }
         this.contextValue = 'lbt-source';
         this.command = {
             command: 'vscode.open',

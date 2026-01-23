@@ -10,7 +10,7 @@ const outputChannel = vscode.window.createOutputChannel(`lbt`);
 
 let ws: string = '';
 if (vscode.workspace.workspaceFolders)
-  ws = vscode.workspace.workspaceFolders[0].uri.fsPath
+  {ws = vscode.workspace.workspaceFolders[0].uri.fsPath}
 
 //const winston = require('winston');
 

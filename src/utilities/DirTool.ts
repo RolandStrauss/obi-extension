@@ -33,7 +33,7 @@ export class DirTool {
   public static *get_all_files_in_dir(rootdir:string, dir: string, file_extensions: string[]): Generator<string> | undefined {
 
     if (!DirTool.dir_exists(path.join(rootdir, dir)))
-      return undefined;
+      {return undefined;}
 
     const fs = require('fs');
     const files = fs.readdirSync(path.join(rootdir, dir), { withFileTypes: true });
@@ -43,7 +43,7 @@ export class DirTool {
         yield* DirTool.get_all_files_in_dir(rootdir, path.join(dir, file.name), file_extensions);
       } else {
         if (file_extensions.includes(file.name.split('.').pop()))
-          yield path.join(dir, file.name);
+          {yield path.join(dir, file.name);}
       }
     }
   }
@@ -60,7 +60,7 @@ export class DirTool {
   public static async get_all_files_in_dir2(rootdir:string, dir: string, file_extensions: string[], replace_backslash: boolean = false): Promise<string[] | undefined> {
 
     if (!DirTool.dir_exists(path.join(rootdir, dir)))
-      return undefined;
+      {return undefined;}
 
     let file_list: string[] = [];
     let call_list = [];
@@ -82,7 +82,7 @@ export class DirTool {
           file_path = path.join(dir, file.name)
 
           if (replace_backslash)
-            file_path = file_path.replace(/\\/g, '/');
+            {file_path = file_path.replace(/\\/g, '/');}
           file_list.push(file_path);
         }
       }
@@ -91,7 +91,7 @@ export class DirTool {
     const results = await Promise.all(call_list);
     results.map((list: string[]|undefined) => {
       if (list)
-        file_list = [...file_list, ...list];
+        {file_list = [...file_list, ...list];}
     });
 
     return file_list;
@@ -110,7 +110,7 @@ export class DirTool {
   public static async get_all_files_in_dir3(rootdir:string, dir: string, file_extensions: string[]|undefined): Promise<source.IQualifiedSource[] | undefined> {
 
     if (!DirTool.dir_exists(path.join(rootdir, dir)))
-      return undefined;
+      {return undefined;}
 
     let file_list: source.IQualifiedSource[] = [];
     let call_list = [];
@@ -144,7 +144,7 @@ export class DirTool {
     const results = await Promise.all(call_list);
     results.map((list: source.IQualifiedSource[]|undefined) => {
       if (list)
-        file_list = [...file_list, ...list];
+        {file_list = [...file_list, ...list];}
     });
 
     return file_list;
@@ -167,10 +167,10 @@ export class DirTool {
     path = DirTool.resolve_env_in_path(path);
 
     if (!fs.existsSync(path))
-      return false;
+      {return false;}
 
     if (fs.lstatSync(path).isDirectory())
-      return false;
+      {return false;}
 
     return true;
   }
@@ -182,10 +182,10 @@ export class DirTool {
     path = DirTool.resolve_env_in_path(path);
 
     if (!fs.existsSync(path))
-      return false;
+      {return false;}
 
     if (fs.lstatSync(path).isDirectory())
-      return true;
+      {return true;}
 
     return false;
   }
@@ -364,14 +364,14 @@ export class DirTool {
 
     try{
       if (!DirTool.dir_exists(path.dirname(file)))
-        fs.mkdirSync(path.dirname(file), {recursive: true});
+        {fs.mkdirSync(path.dirname(file), {recursive: true});}
 
       fs.writeFileSync(file, content, 'utf8');
     }
     catch (e: any) {
       logger.error(`Error write file: ${file}: ${e.message}`);
       if (e.line)
-        logger.error(`Parsing toml content on line ${e.line}, column ${e.column}: ${e.message}`);
+        {logger.error(`Parsing toml content on line ${e.line}, column ${e.column}: ${e.message}`);}
     }
     return;
   }
@@ -384,7 +384,7 @@ export class DirTool {
 
     let key_values: {}= {};
     if (!DirTool.file_exists(file))
-      return undefined;
+      {return undefined;}
 
     try{
       // Read the TOML file into a string
@@ -406,7 +406,7 @@ export class DirTool {
     file = DirTool.resolve_env_in_path(file);
 
     if (!DirTool.file_exists(file))
-      return undefined;
+      {return undefined;}
 
     try{
       // Read the TOML file into a string
@@ -436,7 +436,7 @@ export class DirTool {
 
     const content_list: string[]|undefined = DirTool.get_key_value_file(file);
     if (!content_list)
-      return undefined;
+      {return undefined;}
 
     let key_values: {['key']?: string} = {};
 
@@ -444,11 +444,11 @@ export class DirTool {
 
       const line = content_list[i].trim().split('#');
       if (line[0].length == 0)
-        continue;
+        {continue;}
 
       const line2 = content_list[i].trim().split('source ');
       if (line2[0].length == 0)
-        continue;
+        {continue;}
 
       const k_v: string[] = line[0].trim().split('=');
       key_values[k_v[0]] = k_v[1];

@@ -55,8 +55,9 @@ function getSourceBuildCmds(source, appConfig, extended_sources_config) {
     for (const step of steps) {
         let cmd;
         if (typeof step === 'string') {
-            if (step.trim() === '')
+            if (step.trim() === '') {
                 continue;
+            }
             cmd = getCmdFromStep(step, source, variableDict, appConfig, sourceConfig);
         }
         else if (typeof step === 'object' && step !== null) {

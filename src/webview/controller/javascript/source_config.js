@@ -112,8 +112,9 @@ function save_config() {
     console.log(`steps: ${document.getElementById("steps")}`);
     const steps_value = document.getElementById("steps").value;
     let steps = [];
-    if (steps_value.length > 0)
+    if (steps_value.length > 0) {
         steps = steps_value.split('\n');
+    }
     vscode.postMessage({
         command: "save_config",
         settings: source_settings,

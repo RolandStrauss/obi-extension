@@ -66,22 +66,26 @@ class SSH_Tasks {
         const ssh_key = config.connection['ssh-key'];
         if (!host || host.length == 0) {
             host = await vscode.window.showInputBox({ title: `Enter an IBM i hostname/IP`, placeHolder: "my-ibm-i" });
-            if (!host)
+            if (!host) {
                 throw new Error('Canceled by user. No host provided');
+            }
         }
         if (!ssh_user || ssh_user.length == 0) {
             ssh_user = await vscode.window.showInputBox({ title: `Enter your user for ${host}`, placeHolder: "usrprf" });
-            if (!ssh_user)
+            if (!ssh_user) {
                 throw new Error('Canceled by user. No user provided');
+            }
         }
         let pwd = await SSH_Tasks.context.secrets.get(`lbt|${host}|${ssh_user}`);
         if (!pwd && (!ssh_key || ssh_key.length == 0)) {
             pwd = await vscode.window.showInputBox({ title: `Enter your password for ${ssh_user}@${host}`, placeHolder: "password", password: true });
-            if (!pwd)
+            if (!pwd) {
                 throw new Error('Canceled by user. No password provided');
+            }
         }
-        if (SSH_Tasks.ssh.isConnected())
+        if (SSH_Tasks.ssh.isConnected()) {
             return;
+        }
         await SSH_Tasks.ssh.connect({
             host: host,
             username: ssh_user,
@@ -114,10 +118,12 @@ class SSH_Tasks {
         const result = await SSH_Tasks.ssh.execCommand(cmd);
         Logger_1.logger.info(`CODE: ${result.code}`);
         Logger_1.logger.info(`STDOUT: ${result.stdout}`);
-        if (result.stderr.length > 0)
+        if (result.stderr.length > 0) {
             Logger_1.logger.error(`STDERR: ${result.stderr}`);
-        if (result.code != 0)
+        }
+        if (result.code != 0) {
             throw Error(result.stderr);
+        }
     }
     static async getRemoteFile(local, remote, again) {
         if (!SSH_Tasks.ssh.isConnected()) {
@@ -167,8 +173,9 @@ class SSH_Tasks {
                 }
             }
         });
-        if (failed.length > 0)
+        if (failed.length > 0) {
             Logger_1.logger.error(`Failed to transfer ${failed}`);
+        }
         Logger_1.logger.debug(`Transfered: ${successful}`);
     }
     static async check_remote_paths(files, again) {
@@ -183,8 +190,9 @@ class SSH_Tasks {
         let cmd = '';
         let first = true;
         files.forEach((file) => {
-            if (!first)
+            if (!first) {
                 cmd = `${cmd} && `;
+            }
             file = SSH_Tasks.get_finalized_remote_path(file);
             cmd = `${cmd} ls "${file}"`;
             first = false;
@@ -193,8 +201,9 @@ class SSH_Tasks {
         const result = await SSH_Tasks.ssh.execCommand(cmd);
         Logger_1.logger.info(`CODE: ${result.code}`);
         Logger_1.logger.info(`STDOUT: ${result.stdout}`);
-        if (result.stderr.length > 0)
+        if (result.stderr.length > 0) {
             Logger_1.logger.error(`STDERR: ${result.stderr}`);
+        }
         return result.code == 0;
     }
     static async delete_sources(source_list, again) {
@@ -208,8 +217,9 @@ class SSH_Tasks {
             return;
         }
         const config = AppConfig_1.AppConfig.get_app_config();
-        if (!config.general['remote-base-dir'] || !config.general['local-base-dir'])
+        if (!config.general['remote-base-dir'] || !config.general['local-base-dir']) {
             throw Error(`Config attribute 'config.general.remote_base_dir' or 'config.general.local-base-dir' missing`);
+        }
         const source_dir = config.general['source-dir'] ?? 'src';
         const local_source_dir = path.join(Workspace_1.Workspace.get_workspace(), config.general['local-base-dir'], source_dir);
         const remote_source_dir = `${config.general['remote-base-dir']}/${source_dir}`;
@@ -234,7 +244,9 @@ class SSH_Tasks {
         }
         const config = AppConfig_1.AppConfig.get_app_config();
         if (!config.general['remote-base-dir'] || config.general['remote-base-dir'].length < 4) // to be sure it's not root!
+         {
             throw Error(`Config attribute 'config.general.remote_base_dir' invalid: ${config.general['remote-base-dir']}`);
+        }
         const remote_base_dir = SSH_Tasks.get_finalized_remote_path(config.general['remote-base-dir']);
         const answer = await vscode.window.showInformationMessage(`Process with remote folder: '${remote_base_dir}'?`, { modal: true }, ...['Yes', 'No']);
         switch (answer) {
@@ -270,8 +282,9 @@ class SSH_Tasks {
             return;
         }
         const config = AppConfig_1.AppConfig.get_app_config();
-        if (!config.general['remote-base-dir'] || !config.general['local-base-dir'])
+        if (!config.general['remote-base-dir'] || !config.general['local-base-dir']) {
             throw Error(`Config attribute 'config.general.remote_base_dir' or 'config.general.local-base-dir' missing`);
+        }
         const source_dir = config.general['source-dir'] ?? 'src';
         const local_source_dir = path.join(Workspace_1.Workspace.get_workspace(), config.general['local-base-dir'], source_dir);
         let remote_base_dir = SSH_Tasks.get_finalized_remote_path(config.general['remote-base-dir']);
@@ -302,10 +315,12 @@ class SSH_Tasks {
         });
         Logger_1.logger.info(`Transfer files: ${source_list}`);
         await SSH_Tasks.ssh.putFiles(transfer_list, { concurrency: config.connection['ssh-concurrency'] ?? 5 });
-        if (transfer_list.length == 1)
+        if (transfer_list.length == 1) {
             vscode.window.showInformationMessage(`1 source transfered`);
-        else
+        }
+        else {
             vscode.window.showInformationMessage(`${transfer_list.length} sources transfered`);
+        }
     }
     static async transfer_files(file_list, again) {
         if (!SSH_Tasks.ssh.isConnected()) {
@@ -318,8 +333,9 @@ class SSH_Tasks {
             return;
         }
         const config = AppConfig_1.AppConfig.get_app_config();
-        if (!config.general['remote-base-dir'] || !config.general['local-base-dir'])
+        if (!config.general['remote-base-dir'] || !config.general['local-base-dir']) {
             throw Error(`Config attribute 'config.general.remote_base_dir' missing`);
+        }
         const local_base_dir = path.join(Workspace_1.Workspace.get_workspace(), config.general['local-base-dir']);
         let remote_base_dir = SSH_Tasks.get_finalized_remote_path(config.general['remote-base-dir']);
         Logger_1.logger.info(`Transfer: ${file_list}`);
@@ -360,10 +376,12 @@ class SSH_Tasks {
             // SSH transfer folder
             //##############################
             const status = await SSH_Tasks.ssh_put_dir(local_dir, remote_dir, failed, successful);
-            if (status)
+            if (status) {
                 vscode.window.showInformationMessage(`${successful.length} files were successfully transfered to ${remote_dir}`);
-            else
+            }
+            else {
                 throw new Error(`${successful.length} of ${failed.length} failed transfered to ${remote_dir}`);
+            }
             var endTime = performance.now();
             final_message = `Finished transfer in ${(endTime - startTime) / 1000} seconds.`;
         });
@@ -403,8 +421,9 @@ class SSH_Tasks {
                 }
             }
         });
-        if (failed.length > 0)
+        if (failed.length > 0) {
             Logger_1.logger.error(`Failed to transfer ${failed}`);
+        }
         Logger_1.logger.debug(`Transfered: ${successful}`);
         return result;
     }

@@ -53,10 +53,12 @@ const nunjucks = require('nunjucks');
 const env = nunjucks.configure(Constants_1.Constants.HTML_TEMPLATE_DIR);
 // Register "typename" filter on the environment
 env.addFilter("typename", (obj) => {
-    if (obj === null)
+    if (obj === null) {
         return "null";
-    if (obj === undefined)
+    }
+    if (obj === undefined) {
         return "undefined";
+    }
     // If it's a class instance or built-in
     if (obj.constructor && obj.constructor.name) {
         return obj.constructor.name;
@@ -101,8 +103,9 @@ class lbtConfiguration {
         const source_configs = AppConfig_1.AppConfig.get_source_configs();
         const config = AppConfig_1.AppConfig.get_app_config();
         let source_config;
-        if (source_configs)
+        if (source_configs) {
             source_config = source_configs[lbtConfiguration.source_config];
+        }
         const html = env.render('controller/config_source_details.html', {
             global_stuff: LBTTools_1.lbtTools.get_global_stuff(webview, extensionUri),
             config_css: (0, getUri_1.getUri)(webview, extensionUri, ["asserts/css", "config.css"]),
@@ -117,16 +120,18 @@ class lbtConfiguration {
     }
     static async update() {
         const panel = lbtConfiguration.currentPanel;
-        if (!panel)
+        if (!panel) {
             return;
+        }
         panel._panel.webview.html = await lbtConfiguration.generate_html(lbtConfiguration._extensionUri, lbtConfiguration.currentPanel?._panel.webview);
     }
     static onReceiveMessage(message) {
         const workspaceUri = vscode.workspace.workspaceFolders && vscode.workspace.workspaceFolders.length > 0
             ? vscode.workspace.workspaceFolders[0].uri
             : undefined;
-        if (!workspaceUri)
+        if (!workspaceUri) {
             return;
+        }
         const command = message.command;
         switch (command) {
             case "add_source_cmd":
@@ -210,10 +215,12 @@ class lbtConfiguration {
         let source_config = { "source-cmds": source_cmds, settings: settings, steps: steps };
         const source_name = lbtConfiguration.source_config;
         const ws = Workspace_1.Workspace.get_workspace();
-        if (!source_configs)
+        if (!source_configs) {
             source_configs = { source_name: source_config };
-        else
+        }
+        else {
             source_configs[source_name] = source_config;
+        }
         DirTool_1.DirTool.write_toml(path.join(ws || '', Constants_1.Constants.LBT_SOURCE_CONFIG_FILE), source_configs);
         vscode.window.showInformationMessage('Source configuration saved');
     }

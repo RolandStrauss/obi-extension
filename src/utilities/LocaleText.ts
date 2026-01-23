@@ -48,10 +48,10 @@ export class LocaleText {
   public get_Text(key: string): string {
 
     if (this.current_lang && this.current_lang[key])
-      return this.current_lang[key];
+      {return this.current_lang[key];}
 
     if (this.default_lang && this.default_lang[key])
-      return this.default_lang[key];
+      {return this.default_lang[key];}
 
     if (this.default_lang) {
       this.default_lang[key] = key;

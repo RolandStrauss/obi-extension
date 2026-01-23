@@ -20,7 +20,7 @@
   },
   "license": "MIT",
   "repository": {
-    "url": "https://github.com/RolandStrauss/ldm-extension"
+    "url": "https://github.com/RolandStrauss/lbt-extension"
   },
   "engines": {
     "vscode": "^1.66.0"

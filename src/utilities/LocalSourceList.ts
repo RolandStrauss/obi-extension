@@ -39,12 +39,12 @@ export class LocalSourceList {
             // File change events
             LocalSourceList.watcher_project.onDidCreate(uri => {
                 if (LocalSourceList.watcher_processing_promise.length > 0)
-                    return;
+                    {return;}
                 LocalSourceList.source_loading_promise.push(LocalSourceList.refresh_lbt_stuff(uri));
             });
             LocalSourceList.watcher_project?.onDidDelete(uri => {
                 if (LocalSourceList.watcher_processing_promise.length > 0)
-                    return;
+                    {return;}
                 LocalSourceList.source_loading_promise.push(LocalSourceList.refresh_lbt_stuff(uri));
             });
         }
@@ -58,7 +58,7 @@ export class LocalSourceList {
 
         logger.debug(`File changed: ${uri.fsPath}`);
         if (ext == 'log')
-            return;
+            {return;}
 
         logger.debug(`Reload some stuff`);
         await LocalSourceList.load_source_list();
@@ -79,7 +79,7 @@ export class LocalSourceList {
 
     public static async get_source_list(): Promise<string[]> {
         if (LocalSourceList.source_list === undefined)
-            await LocalSourceList.load_source_list();
+            {await LocalSourceList.load_source_list();}
         return LocalSourceList.source_list || [];
     }
 

@@ -192,7 +192,7 @@ function save_config() {
   const steps_value: string = (document.getElementById("steps") as TextField).value
   let steps:string[] = [];
   if (steps_value.length > 0)
-    steps = steps_value.split('\n');
+    {steps = steps_value.split('\n');}
 
   vscode.postMessage({
     command: "save_config",

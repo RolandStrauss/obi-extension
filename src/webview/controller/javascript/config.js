@@ -88,18 +88,21 @@ function main() {
     });
     const app_elements = document.getElementsByTagName(`vscode-text-field`);
     for (let i = 0; i < app_elements.length; i++) {
-        if (app_elements[i].getAttribute('regex_validator'))
+        if (app_elements[i].getAttribute('regex_validator')) {
             app_elements[i]?.addEventListener('change', () => {
                 vaidate(app_elements[i]);
             });
-        if (!app_elements[i]?.classList.contains('mandatory'))
+        }
+        if (!app_elements[i]?.classList.contains('mandatory')) {
             continue;
+        }
         app_elements[i]?.addEventListener('change', () => {
             check_input(app_elements[i]);
             check_missing_hint();
             const panel = app_elements[i].getAttribute('panel');
-            if (!panel)
+            if (!panel) {
                 return;
+            }
             check_panel_missing(panel);
         });
     }
@@ -275,29 +278,34 @@ function save_configs() {
     save_config('project');
     save_config('user');
     const ssh_password = document.getElementById("user|SSH_PASSWORD");
-    if (ssh_password.value.length > 0)
+    if (ssh_password.value.length > 0) {
         vscode.postMessage({
             command: `save_ssh_password`,
             panel: panel,
             panel_tab: panel_tab,
             password: ssh_password.value
         });
+    }
     reload();
 }
 function check_missing_hint() {
     const missing_elements = document.getElementsByClassName('missing_value');
     let missing_el = document.getElementById('still_missing');
-    if (missing_elements.length > 1)
+    if (missing_elements.length > 1) {
         missing_el.style.display = "";
-    else
+    }
+    else {
         missing_el.style.display = "none";
+    }
 }
 function check_error_text() {
     let error_el = document.getElementById('error_text');
-    if (error_el.getAttribute('show') === 'true')
+    if (error_el.getAttribute('show') === 'true') {
         error_el.style.display = "";
-    else
+    }
+    else {
         error_el.style.display = "none";
+    }
 }
 function check_panel_missing(panel) {
     const panel_el = document.getElementById(panel);
@@ -305,16 +313,18 @@ function check_panel_missing(panel) {
     let found = false;
     for (let i = 0; i < missing_elements.length; i++) {
         const el = missing_elements[i];
-        if (el.getAttribute('panel') != panel)
+        if (el.getAttribute('panel') != panel) {
             continue;
+        }
         found = true;
     }
     if (!found) {
         panel_el?.classList.remove('missing_value');
         return;
     }
-    if (!panel_el?.classList.contains('missing_value'))
+    if (!panel_el?.classList.contains('missing_value')) {
         panel_el?.classList.add('missing_value');
+    }
     return;
 }
 function check_input(element) {
@@ -326,8 +336,9 @@ function check_input(element) {
         const list_values = elem_value.split('\n');
         found_missing = true;
         for (let i = 0; i < list_values.length; i++) {
-            if (list_values[i].length == 0)
+            if (list_values[i].length == 0) {
                 continue;
+            }
             found_missing = false;
             break;
         }
@@ -342,8 +353,9 @@ function check_input(element) {
         const list_values = elem_value.split('\n');
         found_missing = true;
         for (let i = 0; i < list_values.length; i++) {
-            if (list_values[i].length == 0)
+            if (list_values[i].length == 0) {
                 continue;
+            }
             found_missing = false;
             break;
         }
@@ -362,8 +374,9 @@ function check_inputs() {
     for (let i = 0; i < elements.length; i++) {
         check_input(elements[i]);
         const panel = elements[i].getAttribute('panel');
-        if (!panel)
+        if (!panel) {
             return;
+        }
         check_panel_missing(panel);
     }
     check_missing_hint();
@@ -373,10 +386,12 @@ function set_element_missing_value(element) {
     element.classList.add('missing_value');
     const panel = element.getAttribute('panel');
     const panel_el = document.getElementById(panel);
-    if (!panel)
+    if (!panel) {
         return;
-    if (!panel_el?.classList.contains('missing_value'))
+    }
+    if (!panel_el?.classList.contains('missing_value')) {
         panel_el?.classList.add('missing_value');
+    }
 }
 function save_global_cmds(class_prefix) {
     const app_elements = document.getElementsByClassName(`${class_prefix}_save_app_global_cmds`);
@@ -442,13 +457,15 @@ function save_config(class_prefix) {
         const el2 = app_elements[i].id.split('|');
         json_string = '';
         for (let i = 1; i < el2.length; i++) {
-            if (i > 1)
+            if (i > 1) {
                 json_string = `${json_string} :`;
+            }
             json_string = `${json_string} { "${el2[i]}"`;
         }
         const elem_value = app_elements[i].value.replaceAll('\\', '\\\\').replaceAll('"', '\\\"');
-        if (elem_value.length == 0 || elem_value == 'NaN')
+        if (elem_value.length == 0 || elem_value == 'NaN') {
             continue;
+        }
         // Standard element
         let json_value = `"${elem_value.replaceAll('\n', '\\n')}"`;
         if (app_elements[i].getAttribute('type') == 'number') {
@@ -457,18 +474,21 @@ function save_config(class_prefix) {
         // Checkbox element
         if (app_elements[i].classList.contains('type_checkbox')) {
             json_value = 'false';
-            if (app_elements[i].checked)
+            if (app_elements[i].checked) {
                 json_value = 'true';
+            }
         }
         // Array
         if (app_elements[i].classList.contains('type_array')) {
             json_value = '[';
             const list_values = elem_value.split('\n');
             for (let i = 0; i < list_values.length; i++) {
-                if (list_values[i].length == 0)
+                if (list_values[i].length == 0) {
                     continue;
-                if (i > 0)
+                }
+                if (i > 0) {
                     json_value = `${json_value}, `;
+                }
                 json_value = `${json_value} "${list_values[i]}"`;
             }
             json_value = `${json_value} ]`;
@@ -478,10 +498,12 @@ function save_config(class_prefix) {
             json_value = '{';
             const list_values = elem_value.split('\n');
             for (let i = 0; i < list_values.length; i++) {
-                if (list_values[i].length == 0)
+                if (list_values[i].length == 0) {
                     continue;
-                if (i > 0)
+                }
+                if (i > 0) {
                     json_value = `${json_value}, `;
+                }
                 json_value = `${json_value} "${list_values[i].split('=')[0].trim()}": "${list_values[i].split('=')[1].trim()}"`;
             }
             json_value = `${json_value} }`;

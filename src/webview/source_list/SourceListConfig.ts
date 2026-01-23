@@ -108,7 +108,7 @@ export class SourceListConfig {
     const panel = SourceListConfig.currentPanel;
 
     if (!panel)
-      return;
+      {return;}
 
     panel._panel.webview.html = await SourceListConfig.generate_html(SourceListConfig._extensionUri, SourceListConfig.currentPanel?._panel.webview);
     SourceListProvider.source_list_provider.refresh();
@@ -126,7 +126,7 @@ export class SourceListConfig {
     : undefined;
 
     if (!workspaceUri)
-      return;
+      {return;}
 
     const command = message.command;
 

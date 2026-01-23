@@ -3,7 +3,7 @@
   "displayName": "Lancelot Build Tool (LBT)",
   "description": "Automated build tool for IBM i",
   "publisher": "roland-strauss",
-  "version": "0.6.12",
+  "version": "0.7.00",
   "icon": "asserts/img/ext/logo.png",
   "keywords": [
     "ibm i",
@@ -19,7 +19,7 @@
   },
   "license": "MIT",
   "repository": {
-    "url": "https://github.com/RolandStrauss/ldm-extension"
+    "url": "https://github.com/RolandStrauss/lbt-extension"
   },
   "engines": {
     "vscode": "^1.100.0"

@@ -13,13 +13,15 @@ function main() {
     // a given toolkit component can be imported and used to type cast a reference
     // to the element (i.e. the `as Button` syntax)
     console.log(`Load main ${loaded}`);
-    if (loaded)
+    if (loaded) {
         return;
+    }
     loaded = true;
     const run_button = document.getElementById('run_build');
     console.log(`run_button.addEventListener ${run_button}`);
-    if (run_button)
+    if (run_button) {
         run_button.addEventListener('click', run_build);
+    }
     const joblogButton = document.getElementsByClassName("joblog");
     console.log(`joblog.addEventListener ${joblogButton.length}`);
     for (let i = 0; i < joblogButton.length; i++) {

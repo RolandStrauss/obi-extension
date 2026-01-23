@@ -48,12 +48,15 @@ function add_filter() {
     for (let new_lib of new_libs) {
         for (let new_file of new_files) {
             for (let new_member of new_members) {
-                if (new_lib == '')
+                if (new_lib == '') {
                     new_lib = regex ? '.*' : '*';
-                if (new_file == '')
+                }
+                if (new_file == '') {
                     new_file = regex ? '.*' : '*';
-                if (new_member == '')
+                }
+                if (new_member == '') {
                     new_member = regex ? '.*' : '*';
+                }
                 vscode.postMessage({
                     command: "add_filter",
                     lib: new_lib.trim(),
@@ -79,12 +82,15 @@ function save_config() {
         for (let lib of libs) {
             for (let file of files) {
                 for (let member of members) {
-                    if (lib == '')
+                    if (lib == '') {
                         lib = regex ? '.*' : '*';
-                    if (file == '')
+                    }
+                    if (file == '') {
                         file = regex ? '.*' : '*';
-                    if (member == '')
+                    }
+                    if (member == '') {
                         member = regex ? '.*' : '*';
+                    }
                     filter.push({
                         "source-file": file.trim(),
                         "source-lib": lib.trim(),

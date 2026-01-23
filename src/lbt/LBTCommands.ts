@@ -37,11 +37,11 @@ export class lbtCommands {
     const remote_lbt_dir: string | undefined = config.general['remote-lbt-dir'];
 
     if (!remote_base_dir || !remote_lbt_dir)
-      throw Error(`Missing 'remote_base_dir' or 'remote_lbt_dir'`);
+      {throw Error(`Missing 'remote_base_dir' or 'remote_lbt_dir'`);}
 
     const remote_lbt: string | undefined = await lbtTools.get_remote_lbt_python_path();
     if (!remote_lbt)
-      throw Error(`lbt path is not korrekt`);
+      {throw Error(`lbt path is not korrekt`);}
 
     await vscode.window.withProgress({
       location: vscode.ProgressLocation.Notification,
@@ -57,7 +57,7 @@ export class lbtCommands {
 
         let source_list: string[] = sources || [];
         if (!sources)
-          source_list = await lbtTools.generate_source_change_lists();
+          {source_list = await lbtTools.generate_source_change_lists();}
 
         if (source_list.length == 0) {
           vscode.window.showWarningMessage("No changed sources to build");
@@ -97,9 +97,9 @@ export class lbtCommands {
         const result = await SSH_Tasks.transferSources(source_list);
 
         if (generate_compile_list === false)
-          await lbtCommands.transfer_build_list(progress);
+          {await lbtCommands.transfer_build_list(progress);}
         else
-          await lbtCommands.generate_build_script(progress, source_list);
+          {await lbtCommands.generate_build_script(progress, source_list);}
 
 
         progress.report({
@@ -249,7 +249,7 @@ export class lbtCommands {
     let source = vscode.window.activeTextEditor.document.fileName.replace(path.join(Workspace.get_workspace(), AppConfig.get_app_config().general['source-dir'] || 'src'), '');
     source = source.replaceAll('\\', '/');
     if (source.charAt(0) == '/')
-      source = source.substring(1);
+      {source = source.substring(1);}
 
     if (!config.general['supported-object-types'].includes(source.split('.').pop())) {
       vscode.window.showWarningMessage(`${source} is not a supported source type`);
@@ -273,7 +273,7 @@ export class lbtCommands {
     const source = lbtCommands.get_current_active_source();
 
     if (!source)
-      return lbtController.run_finished();
+      {return lbtController.run_finished();}
 
     lbtCommands.run_build(context, source);
   }
@@ -337,7 +337,7 @@ export class lbtCommands {
     const source = lbtCommands.get_current_active_source();
 
     if (!source)
-      return lbtController.run_finished();
+      {return lbtController.run_finished();}
 
     lbtCommands.show_changes(context, source);
   }
@@ -359,7 +359,7 @@ export class lbtCommands {
 
     try {
       if (lbtTools.without_local_lbt())
-        await lbtTools.generate_source_change_lists(source);
+        {await lbtTools.generate_source_change_lists(source);}
       else {
         logger.info(`WS: ${Workspace.get_workspace()}`);
         let cmd = `${lbtTools.get_local_lbt_python_path()} -X utf8 ${path.join(config.general['local-lbt-dir'], 'main.py')} -a create -p .`;
@@ -414,7 +414,7 @@ export class lbtCommands {
 
     try {
       if (!config.general['compiled-object-list'])
-        throw Error(`Invalid config for config.general['compiled-object-list']: ${config.general['compiled-object-list']}`);
+        {throw Error(`Invalid config for config.general['compiled-object-list']: ${config.general['compiled-object-list']}`);}
 
       const object_list_file: string = config.general['compiled-object-list'];
       let json_dict: {} = {};
@@ -465,7 +465,7 @@ export class lbtCommands {
       const remote_lbt_dir: string | undefined = config.general['remote-lbt-dir'];
 
       if (!remote_base_dir || !remote_lbt_dir)
-        throw Error(`Missing 'remote_base_dir' or 'remote_lbt_dir'`);
+        {throw Error(`Missing 'remote_base_dir' or 'remote_lbt_dir'`);}
 
       const remote_lbt: string | undefined = `${config.general['remote-lbt-dir']}/venv/bin/python`;
 
@@ -475,7 +475,7 @@ export class lbtCommands {
       await SSH_Tasks.executeCommand(ssh_cmd);
 
       if (config.general['remote-source-list'] && config.general['source-list'])
-        await SSH_Tasks.getRemoteFile(path.join(ws, config.general['remote-source-list']), `${remote_base_dir}/${config.general['source-list']}`);
+        {await SSH_Tasks.getRemoteFile(path.join(ws, config.general['remote-source-list']), `${remote_base_dir}/${config.general['source-list']}`);}
 
       vscode.window.showInformationMessage('Remote source list transfered from remote');
     }
@@ -500,10 +500,10 @@ export class lbtCommands {
     const remote_lbt_dir: string | undefined = config.general['remote-lbt-dir'];
 
     if (!remote_base_dir || !remote_lbt_dir)
-      throw Error(`Missing config 'remote-base-dir' or 'remote-lbt-dir'`);
+      {throw Error(`Missing config 'remote-base-dir' or 'remote-lbt-dir'`);}
 
     if (!config.general['compiled-object-list'])
-      throw Error(`Missing config 'compiled-object-list'`);
+      {throw Error(`Missing config 'compiled-object-list'`);}
 
     await SSH_Tasks.getRemoteFile(path.join(Workspace.get_workspace(), config.general['compiled-object-list']), `${remote_base_dir}/${config.general['compiled-object-list']}`);
 
@@ -513,19 +513,19 @@ export class lbtCommands {
 
   public static show_build_summary(file?: string) {
     // Display build summary panel for specified file or current selection
-    if (!file) return;
+    if (!file) {return;}
     // TODO: Implement build summary display logic
   }
 
   public static delete_compile_list_item(level?: string, source?: string) {
     // Remove item from compile list
-    if (!level || !source) return;
+    if (!level || !source) {return;}
     // TODO: Implement compile list item deletion
   }
 
   public static delete_compile_list_level(level?: string) {
     // Remove entire level from compile list
-    if (!level) return;
+    if (!level) {return;}
     // TODO: Implement compile list level deletion
   }
 

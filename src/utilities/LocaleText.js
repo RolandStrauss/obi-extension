@@ -59,10 +59,12 @@ class LocaleText {
      * @returns {string} Text in national language. If not found `key` gets returned
      */
     get_Text(key) {
-        if (this.current_lang && this.current_lang[key])
+        if (this.current_lang && this.current_lang[key]) {
             return this.current_lang[key];
-        if (this.default_lang && this.default_lang[key])
+        }
+        if (this.default_lang && this.default_lang[key]) {
             return this.default_lang[key];
+        }
         if (this.default_lang) {
             this.default_lang[key] = key;
             DirTool_1.DirTool.write_file(path.join(this._context.extensionPath, `package.nls.json`), JSON.stringify(this.default_lang, undefined, 2));

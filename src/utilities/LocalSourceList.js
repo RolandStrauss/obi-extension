@@ -55,13 +55,15 @@ class LocalSourceList {
             LocalSourceList.watcher_project = vscode.workspace.createFileSystemWatcher(new vscode.RelativePattern(watch_uri, '**/*'), false, true, false);
             // File change events
             LocalSourceList.watcher_project.onDidCreate(uri => {
-                if (LocalSourceList.watcher_processing_promise.length > 0)
+                if (LocalSourceList.watcher_processing_promise.length > 0) {
                     return;
+                }
                 LocalSourceList.source_loading_promise.push(LocalSourceList.refresh_lbt_stuff(uri));
             });
             LocalSourceList.watcher_project?.onDidDelete(uri => {
-                if (LocalSourceList.watcher_processing_promise.length > 0)
+                if (LocalSourceList.watcher_processing_promise.length > 0) {
                     return;
+                }
                 LocalSourceList.source_loading_promise.push(LocalSourceList.refresh_lbt_stuff(uri));
             });
         }
@@ -70,8 +72,9 @@ class LocalSourceList {
         const config = AppConfig_1.AppConfig.get_app_config();
         const ext = uri.fsPath.split('.').pop() ?? '';
         Logger_1.logger.debug(`File changed: ${uri.fsPath}`);
-        if (ext == 'log')
+        if (ext == 'log') {
             return;
+        }
         Logger_1.logger.debug(`Reload some stuff`);
         await LocalSourceList.load_source_list();
         await vscode.commands.executeCommand("lbt.source-filter.update");
@@ -85,8 +88,9 @@ class LocalSourceList {
         LocalSourceList.source_loading_promise = [];
     }
     static async get_source_list() {
-        if (LocalSourceList.source_list === undefined)
+        if (LocalSourceList.source_list === undefined) {
             await LocalSourceList.load_source_list();
+        }
         return LocalSourceList.source_list || [];
     }
 }

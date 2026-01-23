@@ -22,13 +22,13 @@ function main() {
 
   console.log(`Load main ${loaded}`);
   if (loaded)
-    return;
+    {return;}
   loaded = true;
 
   const run_button = document.getElementById('run_build') as Button;
   console.log(`run_button.addEventListener ${run_button}`);
   if (run_button)
-    run_button.addEventListener('click', run_build);
+    {run_button.addEventListener('click', run_build);}
 
 
   const joblogButton = document.getElementsByClassName("joblog");

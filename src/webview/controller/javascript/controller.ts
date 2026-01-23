@@ -78,7 +78,7 @@ function run_build() {
   const run_build_ring = document.getElementById("run_build_ring");
 
   if (run_build_ring)
-    run_build_ring.style.display='flex';
+    {run_build_ring.style.display='flex';}
 
   if (get_run_type() == "all") {
     command = 'run_build';
@@ -96,7 +96,7 @@ function show_changes() {
 
   const running_ring = document.getElementById("running_ring");
   if (running_ring)
-    running_ring.style.display='flex';
+    {running_ring.style.display='flex';}
 
   if (get_run_type() == "all") {
     command = 'show_changes';
@@ -150,11 +150,11 @@ function receive_message(e: MessageEvent) {
 
       let display = 'flex';
       if (!e.data.build_counts || e.data.build_counts == 0)
-        display = 'none';
+        {display = 'none';}
 
       let open_build_summary = document.getElementById("open_build_summary");
       if (open_build_summary)
-        open_build_summary.style.display=display;
+        {open_build_summary.style.display=display;}
       let build_summary_timestamp_label = document.getElementById("build_summary_timestamp");
       if (build_summary_timestamp_label) {
         build_summary_timestamp_label.innerHTML = ` (${e.data.build_summary_timestamp})`;

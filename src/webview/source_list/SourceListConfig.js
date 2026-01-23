@@ -102,8 +102,9 @@ class SourceListConfig {
     }
     static async update() {
         const panel = SourceListConfig.currentPanel;
-        if (!panel)
+        if (!panel) {
             return;
+        }
         panel._panel.webview.html = await SourceListConfig.generate_html(SourceListConfig._extensionUri, SourceListConfig.currentPanel?._panel.webview);
         SourceListProvider_1.SourceListProvider.source_list_provider.refresh();
     }
@@ -112,8 +113,9 @@ class SourceListConfig {
         const workspaceUri = vscode.workspace.workspaceFolders && vscode.workspace.workspaceFolders.length > 0
             ? vscode.workspace.workspaceFolders[0].uri
             : undefined;
-        if (!workspaceUri)
+        if (!workspaceUri) {
             return;
+        }
         const command = message.command;
         switch (command) {
             case "save_config":

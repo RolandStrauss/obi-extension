@@ -66,14 +66,18 @@ class lbtTools {
         const current_version = vscode.extensions.getExtension('roland-strauss.lbt')?.packageJSON['version'];
         let previous_version = lbtTools.ext_context.workspaceState.get('lbt.version');
         const config = AppConfig_1.AppConfig.get_app_config();
-        if (config.general['local-base-dir'] == '/')
+        if (config.general['local-base-dir'] == '/') {
             throw Error("Root for 'local-base-dir' is not allowed!");
-        if (config.general['remote-base-dir'] == '/')
+        }
+        if (config.general['remote-base-dir'] == '/') {
             throw Error("Root for 'remote-base-dir' is not allowed!");
-        if (config.general['local-lbt-dir'] == '/')
+        }
+        if (config.general['local-lbt-dir'] == '/') {
             throw Error("Root for 'local-lbt-dir' is not allowed!");
-        if (config.general['remote-lbt-dir'] == '/')
+        }
+        if (config.general['remote-lbt-dir'] == '/') {
             throw Error("Root for 'remote-lbt-dir' is not allowed!");
+        }
         if (!DirTool_1.DirTool.dir_exists(path.join(ws, '.lbt', 'log'))) {
             fs.mkdirSync(path.join(ws, '.lbt', 'log'), { recursive: true });
         }
@@ -145,21 +149,25 @@ class lbtTools {
     }
     static get_local_lbt_python_path() {
         const config = AppConfig_1.AppConfig.get_app_config();
-        if (!config.general['local-lbt-dir'])
+        if (!config.general['local-lbt-dir']) {
             return undefined;
+        }
         let venv_bin = path.join('venv', 'bin', 'python');
-        if (process.platform == 'win32')
+        if (process.platform == 'win32') {
             venv_bin = path.join('venv', 'Scripts', 'python.exe');
+        }
         const local_lbt_python = path.join(config.general['local-lbt-dir'], venv_bin);
         Logger_1.logger.info(`Check lbt path ${local_lbt_python}: ${DirTool_1.DirTool.file_exists(local_lbt_python)}`);
-        if (!DirTool_1.DirTool.file_exists(local_lbt_python))
+        if (!DirTool_1.DirTool.file_exists(local_lbt_python)) {
             return undefined;
+        }
         return local_lbt_python;
     }
     static async get_remote_lbt_python_path() {
         const config = AppConfig_1.AppConfig.get_app_config();
-        if (!config.general['remote-lbt-dir'])
+        if (!config.general['remote-lbt-dir']) {
             return undefined;
+        }
         const remote_lbt_python = `${config.general['remote-lbt-dir']}/venv/bin/python`;
         return remote_lbt_python;
     }
@@ -178,11 +186,13 @@ class lbtTools {
     static async check_remote_pase() {
         let check;
         check = await lbtTools.check_remote_home_dir();
-        if (!check)
+        if (!check) {
             return false;
+        }
         check = await SSH_Tasks_1.SSH_Tasks.check_remote_paths(['/home/$USER/.bashrc']);
-        if (check)
+        if (check) {
             return true;
+        }
         const answer = await vscode.window.showErrorMessage(`Missing /home/$USER.bashrc. Run setup?`, { modal: true }, ...['Yes', 'No']);
         switch (answer) {
             case 'No':
@@ -206,8 +216,9 @@ class lbtTools {
     static async check_remote_home_dir() {
         let check;
         check = await SSH_Tasks_1.SSH_Tasks.check_remote_paths(['/home/$USER']);
-        if (check)
+        if (check) {
             return true;
+        }
         const answer = await vscode.window.showErrorMessage(`Missing home directory. Run setup?`, { modal: true }, ...['Yes', 'No']);
         switch (answer) {
             case 'No':
@@ -236,17 +247,20 @@ class lbtTools {
         const remote_lbt_dir = config.general['remote-lbt-dir'];
         const remote_lbt_python = `${config.general['remote-lbt-dir']}/venv/bin/python`;
         let check;
-        if (!remote_base_dir || !remote_lbt_dir)
+        if (!remote_base_dir || !remote_lbt_dir) {
             throw Error(`Missing 'remote_base_dir' or 'remote_lbt_dir'`);
-        if (!config.general['source-dir'])
+        }
+        if (!config.general['source-dir']) {
             return false;
+        }
         check = await SSH_Tasks_1.SSH_Tasks.check_remote_paths([
             `${remote_base_dir}/${config.general['source-dir']}`,
             `${remote_base_dir}/${Constants_1.Constants.LBT_APP_CONFIG_FILE}`,
             remote_lbt_python
         ]);
-        if (!check)
+        if (!check) {
             return false;
+        }
         return true;
     }
     static async check_remote_sources() {
@@ -269,8 +283,9 @@ class lbtTools {
     static async process_check_remote_sources() {
         const config = AppConfig_1.AppConfig.get_app_config();
         const ws = Workspace_1.Workspace.get_workspace();
-        if (!config.general['remote-source-list'])
+        if (!config.general['remote-source-list']) {
             return false;
+        }
         const result = await vscode.window.withProgress({
             location: vscode.ProgressLocation.Notification,
             title: `Remote source check`,
@@ -329,8 +344,9 @@ class lbtTools {
             return false;
         }
         const ws = vscode.workspace.workspaceFolders[0].uri.fsPath;
-        if (!DirTool_1.DirTool.file_exists(path.join(ws, Constants_1.Constants.LBT_APP_CONFIG_FILE)))
+        if (!DirTool_1.DirTool.file_exists(path.join(ws, Constants_1.Constants.LBT_APP_CONFIG_FILE))) {
             return false;
+        }
         //if (!AppConfig.attributes_missing())
         //  return false;
         return true;
@@ -366,8 +382,9 @@ class lbtTools {
         const asserts_uri = webview.asWebviewUri(vscode.Uri.joinPath(extensionUri, 'asserts'));
         const nonce = (0, getNonce_1.getNonce)();
         let theme_mode = 'light';
-        if (vscode.window.activeColorTheme.kind == vscode.ColorThemeKind.Dark)
+        if (vscode.window.activeColorTheme.kind == vscode.ColorThemeKind.Dark) {
             theme_mode = 'dark';
+        }
         const ws = Workspace_1.Workspace.get_workspace();
         return {
             asserts_uri: asserts_uri,
@@ -384,17 +401,22 @@ class lbtTools {
         };
     }
     static override_dict(from_dict, to_dict) {
-        if (to_dict == undefined)
+        if (to_dict == undefined) {
             to_dict = {};
+        }
         for (let [k, v] of Object.entries(from_dict)) {
-            if (typeof v === 'object' && v !== null && to_dict[k] && !(v instanceof Array) && !(v instanceof Date))
+            if (typeof v === 'object' && v !== null && to_dict[k] && !(v instanceof Array) && !(v instanceof Date)) {
                 v = lbtTools.override_dict(from_dict[k], to_dict[k]);
-            if (v == undefined)
+            }
+            if (v == undefined) {
                 continue;
-            if ((typeof v == 'string') && v.length == 0)
+            }
+            if ((typeof v === 'string') && v.length == 0) {
                 continue;
-            if (v instanceof Array && v.length == 0)
+            }
+            if (v instanceof Array && v.length == 0) {
                 continue;
+            }
             to_dict[k] = v;
         }
         //return {...to_dict, ...from_dict};
@@ -419,30 +441,35 @@ class lbtTools {
         DirTool_1.DirTool.write_json(path.join(Workspace_1.Workspace.get_workspace(), AppConfig_1.AppConfig.get_app_config().general['compile-list']), compile_list);
     }
     static get_compile_list(workspaceUri) {
-        if (AppConfig_1.AppConfig.attributes_missing())
+        if (AppConfig_1.AppConfig.attributes_missing()) {
             return undefined;
+        }
         const config = AppConfig_1.AppConfig.get_app_config();
         if (!config.general['compile-list']) {
             vscode.window.showErrorMessage('lbt config is invalid');
             throw Error('lbt config is invalid');
         }
         const file_path = path.join(workspaceUri.fsPath, config.general['compile-list']);
-        if (!DirTool_1.DirTool.file_exists(file_path))
+        if (!DirTool_1.DirTool.file_exists(file_path)) {
             return undefined;
+        }
         let compile_list_string = fs.readFileSync(file_path).toString();
         // Converting to JSON
         const compile_list = JSON.parse(compile_list_string);
-        if (typeof compile_list != 'object' || compile_list == null || (compile_list instanceof Array) || (compile_list instanceof Date))
+        if (typeof compile_list !== 'object' || compile_list == null || (compile_list instanceof Array) || (compile_list instanceof Date)) {
             return undefined;
-        if (!compile_list['compiles'] || !compile_list['timestamp'])
+        }
+        if (!compile_list['compiles'] || !compile_list['timestamp']) {
             return undefined;
+        }
         return compile_list;
     }
     static get_sources_info_from_compile_list() {
         let sources = [];
         const compile_list = lbtTools.get_compile_list(Workspace_1.Workspace.get_workspace_uri());
-        if (!compile_list || !('compiles' in compile_list))
+        if (!compile_list || !('compiles' in compile_list)) {
             return sources;
+        }
         for (const level_item of compile_list['compiles']) {
             for (const source of level_item['sources']) {
                 sources.push(source);
@@ -454,12 +481,14 @@ class lbtTools {
         let sources = [];
         let need_2_build = false;
         const compile_list = lbtTools.get_compile_list(Workspace_1.Workspace.get_workspace_uri());
-        if (!compile_list || !('compiles' in compile_list))
+        if (!compile_list || !('compiles' in compile_list)) {
             return sources;
+        }
         for (const level_item of compile_list['compiles']) {
             for (const source of level_item['sources']) {
-                if (skip_ignored && source['ignore'])
+                if (skip_ignored && source['ignore']) {
                     continue;
+                }
                 need_2_build = false;
                 for (const cmd of source['cmds']) {
                     if (cmd['status'] != 'success') {
@@ -467,21 +496,24 @@ class lbtTools {
                         break;
                     }
                 }
-                if (need_2_build)
+                if (need_2_build) {
                     sources.push(source['source']);
+                }
             }
         }
         return sources;
     }
     static is_compile_list_completed(workspaceUri) {
         const compile_list = lbtTools.get_compile_list(workspaceUri);
-        if (!compile_list || !('compiles' in compile_list))
+        if (!compile_list || !('compiles' in compile_list)) {
             return false;
+        }
         for (const level_item of compile_list['compiles']) {
             for (const source of level_item['sources']) {
                 for (const cmd of source['cmds']) {
-                    if (cmd['status'] != 'success')
+                    if (cmd['status'] != 'success') {
                         return false;
+                    }
                 }
             }
         }
@@ -489,8 +521,9 @@ class lbtTools {
     }
     static get_source_hash_list(workspace) {
         const config = AppConfig_1.AppConfig.get_app_config();
-        if (!config.general['compiled-object-list'])
+        if (!config.general['compiled-object-list']) {
             return undefined;
+        }
         const file = path.join(workspace, config.general['compiled-object-list']);
         return DirTool_1.DirTool.get_json(file);
     }
@@ -553,8 +586,9 @@ class lbtTools {
             "changed-sources": [source || ''],
             "old-sources": []
         };
-        if (!source)
+        if (!source) {
             changed_sources = await lbtTools.get_changed_sources();
+        }
         Logger_1.logger.info('Get dependend sources');
         const dependend_sources = lbtTools.get_dependend_sources(changed_sources);
         (0, createBuildList_1.createBuildList)(source);
@@ -567,8 +601,9 @@ class lbtTools {
     }
     static async compare_source_change(results, last_source_hashes) {
         // Get all sources which are new or have changed
-        if (!last_source_hashes)
+        if (!last_source_hashes) {
             last_source_hashes = lbtTools.get_source_hash_list(Workspace_1.Workspace.get_workspace()) || {};
+        }
         let changed_sources = [];
         let new_sources = [];
         let old_sources = [];
@@ -606,10 +641,12 @@ class lbtTools {
         const t1 = performance.now();
         Logger_1.logger.info(`Change check: It took ${((t1 - t0) / 1000).toFixed(2)} seconds.`);
         all_promises.map((source_item_list) => {
-            if (source_item_list['changed-sources'].length > 0)
+            if (source_item_list['changed-sources'].length > 0) {
                 changed_sources.push(source_item_list['changed-sources'][0]);
-            if (source_item_list['new-objects'].length > 0)
+            }
+            if (source_item_list['new-objects'].length > 0) {
                 new_sources.push(source_item_list['new-objects'][0]);
+            }
         });
         //----
         /*
@@ -638,8 +675,9 @@ class lbtTools {
                 return;
             }
         });
-        if (found)
+        if (found) {
             return source_from_list;
+        }
         return undefined;
     }
     static async check_source_change_item(source_item, last_source_hashes) {
@@ -656,8 +694,9 @@ class lbtTools {
                 return { "changed-sources": [], "new-objects": [] };
             }
         }
-        if (source_changed)
+        if (source_changed) {
             return { "changed-sources": [k_source], "new-objects": [] };
+        }
         return { "changed-sources": [], "new-objects": [] };
     }
     static async retrieve_current_source_hashes() {
@@ -687,15 +726,17 @@ class lbtTools {
                 checksum_calls.push(DirTool_1.DirTool.checksumFile(source_dir, source));
                 if (counter > max_threads) {
                     const all_promises = await Promise.all(checksum_calls);
-                    if (all_promises)
+                    if (all_promises) {
                         hash_values = [...hash_values, ...all_promises];
+                    }
                     counter = 0;
                     checksum_calls = [];
                 }
             }
             const all_promises = await Promise.all(checksum_calls);
-            if (all_promises)
+            if (all_promises) {
                 hash_values = [...hash_values, ...all_promises];
+            }
         }
         p2 = performance.now();
         Logger_1.logger.info(`In total ${hash_values.length} hash values. Duration: ${((p2 - p1) / 1000).toFixed(2)} seconds`);
@@ -711,8 +752,9 @@ class lbtTools {
     }
     static get_remote_compiled_object_list() {
         const config = AppConfig_1.AppConfig.get_app_config();
-        if (!config.general['remote-base-dir'])
+        if (!config.general['remote-base-dir']) {
             throw Error(`Config attribute 'config.general.remote_base_dir' missing`);
+        }
         const local_file = path.join(Workspace_1.Workspace.get_workspace(), config.general['compiled-object-list']);
         const remote_file = `${config.general['remote-base-dir']}/${config.general['compiled-object-list']}`;
         SSH_Tasks_1.SSH_Tasks.getRemoteFile(local_file, remote_file);
@@ -736,8 +778,9 @@ class lbtTools {
     }
     static async process_transfer_project_folder(silent) {
         const config = AppConfig_1.AppConfig.get_app_config();
-        if (!config.general['remote-base-dir'])
+        if (!config.general['remote-base-dir']) {
             throw Error(`Config attribute 'config.general.remote_base_dir' missing`);
+        }
         const local_dir = Workspace_1.Workspace.get_workspace();
         const remote_dir = config.general['remote-base-dir'];
         if (!silent) {
@@ -814,8 +857,9 @@ class lbtTools {
         return;
     }
     static get_extended_source_infos(sources) {
-        if (!sources)
+        if (!sources) {
             return;
+        }
         let new_list = [];
         const config = AppConfig_1.AppConfig.get_app_config();
         const source_infos = lbtTools.get_source_infos();
@@ -830,8 +874,9 @@ class lbtTools {
         return new_list;
     }
     static get_filtered_sources(sources, source_filters) {
-        if (!sources)
+        if (!sources) {
             return;
+        }
         const wcmatch = require('wildcard-match');
         let filtered_sources = [];
         let use_regex;
@@ -851,10 +896,12 @@ class lbtTools {
                 file = (source_filter['source-file'] || '').toLowerCase();
                 mbr = (source_filter['source-member'] || '').toLowerCase();
                 isMatch = false;
-                if ((!src_lib || !src_file || !src_mbr) && !show_empty_folders)
+                if ((!src_lib || !src_file || !src_mbr) && !show_empty_folders) {
                     continue;
-                if (!src_lib && !src_file)
+                }
+                if (!src_lib && !src_file) {
                     continue;
+                }
                 if (use_regex) {
                     const re_lib = new RegExp(`^${lib}$`);
                     const re_file = new RegExp(`^${file}$`);
@@ -867,8 +914,9 @@ class lbtTools {
                     const wc_mbr = wcmatch(mbr);
                     isMatch = wc_lib(src_lib.toLowerCase()) && wc_file(src_file.toLowerCase()) && wc_mbr(src_mbr.toLowerCase());
                 }
-                if (isMatch)
+                if (isMatch) {
                     filtered_sources.push({ "source-lib": src_lib, "source-file": src_file, "source-member": src_mbr, "use-regex": false, "show-empty-folders": false });
+                }
             }
         }
         return filtered_sources;
@@ -878,8 +926,9 @@ class lbtTools {
         const src_dir = config.general['source-dir'] || 'src';
         local_file_path = local_file_path.replace(Workspace_1.Workspace.get_workspace(), '');
         local_file_path = local_file_path.replace(/\\/g, '/');
-        if (remove_src)
+        if (remove_src) {
             local_file_path = local_file_path.replace(`${src_dir}/`, '');
+        }
         local_file_path = local_file_path.replace(/^\/+/, '');
         return local_file_path;
     }

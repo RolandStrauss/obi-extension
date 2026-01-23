@@ -128,8 +128,9 @@ class ConfigSettings {
 exports.ConfigSettings = ConfigSettings;
 class ConfigGlobal {
     constructor(settings, cmds, compile_cmds, steps) {
-        if (settings?.general)
+        if (settings?.general) {
             this.settings = new ConfigSettings(settings?.general, settings?.language);
+        }
         this.cmds = cmds;
         this['compile-cmds'] = compile_cmds;
         this.steps = steps;
@@ -156,12 +157,15 @@ class AppConfig {
     static self_check() {
         const config = AppConfig.get_app_config();
         let error_messages = '';
-        if (config.general['local-lbt-dir'] && !DirTool_1.DirTool.dir_exists(config.general['local-lbt-dir']))
+        if (config.general['local-lbt-dir'] && !DirTool_1.DirTool.dir_exists(config.general['local-lbt-dir'])) {
             error_messages = `Config error: local lbt location '${config.general['local-lbt-dir']}' does not exist`;
-        if (config.general['local-lbt-dir'] && DirTool_1.DirTool.dir_exists(config.general['local-lbt-dir']) && !LBTTools_1.lbtTools.get_local_lbt_python_path())
+        }
+        if (config.general['local-lbt-dir'] && DirTool_1.DirTool.dir_exists(config.general['local-lbt-dir']) && !LBTTools_1.lbtTools.get_local_lbt_python_path()) {
             error_messages = `Local lbt error: Virtual environment is missing in '${config.general['local-lbt-dir']}'. Have you run the setup script?`;
-        if (error_messages.length > 0)
+        }
+        if (error_messages.length > 0) {
             vscode.window.showErrorMessage(error_messages);
+        }
         return error_messages;
     }
     static get_app_config(config_dict) {
@@ -171,7 +175,9 @@ class AppConfig {
         let glob_obj = undefined;
         if (!configs) {
             if (this._config && this._last_loading_time > (Date.now() - 2000)) // Reuse if only 2 seconds old
+             {
                 return this._config;
+            }
             configs = AppConfig.load_configs();
         }
         if (configs.connection) {
@@ -194,15 +200,17 @@ class AppConfig {
         return app_config;
     }
     static get_string(value) {
-        if (!value || value.length == 0)
+        if (!value || value.length == 0) {
             return undefined;
+        }
         return value.trim();
     }
     static get_profile_app_config_list() {
         let configs = [{ 'alias': 'Default User Config', 'file': Constants_1.Constants.LBT_APP_CONFIG_USER }];
         const ws = Workspace_1.Workspace.get_workspace();
-        if (!ws)
+        if (!ws) {
             return configs;
+        }
         const files = DirTool_1.DirTool.list_dir(path.join(ws, Constants_1.Constants.LBT_APP_CONFIG_DIR));
         for (const file of files) {
             if (file.endsWith('.toml') && (file.startsWith('.user-app-config') && file != Constants_1.Constants.LBT_APP_CONFIG && file != Constants_1.Constants.LBT_APP_CONFIG_USER)) {
@@ -227,8 +235,9 @@ class AppConfig {
         if (!workspace_settings) {
             return undefined;
         }
-        if (workspace_settings.current_profile)
+        if (workspace_settings.current_profile) {
             return workspace_settings.current_profile;
+        }
         return Constants_1.Constants.LBT_APP_CONFIG_USER;
     }
     static get_current_profile_app_config_file() {
@@ -250,10 +259,12 @@ class AppConfig {
             if (object[k] && typeof object[k] === 'object' && !(object[k] instanceof Array)) {
                 return AppConfig.empty(object[k]);
             }
-            if (object[k] instanceof Array)
+            if (object[k] instanceof Array) {
                 object[k] = [];
-            if (typeof object[k] === 'string')
+            }
+            if (typeof object[k] === 'string') {
                 object[k] = '';
+            }
         });
     }
     static load_configs() {

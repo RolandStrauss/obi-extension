@@ -45,8 +45,9 @@ const Constants_1 = require("../Constants");
 const fs = __importStar(require("fs"));
 const outputChannel = vscode.window.createOutputChannel(`lbt`);
 let ws = '';
-if (vscode.workspace.workspaceFolders)
+if (vscode.workspace.workspaceFolders) {
     ws = vscode.workspace.workspaceFolders[0].uri.fsPath;
+}
 //const winston = require('winston');
 class CustomTransport extends winston_transport_1.default {
     constructor(opts) {

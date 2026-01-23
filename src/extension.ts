@@ -61,7 +61,7 @@ export function activate(context: vscode.ExtensionContext) {
   );
 
   if (!contains_lbt_project)
-    return;
+    {return;}
 
   const lbt_config_invalid_provider = new ConfigInvalid(context.extensionUri);
   context.subscriptions.push(
@@ -141,9 +141,9 @@ export function activate(context: vscode.ExtensionContext) {
       // Only available with workspaces
       lbtTools.check_remote_sources().then((success) => {
         if (success)
-          vscode.window.showInformationMessage('Remote source check succeeded');
+          {vscode.window.showInformationMessage('Remote source check succeeded');}
         else
-          vscode.window.showWarningMessage('Remote source check failed');
+          {vscode.window.showWarningMessage('Remote source check failed');}
       });
     })
   );
@@ -235,9 +235,9 @@ export function activate(context: vscode.ExtensionContext) {
   if (config.general['check-remote-source-on-startup'] && config.general['check-remote-source-on-startup'] === true) {
     lbtTools.check_remote_sources().then((success) => {
       if (success)
-        vscode.window.showInformationMessage('Remote source check succeeded');
+        {vscode.window.showInformationMessage('Remote source check succeeded');}
       else
-        vscode.window.showWarningMessage('Remote source check failed');
+        {vscode.window.showWarningMessage('Remote source check failed');}
     });
   }
 
@@ -259,7 +259,7 @@ export function activate(context: vscode.ExtensionContext) {
   vscode.commands.registerCommand('lbt.source.edit-compile-config', async (item: SourceListItem | vscode.Uri) => {
 
     if (item instanceof SourceListItem)
-      lbtConfiguration.render(context, context.extensionUri, `${item.src_lib}/${item.src_file}/${item.src_member}`);
+      {lbtConfiguration.render(context, context.extensionUri, `${item.src_lib}/${item.src_file}/${item.src_member}`);}
 
     if (item instanceof vscode.Uri) {
 
@@ -284,7 +284,7 @@ export function activate(context: vscode.ExtensionContext) {
   vscode.commands.registerCommand('lbt.source.maintain-source-dependency', async (item: SourceListItem | vscode.Uri) => {
 
     if (item instanceof SourceListItem)
-      lbtSourceDependency.render(context, context.extensionUri, `${item.src_lib}/${item.src_file}/${item.src_member}`);
+      {lbtSourceDependency.render(context, context.extensionUri, `${item.src_lib}/${item.src_file}/${item.src_member}`);}
 
     if (item instanceof vscode.Uri) {
 
