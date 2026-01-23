@@ -5,11 +5,11 @@ import { DirTool } from '../../utilities/DirTool';
 import { SourceList } from './SourceList';
 import { Constants } from '../../Constants';
 import { logger } from '../../utilities/Logger';
-import * as source from '../../ldm/Source';
+import * as source from '../../lbt/Source';
 import { AppConfig } from '../controller/AppConfig';
 import { Workspace } from '../../utilities/Workspace';
 import { SourceListConfig } from './SourceListConfig';
-import { ldmTools } from '../../utilities/ldmTools';
+import { lbtTools } from '../../utilities/LBTTools';
 
 
 interface ISourceLists {
@@ -69,10 +69,10 @@ export class SourceListProvider implements vscode.TreeDataProvider<SourceListIte
       if (!DirTool.is_file(file))
         continue;
 
-      //ldmTools.get_filtered_sources_with_details(element).then((result) => {
+      //lbtTools.get_filtered_sources_with_details(element).then((result) => {
       //  SourceListProvider.source_lists[element] = result;
       //});
-      SourceListProvider.source_lists[element] = ldmTools.get_filtered_sources_with_details(element);
+      SourceListProvider.source_lists[element] = lbtTools.get_filtered_sources_with_details(element);
 
       const new_child = new SourceListItem(
         element.replaceAll('.json', ''),
@@ -169,7 +169,7 @@ export class SourceListProvider implements vscode.TreeDataProvider<SourceListIte
   }
 
 
-  // ldm.source-filter.add-source-file
+  // lbt.source-filter.add-source-file
   async add_new_source_file(item: SourceListItem): Promise<string|undefined> {
 
     const app_config = AppConfig.get_app_config();
@@ -195,7 +195,7 @@ export class SourceListProvider implements vscode.TreeDataProvider<SourceListIte
 
 
 
-  // ldm.source-filter.add-source-member
+  // lbt.source-filter.add-source-member
   async add_new_source_member(item: SourceListItem): Promise<string|undefined> {
 
     const app_config = AppConfig.get_app_config();
@@ -226,7 +226,7 @@ export class SourceListProvider implements vscode.TreeDataProvider<SourceListIte
 
 
 
-  // ldm.source-filter.add-source-file
+  // lbt.source-filter.add-source-file
   async change_source_description(item: SourceListItem | vscode.Uri): Promise<void> {
 
     const config: AppConfig = AppConfig.get_app_config();
@@ -241,10 +241,10 @@ export class SourceListProvider implements vscode.TreeDataProvider<SourceListIte
     logger.debug(`Changing source description for item: ${JSON.stringify(item, null, 2)}`);
 
     if (item instanceof SourceListItem) {
-      if (!item.member_path_ldm || !item.src_member) {
+      if (!item.member_path_lbt || !item.src_member) {
         throw new Error('Source member information missing');
       }
-      source_path = item.member_path_ldm;
+      source_path = item.member_path_lbt;
       member = item.src_member;
       description = typeof item.description === 'string' ? item.description : '';
     }
@@ -252,7 +252,7 @@ export class SourceListProvider implements vscode.TreeDataProvider<SourceListIte
     if (item instanceof vscode.Uri) {
       logger.debug(`Changing source description for URI: ${item.fsPath}`);
 
-      source_path = ldmTools.convert_local_filepath_2_ldm_filepath(item.fsPath, true);
+      source_path = lbtTools.convert_local_filepath_2_lbt_filepath(item.fsPath, true);
 
       const match = source_path.match(/^([^\/]+)\/([^\/]+)\/(.+)$/);
       if (!match) {
@@ -264,7 +264,7 @@ export class SourceListProvider implements vscode.TreeDataProvider<SourceListIte
       member = match[3];
       logger.debug(`Changing description for source member: lib='${lib}', file='${file}', member='${member}'`);
 
-      const source_infos: source.ISourceInfos = await ldmTools.get_source_infos();
+      const source_infos: source.ISourceInfos = await lbtTools.get_source_infos();
       if (source_infos[`${source_path}/${member}`]) {
         description = typeof source_infos[`${source_path}/${member}`].description === 'string' ? source_infos[`${source_path}/${member}`].description : '';
       }
@@ -279,13 +279,13 @@ export class SourceListProvider implements vscode.TreeDataProvider<SourceListIte
       throw new Error('Canceled by user. No source description provided');
     }
 
-    ldmTools.update_source_infos(source_path, member, new_description);
+    lbtTools.update_source_infos(source_path, member, new_description);
 
     return;
   }
 
 
-  // ldm.source-filter.add-source-file
+  // lbt.source-filter.add-source-file
   async rename_source_member(item: SourceListItem | vscode.Uri): Promise<void> {
 
     const app_config = AppConfig.get_app_config();
@@ -317,17 +317,17 @@ export class SourceListProvider implements vscode.TreeDataProvider<SourceListIte
     const to_path = path.join(Workspace.get_workspace(),item.member_path, new_name)
     fs.renameSync(from_path, to_path);
 
-    const source_infos: source.ISourceInfos = await ldmTools.get_source_infos();
-    if (source_infos[`${item.member_path_ldm}/${item.src_member}`]) {
-        const description: string = typeof source_infos[`${item.member_path_ldm}/${item.src_member}`].description === 'string' ? source_infos[`${item.member_path_ldm}/${item.src_member}`].description : '';
-        ldmTools.update_source_infos(item.member_path_ldm, new_name, description);
+    const source_infos: source.ISourceInfos = await lbtTools.get_source_infos();
+    if (source_infos[`${item.member_path_lbt}/${item.src_member}`]) {
+        const description: string = typeof source_infos[`${item.member_path_lbt}/${item.src_member}`].description === 'string' ? source_infos[`${item.member_path_lbt}/${item.src_member}`].description : '';
+        lbtTools.update_source_infos(item.member_path_lbt, new_name, description);
     }
 
     return;
   }
 
 
-  // ldm.source-filter.add-source-file
+  // lbt.source-filter.add-source-file
   async delete_source_member(item: SourceListItem | vscode.Uri): Promise<void> {
 
     const app_config = AppConfig.get_app_config();
@@ -354,16 +354,16 @@ export class SourceListProvider implements vscode.TreeDataProvider<SourceListIte
     };
 
     // build
-    vscode.window.registerTreeDataProvider('ldm.source-filter', this);
+    vscode.window.registerTreeDataProvider('lbt.source-filter', this);
 
     // create
-    const tree = vscode.window.createTreeView('ldm.source-filter', options);
+    const tree = vscode.window.createTreeView('lbt.source-filter', options);
 
-    vscode.commands.registerCommand('ldm.source-filter.update', () => {
+    vscode.commands.registerCommand('lbt.source-filter.update', () => {
       this.refresh();
     });
 
-    vscode.commands.registerCommand('ldm.source-filter.add', () => {
+    vscode.commands.registerCommand('lbt.source-filter.add', () => {
       this.add_new_source_filter().then((source_list: string|undefined) => {
         this.refresh();
         if (source_list)
@@ -371,15 +371,15 @@ export class SourceListProvider implements vscode.TreeDataProvider<SourceListIte
       });
     });
 
-    vscode.commands.registerCommand('ldm.source-filter.show-view', async (item: SourceListItem) => {
+    vscode.commands.registerCommand('lbt.source-filter.show-view', async (item: SourceListItem) => {
       SourceList.render(context.extensionUri, Workspace.get_workspace_uri(), item.source_list);
     });
 
-    vscode.commands.registerCommand('ldm.source-filter.edit-config', async (item: SourceListItem) => {
+    vscode.commands.registerCommand('lbt.source-filter.edit-config', async (item: SourceListItem) => {
       SourceListConfig.render(context, item.source_list);
     });
 
-    vscode.commands.registerCommand('ldm.source-filter.delete-config', async (item: SourceListItem) => {
+    vscode.commands.registerCommand('lbt.source-filter.delete-config', async (item: SourceListItem) => {
 
       if (SourceListConfig.currentPanel && SourceListConfig.source_list_file == item.source_list)
         SourceListConfig.currentPanel.dispose();
@@ -387,30 +387,30 @@ export class SourceListProvider implements vscode.TreeDataProvider<SourceListIte
       this.refresh();
     });
 
-    vscode.commands.registerCommand('ldm.source-filter.add-source-member', async (item: SourceListItem) => {
+    vscode.commands.registerCommand('lbt.source-filter.add-source-member', async (item: SourceListItem) => {
       const source_member = await this.add_new_source_member(item);
       this.refresh();
       //Why ??? if (source_member)
       //  SourceListConfig.render(context, source_member);
     });
 
-    vscode.commands.registerCommand('ldm.source-filter.add-source-file', async (item: SourceListItem) => {
+    vscode.commands.registerCommand('lbt.source-filter.add-source-file', async (item: SourceListItem) => {
       const source_file = await this.add_new_source_file(item);
       this.refresh();
     });
 
 
-    vscode.commands.registerCommand('ldm.source-filter.change-source-description', async (item: SourceListItem | vscode.Uri) => {
+    vscode.commands.registerCommand('lbt.source-filter.change-source-description', async (item: SourceListItem | vscode.Uri) => {
       await this.change_source_description(item);
       this.refresh();
     });
 
-    vscode.commands.registerCommand('ldm.source-filter.rename-source-member', async (item: SourceListItem) => {
+    vscode.commands.registerCommand('lbt.source-filter.rename-source-member', async (item: SourceListItem) => {
       await this.rename_source_member(item);
       this.refresh();
     });
 
-    vscode.commands.registerCommand('ldm.source-filter.delete-source-member', async (item: SourceListItem) => {
+    vscode.commands.registerCommand('lbt.source-filter.delete-source-member', async (item: SourceListItem) => {
       await this.delete_source_member(item);
       this.refresh();
     });
@@ -479,7 +479,7 @@ export class SourceListItem extends vscode.TreeItem {
   public readonly src_member: string | undefined;
   public readonly list_level: string;
   public readonly member_path: string | undefined;
-  public readonly member_path_ldm: string | undefined;
+  public readonly member_path_lbt: string | undefined;
   //public readonly contextValue?: string | undefined;
 
   constructor(
@@ -533,8 +533,8 @@ export class SourceListItem extends vscode.TreeItem {
       return;
 
     if (list_level == 'source-member') {
-      this.member_path_ldm = ldmTools.convert_local_filepath_2_ldm_filepath(path.join(this.src_lib || '', this.src_file || ''));
-      this.member_path = path.join(AppConfig.get_app_config().general['source-dir']||'src', this.member_path_ldm);
+      this.member_path_lbt = lbtTools.convert_local_filepath_2_lbt_filepath(path.join(this.src_lib || '', this.src_file || ''));
+      this.member_path = path.join(AppConfig.get_app_config().general['source-dir']||'src', this.member_path_lbt);
       member_file_path = path.join(this.member_path, this.src_member || '');
       if (!DirTool.file_exists(path.join(ws, member_file_path)))
         icon = 'error.svg';
@@ -548,7 +548,7 @@ export class SourceListItem extends vscode.TreeItem {
     if (list_level != 'source-member')
       return;
 
-    this.contextValue = 'ldm-source';
+    this.contextValue = 'lbt-source';
 
     this.command = {
       command: 'vscode.open',

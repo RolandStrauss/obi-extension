@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import { ldmConstants } from './ldm_constants';
+import { lbtConstants } from './lbt_constants';
 import { deepListMerge } from './dict_tools';
 import { addBuildCmds } from './build_cmds';
 import { AppConfig } from '../../../webview/controller/AppConfig';
@@ -21,10 +21,10 @@ export function getBuildOrder(
   const objectsTree = getTargetsDependedObjects(dependencyDict, targetList);
   const ws = Workspace.get_workspace();
 
-  DirTool.write_json(path.join(ws, '.ldm/tmp/objects_tree.json'), objectsTree);
+  DirTool.write_json(path.join(ws, '.lbt/tmp/objects_tree.json'), objectsTree);
 
   const dependendObjects = getTargetsOnlyDependedObjects(dependencyDict, targetList);
-  DirTool.write_json(path.join(ws, ldmConstants.get('DEPENDEND_OBJECT_LIST')), dependendObjects);
+  DirTool.write_json(path.join(ws, lbtConstants.get('DEPENDEND_OBJECT_LIST')), dependendObjects);
 
   const allObjectsToBuild = Array.from(new Set([...targetList, ...dependendObjects]));
 
@@ -43,15 +43,15 @@ export function getBuildOrder(
 
 
 
-  DirTool.write_json(path.join(ws, '.ldm/tmp/ordered_target_tree.json'), orderedTargetTree);
+  DirTool.write_json(path.join(ws, '.lbt/tmp/ordered_target_tree.json'), orderedTargetTree);
 
   let newTargetTree = removeDuplicities(orderedTargetTree);
-  DirTool.write_json(path.join(ws, '.ldm/tmp/new_target_tree.json'), newTargetTree);
+  DirTool.write_json(path.join(ws, '.lbt/tmp/new_target_tree.json'), newTargetTree);
 
   if (!appConfig) {
     appConfig = AppConfig.get_app_config();
   }
-  const extended_sources_config = DirTool.get_toml(ldmConstants.get('EXTENDED_SOURCE_PROCESS_CONFIG_TOML'));
+  const extended_sources_config = DirTool.get_toml(lbtConstants.get('EXTENDED_SOURCE_PROCESS_CONFIG_TOML'));
 
   addBuildCmds(newTargetTree, appConfig, extended_sources_config);
 
@@ -247,3 +247,4 @@ export function getCopySources(
 
   return Array.from(allDependencies).filter(dep => dep.toLowerCase().endsWith('.cpy'));
 }
+

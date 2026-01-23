@@ -4,7 +4,7 @@ import { getUri } from "../../utilities/getUri";
 import { DirTool } from '../../utilities/DirTool';
 import * as path from 'path';
 import { Constants } from '../../Constants';
-import { ldmTools } from '../../utilities/ldmTools';
+import { lbtTools } from '../../utilities/LBTTools';
 import { Workspace } from '../../utilities/Workspace';
 import { I_Releaser } from './I_Releaser';
 
@@ -102,13 +102,13 @@ export class DeploymentConfig {
 
     const config = DeploymentConfig.get_deployment_config();
 
-    const auth_token = await context.secrets.get(`ldm|deployment|http_auth_token`);
+    const auth_token = await context.secrets.get(`lbt|deployment|http_auth_token`);
 
     nunjucks.configure(Constants.HTML_TEMPLATE_DIR);
 
     const html = nunjucks.render('deployment/deployment-config.html',
       {
-        global_stuff: ldmTools.get_global_stuff(webview, extensionUri),
+        global_stuff: lbtTools.get_global_stuff(webview, extensionUri),
         config_css: getUri(webview, extensionUri, ["asserts/css", "config.css"]),
         main_java_script: getUri(webview, extensionUri, ["out", "deployment_config.js"]),
         auth_token: auth_token,
@@ -167,7 +167,7 @@ export class DeploymentConfig {
 
     const toml_file: string = path.join(Workspace.get_workspace(), Constants.DEPLOYMENT_CONFIG_FILE);
     data['i-releaser']['auth-token']
-    ldmTools.ext_context.secrets.store('ldm|deployment|http_auth_token', data['i-releaser']['auth-token'] || '');
+    lbtTools.ext_context.secrets.store('lbt|deployment|http_auth_token', data['i-releaser']['auth-token'] || '');
     delete data['i-releaser']['auth-token'];
     DirTool.write_toml(toml_file, data);
     I_Releaser.refresh();
@@ -178,7 +178,7 @@ export class DeploymentConfig {
 
   private static createNewPanel(extensionUri : Uri) {
     return window.createWebviewPanel(
-      'ldm_deployment_config', // Identifies the type of the webview. Used internally
+      'lbt_deployment_config', // Identifies the type of the webview. Used internally
       'i-Releaser config', // Title of the panel displayed to the user
       // The editor column the panel should be displayed in
       ViewColumn.One,

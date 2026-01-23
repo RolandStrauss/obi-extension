@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { ldmTools } from '../../utilities/ldmTools';
+import { lbtTools } from '../../utilities/LBTTools';
 import { DirTool } from '../../utilities/DirTool';
 import * as path from 'path';
 import { Constants } from '../../Constants';
@@ -25,8 +25,8 @@ export interface IConfigGeneralProperties {
   'local-base-dir' : string,
   'remote-base-dir' : string,
   'source-dir' : string,
-  'local-ldm-dir' : string,
-  'remote-ldm-dir' : string,
+  'local-lbt-dir' : string,
+  'remote-lbt-dir' : string,
   'supported-object-types' : string[],
   'file-system-encoding' : string,
   'console-output-encoding' : string,
@@ -86,8 +86,8 @@ export class ConfigGeneral {
   public ['local-base-dir']?: string;
   public ['remote-base-dir']?: string;
   public ['source-dir']?: string;
-  public ['local-ldm-dir']?: string; // if not used, not necessary
-  public ['remote-ldm-dir']?: string;
+  public ['local-lbt-dir']?: string; // if not used, not necessary
+  public ['remote-lbt-dir']?: string;
   public ['supported-object-types']?: string[];
   public ['file-system-encoding']?: string;
   public ['console-output-encoding']?: string;
@@ -106,15 +106,15 @@ export class ConfigGeneral {
 
 
   constructor(local_base_dir?: string, remote_base_dir?: string, source_dir?: string,
-    local_ldm_dir?: string, remote_ldm_dir?: string, supported_object_types?: string[], file_system_encoding?: string,
+    local_lbt_dir?: string, remote_lbt_dir?: string, supported_object_types?: string[], file_system_encoding?: string,
     console_output_encoding?: string, compiled_object_list?: string, dependency_list?: string, deployment_object_list?: string,
     build_output_dir?: string, compile_list?: string, compiled_object_list_md?: string, remote_source_list?: string,
     check_remote_source_on_startup?: boolean, source_infos?: string, max_threads?: number, local_source_list?: string, cloud_ws_ssh_remote_host?: string) {
 
     this['local-base-dir'] = local_base_dir;
     this['remote-base-dir'] = remote_base_dir;
-    this['local-ldm-dir'] = local_ldm_dir;
-    this['remote-ldm-dir'] = remote_ldm_dir;
+    this['local-lbt-dir'] = local_lbt_dir;
+    this['remote-lbt-dir'] = remote_lbt_dir;
     this['source-dir'] = source_dir;
 
     this['supported-object-types'] = supported_object_types;
@@ -140,7 +140,7 @@ export class ConfigGeneral {
       !this['local-base-dir'] ||
       !this['remote-base-dir'] ||
       !this['source-dir'] ||
-      !this['remote-ldm-dir'] ||
+      !this['remote-lbt-dir'] ||
       (!this['supported-object-types'] || this['supported-object-types'].length == 0) ||
       !this['file-system-encoding'] ||
       !this['console-output-encoding'] ||
@@ -318,11 +318,11 @@ export class AppConfig {
     const config = AppConfig.get_app_config();
     let error_messages: string = '';
 
-    if (config.general['local-ldm-dir'] && !DirTool.dir_exists(config.general['local-ldm-dir']))
-      error_messages = `Config error: local ldm location '${config.general['local-ldm-dir']}' does not exist`
+    if (config.general['local-lbt-dir'] && !DirTool.dir_exists(config.general['local-lbt-dir']))
+      error_messages = `Config error: local lbt location '${config.general['local-lbt-dir']}' does not exist`
 
-    if (config.general['local-ldm-dir'] && DirTool.dir_exists(config.general['local-ldm-dir']) && !ldmTools.get_local_ldm_python_path())
-      error_messages = `Local ldm error: Virtual environmentd is missing in '${config.general['local-ldm-dir']}'. Have you run the setup script?`
+    if (config.general['local-lbt-dir'] && DirTool.dir_exists(config.general['local-lbt-dir']) && !lbtTools.get_local_lbt_python_path())
+      error_messages = `Local lbt error: Virtual environment is missing in '${config.general['local-lbt-dir']}'. Have you run the setup script?`
 
     if (error_messages.length > 0)
       vscode.window.showErrorMessage(error_messages);
@@ -362,8 +362,8 @@ export class AppConfig {
         AppConfig.get_string(gen['local-base-dir']),
         AppConfig.get_string(gen['remote-base-dir']),
         AppConfig.get_string(gen['source-dir']),
-        AppConfig.get_string(gen['local-ldm-dir']),
-        AppConfig.get_string(gen['remote-ldm-dir']),
+        AppConfig.get_string(gen['local-lbt-dir']),
+        AppConfig.get_string(gen['remote-lbt-dir']),
         gen['supported-object-types'],
         AppConfig.get_string(gen['file-system-encoding']),
         AppConfig.get_string(gen['console-output-encoding']),
@@ -406,11 +406,11 @@ export class AppConfig {
 
   public static get_profile_app_config_list(): { alias: string; file: string }[] {
 
-    let configs: { alias: string; file: string }[] = [{'alias': 'Default User Config', 'file': Constants.ldm_APP_CONFIG_USER}];
-    const files = DirTool.list_dir(path.join(Workspace.get_workspace(), Constants.ldm_APP_CONFIG_DIR));
+    let configs: { alias: string; file: string }[] = [{'alias': 'Default User Config', 'file': Constants.LBT_APP_CONFIG_USER}];
+    const files = DirTool.list_dir(path.join(Workspace.get_workspace(), Constants.LBT_APP_CONFIG_DIR));
 
     for (const file of files) {
-      if (file.endsWith('.toml') && (file.startsWith('.user-app-config') && file != Constants.ldm_APP_CONFIG && file != Constants.ldm_APP_CONFIG_USER)) {
+      if (file.endsWith('.toml') && (file.startsWith('.user-app-config') && file != Constants.LBT_APP_CONFIG && file != Constants.LBT_APP_CONFIG_USER)) {
         configs.push({'alias': file.replace('.user-app-config-', '').replace('.toml', ''), 'file': file});
       }
     }
@@ -429,7 +429,7 @@ export class AppConfig {
 
   public static get_project_app_config(workspace: vscode.Uri): AppConfig {
 
-    const app_config = DirTool.get_toml(path.join(workspace.fsPath, Constants.ldm_APP_CONFIG_FILE));
+    const app_config = DirTool.get_toml(path.join(workspace.fsPath, Constants.LBT_APP_CONFIG_FILE));
 
     return app_config
   }
@@ -445,13 +445,13 @@ export class AppConfig {
     if (workspace_settings.current_profile)
       return workspace_settings.current_profile;
 
-    return Constants.ldm_APP_CONFIG_USER;
+    return Constants.LBT_APP_CONFIG_USER;
   }
 
 
   public static get_current_profile_app_config_file(): string {
 
-    return path.join(Constants.ldm_APP_CONFIG_DIR, AppConfig.get_current_profile_app_config_name());
+    return path.join(Constants.LBT_APP_CONFIG_DIR, AppConfig.get_current_profile_app_config_name());
   }
 
 
@@ -469,7 +469,7 @@ export class AppConfig {
 
   public static get_source_configs(): SourceConfigList|undefined {
 
-    const source_config: SourceConfigList|undefined = DirTool.get_toml(path.join(Workspace.get_workspace(), Constants.ldm_SOURCE_CONFIG_FILE));
+    const source_config: SourceConfigList|undefined = DirTool.get_toml(path.join(Workspace.get_workspace(), Constants.LBT_SOURCE_CONFIG_FILE));
 
     return source_config;
   }
@@ -498,7 +498,7 @@ export class AppConfig {
     const project_app_config: {} = AppConfig.get_project_app_config(ws_uri);
     const user_app_config: {} = AppConfig.get_user_app_config(ws_uri);
 
-    const config = ldmTools.override_dict(user_app_config, project_app_config);
+    const config = lbtTools.override_dict(user_app_config, project_app_config);
 
     return config;
 

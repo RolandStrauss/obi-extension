@@ -1,6 +1,6 @@
 import * as path from 'path';
 import { minimatch } from "minimatch";
-import { ldmConstants } from './ldm_constants';
+import { lbtConstants } from './lbt_constants';
 import { getSourceProperties } from './properties';
 import { DirTool } from '../../../utilities/DirTool';
 
@@ -144,3 +144,4 @@ function fnmatch(source: string, conditionValue: string): boolean {
   // Use minimatch for glob pattern matching
   return minimatch(source, conditionValue, { matchBase: true });
 }
+

@@ -5,10 +5,10 @@ import { getNonce } from "../../utilities/getNonce";
 import { DirTool } from '../../utilities/DirTool';
 import * as path from 'path';
 import { Constants } from '../../Constants';
-import { ldmTools } from '../../utilities/ldmTools';
+import { lbtTools } from '../../utilities/LBTTools';
 import { AppConfig, ConfigCompileSettings } from '../controller/AppConfig';
 import { Workspace } from '../../utilities/Workspace';
-import * as source from '../../ldm/Source';
+import * as source from '../../lbt/Source';
 import { SourceListProvider } from './SourceListProvider';
 
 /*
@@ -87,7 +87,7 @@ export class SourceListConfig {
     nunjucks.configure(Constants.HTML_TEMPLATE_DIR);
     const html = nunjucks.render('source_list/source-filter-config.html',
       {
-        global_stuff: ldmTools.get_global_stuff(webview, extensionUri),
+        global_stuff: lbtTools.get_global_stuff(webview, extensionUri),
         config_css: getUri(webview, extensionUri, ["asserts/css", "config.css"]),
         main_java_script: getUri(webview, extensionUri, ["out", "source_list_config.js"]),
         source_list: source_list,
@@ -196,8 +196,8 @@ export class SourceListConfig {
 
   private static createNewPanel(extensionUri : Uri) {
     return window.createWebviewPanel(
-      'ldm_filter_config', // Identifies the type of the webview. Used internally
-      'ldm filter config', // Title of the panel displayed to the user
+      'lbt_filter_config', // Identifies the type of the webview. Used internally
+      'lbt filter config', // Title of the panel displayed to the user
       // The editor column the panel should be displayed in
       ViewColumn.One,
       // Extra panel configurations

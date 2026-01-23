@@ -71,7 +71,7 @@ export class SSH_Tasks {
         throw new Error('Canceled by user. No user provided');
     }
 
-    let pwd: string | undefined = await SSH_Tasks.context.secrets.get(`ldm|${host}|${ssh_user}`);
+    let pwd: string | undefined = await SSH_Tasks.context.secrets.get(`lbt|${host}|${ssh_user}`);
     if (! pwd && (!ssh_key || ssh_key.length == 0)) {
       pwd = await vscode.window.showInputBox({ title: `Enter your password for ${ssh_user}@${host}`, placeHolder: "password", password: true });
       if (! pwd)
@@ -335,20 +335,20 @@ export class SSH_Tasks {
 
     let transfer_list: FileTransfer[] = [
       {
-        local: path.join(Workspace.get_workspace(), Constants.ldm_APP_CONFIG_FILE),
-        remote: `${remote_base_dir}/${Constants.ldm_APP_CONFIG_FILE}`,
+        local: path.join(Workspace.get_workspace(), Constants.LBT_APP_CONFIG_FILE),
+        remote: `${remote_base_dir}/${Constants.LBT_APP_CONFIG_FILE}`,
       },
       {
         local: path.join(Workspace.get_workspace(), AppConfig.get_current_profile_app_config_file()),
-        remote: `${remote_base_dir}/${Constants.ldm_APP_CONFIG_USER_FILE}`,
+        remote: `${remote_base_dir}/${Constants.LBT_APP_CONFIG_USER_FILE}`,
       },
       {
-        local: path.join(Workspace.get_workspace(), '.ldm', 'etc', 'constants.py'),
-        remote: `${remote_base_dir}/.ldm/etc/constants.py`,
+        local: path.join(Workspace.get_workspace(), '.lbt', 'etc', 'constants.py'),
+        remote: `${remote_base_dir}/.lbt/etc/constants.py`,
       },
       {
-        local: path.join(Workspace.get_workspace(), '.ldm', 'etc', 'logger_config.py'),
-        remote: `${remote_base_dir}/.ldm/etc/logger_config.py`,
+        local: path.join(Workspace.get_workspace(), '.lbt', 'etc', 'logger_config.py'),
+        remote: `${remote_base_dir}/.lbt/etc/logger_config.py`,
       }
     ];
 

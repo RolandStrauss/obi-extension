@@ -1,17 +1,17 @@
 # Product Requirements Document (PRD)
-## Lancelot Development Manager (LDM) - VS Code Extension
+## Lancelot Build Tool (LBT) - VS Code Extension
 
 **Document Version:** 1.0  
 **Date:** January 23, 2026  
 **Product Version:** 0.6.10 (Beta)  
-**Project Repository:** andreas-prouza/ldm-extension  
+**Project Repository:** roland-strauss/ldm-extension  
 **Status:** Beta Release - Production Release Planned
 
 ---
 
 ## Executive Summary
 
-The Lancelot Development Manager (LDM) is a comprehensive VS Code extension that automates the build process for IBM i applications. The extension provides a modern, local-first development experience for IBM i developers, allowing them to work with source code locally while maintaining integration with IBM i systems through automated build processes. Currently in Beta (v0.6.10), the product is approaching production readiness with significant functionality already implemented.
+The Lancelot Build Tool (LBT) is a comprehensive VS Code extension that automates the build process for IBM i applications. The extension provides a modern, local-first development experience for IBM i developers, allowing them to work with source code locally while maintaining integration with IBM i systems through automated build processes. Currently in Beta (v0.6.10), the product is approaching production readiness with significant functionality already implemented.
 
 ### Business Value Proposition
 
@@ -665,7 +665,7 @@ UI Update (Webview)
 - SSH server enabled
 - Bash shell available
 - IFS access permissions
-- ldm backend installed (separate repo: andreas-prouza/ldm)
+- ldm backend installed (separate repo: roland-strauss/ldm)
 
 **Third-Party Libraries**
 - node-ssh: SSH communication
@@ -683,7 +683,7 @@ UI Update (Webview)
 - Debug adapters (future)
 
 **IBM i Backend**
-- ldm Python/Shell scripts (andreas-prouza/ldm repo)
+- ldm Python/Shell scripts (roland-strauss/ldm repo)
 - IBM i build commands (CRTBNDRPG, CRTSQLRPGI, etc.)
 - IFS file system
 - Job logs and spool files
@@ -820,7 +820,7 @@ UI Update (Webview)
 
 - **IFS:** Integrated File System (IBM i file system)
 - **LIBL:** Library List (IBM i compilation search path)
-- **ldm:** Lancelot Development Manager
+- **lbt:** Lancelot Build Tool
 - **PDM:** Programming Development Manager (legacy IBM i tool)
 - **RPGLE:** RPG IV (programming language for IBM i)
 - **SEU:** Source Entry Utility (legacy IBM i editor)
@@ -899,7 +899,7 @@ project/
 ### Appendix E: Key Stakeholders
 
 **Internal Team**
-- Andreas Prouza - Lead Developer & Product Owner
+- Roland Strauss - Lead Developer & Product Owner
 - Development Team - (to be expanded)
 - QA Team - (to be established)
 
@@ -911,9 +911,9 @@ project/
 
 ### Appendix F: References & Links
 
-- **Extension Repository:** https://github.com/andreas-prouza/ldm-extension
-- **Backend Repository:** https://github.com/andreas-prouza/ldm
-- **Documentation:** https://github.com/andreas-prouza/ibm-i-build-ldm
+- **Extension Repository:** https://github.com/RolandStrauss/ldm-extension
+- **Backend Repository:** https://github.com/roland-strauss/ldm
+- **Documentation:** https://github.com/roland-strauss/ibm-i-build-ldm
 - **VS Code Marketplace:** (to be published at GA)
 - **Support Site:** https://www.prouza.at
 
@@ -923,7 +923,7 @@ project/
 
 This PRD requires approval from:
 
-- [ ] Product Owner: Andreas Prouza
+- [ ] Product Owner: Roland Strauss
 - [ ] Development Lead: _________________
 - [ ] Project Manager: _________________
 - [ ] Executive Sponsor: _________________

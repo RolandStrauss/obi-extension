@@ -4,7 +4,7 @@ import { getUri } from "../../utilities/getUri";
 import { DirTool } from '../../utilities/DirTool';
 import * as path from 'path';
 import { Constants } from '../../Constants';
-import { ldmTools } from '../../utilities/ldmTools';
+import { lbtTools } from '../../utilities/LBTTools';
 import { AppConfig, ConfigCompileSettings, SourceConfig, SourceConfigList } from './AppConfig';
 import { Workspace } from '../../utilities/Workspace';
 import { LocalSourceList } from '../../utilities/LocalSourceList';
@@ -34,9 +34,9 @@ env.addFilter("typename", (obj: any) => {
 
 
 
-export class ldmSourceDependency {
+export class lbtSourceDependency {
 
-  public static currentPanel: ldmSourceDependency | undefined;
+  public static currentPanel: lbtSourceDependency | undefined;
   private readonly _panel: WebviewPanel;
   private _disposables: Disposable[] = [];
   private static _context: vscode.ExtensionContext;
@@ -71,23 +71,23 @@ export class ldmSourceDependency {
    */
   public static async render(context: vscode.ExtensionContext, extensionUri: Uri, source_config: string) {
 
-    ldmSourceDependency._context = context;
-    ldmSourceDependency._extensionUri = extensionUri;
-    ldmSourceDependency.source = source_config;
+    lbtSourceDependency._context = context;
+    lbtSourceDependency._extensionUri = extensionUri;
+    lbtSourceDependency.source = source_config;
 
-    if (ldmSourceDependency.currentPanel) {
-      ldmSourceDependency.currentPanel.dispose();
+    if (lbtSourceDependency.currentPanel) {
+      lbtSourceDependency.currentPanel.dispose();
     }
 
 
     // If a webview panel does not already exist create and show a new one
     const panel = this.createNewPanel(extensionUri);
 
-    panel.webview.html = await ldmSourceDependency.generate_html(extensionUri, panel.webview);
+    panel.webview.html = await lbtSourceDependency.generate_html(extensionUri, panel.webview);
 
     panel.webview.onDidReceiveMessage(this.onReceiveMessage);
 
-    ldmSourceDependency.currentPanel = new ldmSourceDependency(panel, extensionUri);
+    lbtSourceDependency.currentPanel = new lbtSourceDependency(panel, extensionUri);
 
   }
 
@@ -104,36 +104,36 @@ export class ldmSourceDependency {
     let source_config: SourceConfig|undefined;
 
     if (source_configs)
-      source_config = source_configs[ldmSourceDependency.source];
+      source_config = source_configs[lbtSourceDependency.source];
 
     const local_source_list: string[] = await LocalSourceList.get_source_list();
-    const dependencies: {['source']: string[]} = ldmTools.get_dependency_list() || {};
+    const dependencies: {['source']: string[]} = lbtTools.get_dependency_list() || {};
     let dependencies_1: string[] = [];
     let dependencies_2: string[] = [];
 
-    for (const dep of dependencies[ldmSourceDependency.source] || []) {
+    for (const dep of dependencies[lbtSourceDependency.source] || []) {
       dependencies_1.push({"source": dep, "file": DirTool.get_encoded_file_URI(path.join(config.general['source-dir'] || 'src', dep))} as any);
     }
 
     for (const [source, deps] of Object.entries(dependencies)) {
-      if (deps.includes(ldmSourceDependency.source)) {
+      if (deps.includes(lbtSourceDependency.source)) {
         dependencies_2.push({"source": source, "file": DirTool.get_encoded_file_URI(path.join(config.general['source-dir'] || 'src', source))} as any);
       }
     }
 
     const html = env.render('source_list/maintain-source-dependency.html',
       {
-        global_stuff: ldmTools.get_global_stuff(webview, extensionUri),
+        global_stuff: lbtTools.get_global_stuff(webview, extensionUri),
         config_css: getUri(webview, extensionUri, ["asserts/css", "config.css"]),
         main_java_script: getUri(webview, extensionUri, ["out", "source_dependency.js"]),
         icons: {debug_start: '$(preview)'},
         src_folder: DirTool.get_encoded_file_URI(source_dir),
-        source: ldmSourceDependency.source,
+        source: lbtSourceDependency.source,
         source_list: local_source_list,
         dependency_list_1: dependencies_1,
         dependency_list_2: dependencies_2,
-        source_file: DirTool.get_encoded_file_URI(path.join(config.general['source-dir']||'src', ldmSourceDependency.source)),
-        source_config_file: DirTool.get_encoded_file_URI(Constants.ldm_SOURCE_CONFIG_FILE),
+        source_file: DirTool.get_encoded_file_URI(path.join(config.general['source-dir']||'src', lbtSourceDependency.source)),
+        source_config_file: DirTool.get_encoded_file_URI(Constants.LBT_SOURCE_CONFIG_FILE),
         source_config: source_config
       }
     );
@@ -146,12 +146,12 @@ export class ldmSourceDependency {
 
   public static async update(): Promise<void> {
 
-    const panel = ldmSourceDependency.currentPanel;
+    const panel = lbtSourceDependency.currentPanel;
 
     if (!panel)
       return;
 
-    panel._panel.webview.html = await ldmSourceDependency.generate_html(ldmSourceDependency._extensionUri, ldmSourceDependency.currentPanel?._panel.webview);
+    panel._panel.webview.html = await lbtSourceDependency.generate_html(lbtSourceDependency._extensionUri, lbtSourceDependency.currentPanel?._panel.webview);
 
   }
 
@@ -172,23 +172,23 @@ export class ldmSourceDependency {
     switch (command) {
 
       case "add_dependency_1":
-        ldmSourceDependency.add_dependency(1, message.source);
+        lbtSourceDependency.add_dependency(1, message.source);
         break;
 
       case "add_dependency_2":
-        ldmSourceDependency.add_dependency(2, message.source);
+        lbtSourceDependency.add_dependency(2, message.source);
         break;
 
       case "delete_dependency_1":
-        ldmSourceDependency.delete_dependency(1, message.source);
+        lbtSourceDependency.delete_dependency(1, message.source);
         break;
 
       case "delete_dependency_2":
-        ldmSourceDependency.delete_dependency(2, message.source);
+        lbtSourceDependency.delete_dependency(2, message.source);
         break;
 
       case "reload":
-        ldmSourceDependency.update();
+        lbtSourceDependency.update();
         break;
     }
     return;
@@ -198,41 +198,41 @@ export class ldmSourceDependency {
 
   private static add_dependency(type: number, new_source: string): void {
 
-    let dependency_list: {['source']: string[]} = ldmTools.get_dependency_list();
+    let dependency_list: {['source']: string[]} = lbtTools.get_dependency_list();
 
     // Add dependency to current source
     if (type == 1) {
-      if (!dependency_list[ldmSourceDependency.source])
-        dependency_list[ldmSourceDependency.source] = [];
-      dependency_list[ldmSourceDependency.source].push(new_source);
+      if (!dependency_list[lbtSourceDependency.source])
+        dependency_list[lbtSourceDependency.source] = [];
+      dependency_list[lbtSourceDependency.source].push(new_source);
     }
 
     // Add current source as dependency to other source
     if (type == 2) {
       if (!dependency_list[new_source])
         dependency_list[new_source] = [];
-      dependency_list[new_source].push(ldmSourceDependency.source);
+      dependency_list[new_source].push(lbtSourceDependency.source);
     }
 
-    ldmTools.save_dependency_list(dependency_list);
+    lbtTools.save_dependency_list(dependency_list);
   }
 
 
 
   private static delete_dependency(type: number, source: string): void {
-    let dependency_list: {['source']: string[]} = ldmTools.get_dependency_list();
+    let dependency_list: {['source']: string[]} = lbtTools.get_dependency_list();
 
     let key: string;
     let value: string;
 
     if (type == 1) {
-      key = ldmSourceDependency.source;
+      key = lbtSourceDependency.source;
       value = source;
     }
 
     if (type == 2) {
       key = source;
-      value = ldmSourceDependency.source;
+      value = lbtSourceDependency.source;
     }
 
     if (dependency_list[key]) {
@@ -242,15 +242,15 @@ export class ldmSourceDependency {
       }
     }
 
-    ldmTools.save_dependency_list(dependency_list);
+    lbtTools.save_dependency_list(dependency_list);
   }
 
 
 
   private static createNewPanel(extensionUri : Uri) {
     return window.createWebviewPanel(
-      'ldm_source_dependency', // Identifies the type of the webview. Used internally
-      'ldm source dependency', // Title of the panel displayed to the user
+      'lbt_source_dependency', // Identifies the type of the webview. Used internally
+      'lbt source dependency', // Title of the panel displayed to the user
       // The editor column the panel should be displayed in
       ViewColumn.One,
       // Extra panel configurations
@@ -273,7 +273,7 @@ export class ldmSourceDependency {
    * Cleans up and disposes of webview resources when the webview panel is closed.
    */
   public dispose() {
-    ldmSourceDependency.currentPanel = undefined;
+    lbtSourceDependency.currentPanel = undefined;
 
     // Dispose of the current webview panel
     this._panel.dispose();

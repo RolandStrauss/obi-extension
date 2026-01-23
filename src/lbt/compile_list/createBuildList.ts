@@ -3,11 +3,11 @@ import * as path from 'path';
 import { getFiles, getChangedSources } from './modules/files';
 import { getBuildOrder } from './modules/dependency';
 import { orderBuilds } from './modules/build_cmds';
-import { ldmConstants } from './modules/ldm_constants';
+import { lbtConstants } from './modules/lbt_constants';
 import { DirTool } from '../../utilities/DirTool';
 import { AppConfig } from '../../webview/controller/AppConfig';
 import { Workspace } from '../../utilities/Workspace';
-import { ldmTools } from '../../utilities/ldmTools';
+import { lbtTools } from '../../utilities/LBTTools';
 
 
 
@@ -21,8 +21,8 @@ export function createBuildList(source?: string): void {
   const sourceDir = path.join(ws, generalConfig['local-base-dir'], generalConfig['source-dir']);
   const buildListPath = path.join(ws, generalConfig['compiled-object-list']);
   const objectTypes = generalConfig['supported-object-types'];
-  const dependencyList = ldmTools.get_dependency_list();
-  const buildOutputDir = path.join(ws, generalConfig['build-output-dir'] || '.ldm/build-output');
+  const dependencyList = lbtTools.get_dependency_list();
+  const buildOutputDir = path.join(ws, generalConfig['build-output-dir'] || '.lbt/build-output');
 
   if (fs.existsSync(buildOutputDir)) {
     fs.rmSync(buildOutputDir, { recursive: true, force: true });
@@ -36,7 +36,7 @@ export function createBuildList(source?: string): void {
     changedSourcesList = getChangedSources(sourceDir, buildListPath, objectTypes, sourceList);
   }
 
-  DirTool.write_json(path.join(ws, ldmConstants.get('CHANGED_OBJECT_LIST')), changedSourcesList);
+  DirTool.write_json(path.join(ws, lbtConstants.get('CHANGED_OBJECT_LIST')), changedSourcesList);
   let buildTargets = getBuildOrder(dependencyList, [
     ...changedSourcesList['new-objects'],
     ...changedSourcesList['changed-sources'],

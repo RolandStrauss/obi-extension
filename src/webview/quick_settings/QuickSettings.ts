@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import { getUri } from "../../utilities/getUri";
 import { DirTool } from '../../utilities/DirTool';
-import { ldmTools } from '../../utilities/ldmTools';
+import { lbtTools } from '../../utilities/LBTTools';
 import { Constants } from '../../Constants';
 import * as path from 'path';
 import { BuildSummary } from '../show_changes/BuildSummary';
@@ -24,7 +24,7 @@ const nunjucks = require('nunjucks');
 export class QuickSettings implements vscode.WebviewViewProvider {
 
 
-	public static readonly viewType = 'ldm.quick-settings';
+	public static readonly viewType = 'lbt.quick-settings';
   public static view_object: QuickSettings;
   public static current_run_type: string | undefined;
 
@@ -80,7 +80,7 @@ export class QuickSettings implements vscode.WebviewViewProvider {
     nunjucks.configure(Constants.HTML_TEMPLATE_DIR);
     const html = nunjucks.render(html_template,
       {
-        global_stuff: ldmTools.get_global_stuff(webviewView.webview, this._extensionUri),
+        global_stuff: lbtTools.get_global_stuff(webviewView.webview, this._extensionUri),
         main_java_script: getUri(webviewView.webview, this._extensionUri, ["out", "controller.js"]),
         config_settings_attributes: config_settings_attributes
       }
@@ -101,3 +101,5 @@ export class QuickSettings implements vscode.WebviewViewProvider {
 
 
 }
+
+

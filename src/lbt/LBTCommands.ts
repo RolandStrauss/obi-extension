@@ -2,12 +2,12 @@ import * as vscode from 'vscode';
 
 import { fork, spawn } from "child_process";
 import { BuildSummary } from '../webview/show_changes/BuildSummary';
-import { ldmStatus } from './ldmStatus';
-import { ldmController } from '../webview/controller/ldmController';
-import { ldmTools } from '../utilities/ldmTools';
+import { lbtStatus } from './LBTStatus';
+import { lbtController } from '../webview/controller/lbtController';
+import { lbtTools } from '../utilities/LBTTools';
 import { Workspace } from '../utilities/Workspace';
 
-import * as source from '../ldm/Source';
+import * as source from '../lbt/Source';
 import { SSH_Tasks } from '../utilities/SSH_Tasks';
 import { AppConfig } from '../webview/controller/AppConfig';
 import * as path from 'path';
@@ -19,13 +19,13 @@ import { Uri } from 'vscode';
 
 
 
-export class ldmCommands {
+export class lbtCommands {
 
 
-  public static run_build_status: ldmStatus = ldmStatus.READY;
-  public static show_changes_status: ldmStatus = ldmStatus.READY;
-  public static remote_source_list_status: ldmStatus = ldmStatus.READY;
-  public static reset_compiled_object_list_status: ldmStatus = ldmStatus.READY;
+  public static run_build_status: lbtStatus = lbtStatus.READY;
+  public static show_changes_status: lbtStatus = lbtStatus.READY;
+  public static remote_source_list_status: lbtStatus = lbtStatus.READY;
+  public static reset_compiled_object_list_status: lbtStatus = lbtStatus.READY;
 
 
 
@@ -34,14 +34,14 @@ export class ldmCommands {
     const ws = Workspace.get_workspace();
     const config = AppConfig.get_app_config();
     const remote_base_dir: string | undefined = config.general['remote-base-dir'];
-    const remote_ldm_dir: string | undefined = config.general['remote-ldm-dir'];
+    const remote_lbt_dir: string | undefined = config.general['remote-lbt-dir'];
 
-    if (!remote_base_dir || !remote_ldm_dir)
-      throw Error(`Missing 'remote_base_dir' or 'remote_ldm_dir'`);
+    if (!remote_base_dir || !remote_lbt_dir)
+      throw Error(`Missing 'remote_base_dir' or 'remote_lbt_dir'`);
 
-    const remote_ldm: string | undefined = await ldmTools.get_remote_ldm_python_path();
-    if (!remote_ldm)
-      throw Error(`ldm path is not korrekt`);
+    const remote_lbt: string | undefined = await lbtTools.get_remote_lbt_python_path();
+    if (!remote_lbt)
+      throw Error(`lbt path is not korrekt`);
 
     await vscode.window.withProgress({
       location: vscode.ProgressLocation.Notification,
@@ -57,7 +57,7 @@ export class ldmCommands {
 
         let source_list: string[] = sources || [];
         if (!sources)
-          source_list = await ldmTools.generate_source_change_lists();
+          source_list = await lbtTools.generate_source_change_lists();
 
         if (source_list.length == 0) {
           vscode.window.showWarningMessage("No changed sources to build");
@@ -76,7 +76,7 @@ export class ldmCommands {
           }
         }
 
-        if (! await ldmTools.check_remote_pase()){
+        if (! await lbtTools.check_remote_pase()){
           vscode.window.showErrorMessage('Remote PASE is not configured correctly. Please check your configuration.');
           return false;
         }
@@ -85,7 +85,7 @@ export class ldmCommands {
           message: `Check remote project folder`
         });
 
-        let check: boolean = await ldmTools.check_remote();
+        let check: boolean = await lbtTools.check_remote();
 
         if (!check) {
           return false;
@@ -97,22 +97,22 @@ export class ldmCommands {
         const result = await SSH_Tasks.transferSources(source_list);
 
         if (generate_compile_list === false)
-          await ldmCommands.transfer_build_list(progress);
+          await lbtCommands.transfer_build_list(progress);
         else
-          await ldmCommands.generate_build_script(progress, source_list);
+          await lbtCommands.generate_build_script(progress, source_list);
 
 
         progress.report({
           message: `Run build on IBM i`
         });
 
-        await ldmCommands.execute_remote_build();
+        await lbtCommands.execute_remote_build();
 
         progress.report({
           message: `Get all outputs back to you`
         });
 
-        await ldmCommands.get_remote_build_output();
+        await lbtCommands.get_remote_build_output();
 
       });
   }
@@ -126,16 +126,16 @@ export class ldmCommands {
 
     const config = AppConfig.get_app_config();
     const remote_base_dir: string | undefined = config.general['remote-base-dir'];
-    const remote_ldm_dir: string | undefined = config.general['remote-ldm-dir'];
-    const remote_ldm: string | undefined = await ldmTools.get_remote_ldm_python_path();
+    const remote_lbt_dir: string | undefined = config.general['remote-lbt-dir'];
+    const remote_lbt: string | undefined = await lbtTools.get_remote_lbt_python_path();
 
-    if (!ldmTools.without_local_ldm() && config.general['local-ldm-dir']) {
+    if (!lbtTools.without_local_lbt() && config.general['local-lbt-dir']) {
 
       progress.report({
-        message: `Generate build script by local ldm.`
+        message: `Generate build script by local lbt.`
       });
 
-      let cmd = `${ldmTools.get_local_ldm_python_path()} -X utf8 ${path.join(config.general['local-ldm-dir'], 'main.py')} -a create -p .`;
+      let cmd = `${lbtTools.get_local_lbt_python_path()} -X utf8 ${path.join(config.general['local-lbt-dir'], 'main.py')} -a create -p .`;
 
       if (source_list.length == 1) {
         const quote = process.platform === 'win32' ? '"' : "'";
@@ -152,14 +152,14 @@ export class ldmCommands {
         throw error;
       }
 
-      await ldmCommands.transfer_build_list(progress);
+      await lbtCommands.transfer_build_list(progress);
     }
     else {
 
       progress.report({
-        message: `Generate build script on remote. If it takes too long, use ldm localy (see documentation).`
+        message: `Generate build script on remote. If it takes too long, use lbt locally (see documentation).`
       });
-      let ssh_cmd: string = `cd '${remote_base_dir}' || exit 1; rm log/* .ldm/log/* 2> /dev/null || true; ${remote_ldm} -X utf8 ${remote_ldm_dir}/main.py -a create -p .`;
+      let ssh_cmd: string = `cd '${remote_base_dir}' || exit 1; rm log/* .lbt/log/* 2> /dev/null || true; ${remote_lbt} -X utf8 ${remote_lbt_dir}/main.py -a create -p .`;
       if (source_list.length == 1) {
         const quote = process.platform === 'win32' ? '"' : "'";
         ssh_cmd = `${ssh_cmd} --source=${quote}${source_list[0]}${quote}`;
@@ -182,7 +182,7 @@ export class ldmCommands {
       message: `Transfer build list to remote.`
     });
     await SSH_Tasks.transfer_files([config.general['compile-list']]);
-    await SSH_Tasks.transfer_dir(path.join(Workspace.get_workspace(), Constants.ldm_TMP_DIR), `${config.general['remote-base-dir']}/${Constants.ldm_TMP_DIR}`);
+    await SSH_Tasks.transfer_dir(path.join(Workspace.get_workspace(), Constants.LBT_TMP_DIR), `${config.general['remote-base-dir']}/${Constants.LBT_TMP_DIR}`);
 
   }
 
@@ -194,9 +194,9 @@ export class ldmCommands {
 
     const config = AppConfig.get_app_config();
     const remote_base_dir: string | undefined = config.general['remote-base-dir'];
-    const remote_ldm_dir: string | undefined = config.general['remote-ldm-dir'];
-    const remote_ldm: string | undefined = await ldmTools.get_remote_ldm_python_path();
-    const ssh_cmd: string = `cd '${remote_base_dir}' || exit 1; rm log/* .ldm/log/* 2> /dev/null || true; ${remote_ldm} -X utf8 ${remote_ldm_dir}/main.py -a run -p .`;
+    const remote_lbt_dir: string | undefined = config.general['remote-lbt-dir'];
+    const remote_lbt: string | undefined = await lbtTools.get_remote_lbt_python_path();
+    const ssh_cmd: string = `cd '${remote_base_dir}' || exit 1; rm log/* .lbt/log/* 2> /dev/null || true; ${remote_lbt} -X utf8 ${remote_lbt_dir}/main.py -a run -p .`;
     await SSH_Tasks.executeCommand(ssh_cmd);
   }
 
@@ -211,20 +211,20 @@ export class ldmCommands {
 
     let promise_list = [
       SSH_Tasks.getRemoteDir(path.join(ws, Constants.BUILD_OUTPUT_DIR), `${remote_base_dir}/${Constants.BUILD_OUTPUT_DIR}`),
-      SSH_Tasks.getRemoteDir(path.join(ws, '.ldm', 'tmp'), `${remote_base_dir}/.ldm/tmp`),
-      SSH_Tasks.getRemoteDir(path.join(ws, '.ldm', 'log'), `${remote_base_dir}/.ldm/log`)
+      SSH_Tasks.getRemoteDir(path.join(ws, '.lbt', 'tmp'), `${remote_base_dir}/.lbt/tmp`),
+      SSH_Tasks.getRemoteDir(path.join(ws, '.lbt', 'log'), `${remote_base_dir}/.lbt/log`)
     ];
 
     await Promise.all(promise_list);
 
     if (DirTool.file_exists(path.join(ws, config.general['compile-list']))) {
 
-      const compile_list: {} = ldmTools.get_compile_list(ws_uri) || {};
+      const compile_list: {} = lbtTools.get_compile_list(ws_uri) || {};
       const timestamp: string = compile_list['timestamp'] || new Date().toISOString();
       DirTool.write_json(path.join(ws, Constants.BUILD_HISTORY_DIR, `${timestamp.replaceAll(":", ".")}.json`), compile_list);
 
-      const sources: source.SourceCompileList[] = ldmTools.get_sources_info_from_compile_list();
-      const source_hashes: source.ISource = ldmTools.get_source_hash_list(Workspace.get_workspace()) || {};
+      const sources: source.SourceCompileList[] = lbtTools.get_sources_info_from_compile_list();
+      const source_hashes: source.ISource = lbtTools.get_source_hash_list(Workspace.get_workspace()) || {};
 
       for (const source of sources) {
         if (source.status == 'success') {
@@ -270,12 +270,12 @@ export class ldmCommands {
 
   public static async run_single_build(context: vscode.ExtensionContext) {
 
-    const source = ldmCommands.get_current_active_source();
+    const source = lbtCommands.get_current_active_source();
 
     if (!source)
-      return ldmController.run_finished();
+      return lbtController.run_finished();
 
-    ldmCommands.run_build(context, source);
+    lbtCommands.run_build(context, source);
   }
 
 
@@ -283,14 +283,14 @@ export class ldmCommands {
 
   public static async run_build(context: vscode.ExtensionContext, source?: string) {
 
-    if (ldmCommands.run_build_status != ldmStatus.READY) {
-      vscode.window.showErrorMessage('ldm process is already running');
+    if (lbtCommands.run_build_status != lbtStatus.READY) {
+      vscode.window.showErrorMessage('lbt process is already running');
       return;
     }
 
-    await ldmCommands.show_changes(context, source);
+    await lbtCommands.show_changes(context, source);
 
-    await ldmCommands.rerun_build([], {});
+    await lbtCommands.rerun_build([], {});
 
     return;
   }
@@ -300,46 +300,46 @@ export class ldmCommands {
 
   public static async rerun_build(ignore_sources: string[], ignore_sources_cmd: { [key: string]: [string] | null }) {
 
-    if (ldmCommands.run_build_status != ldmStatus.READY) {
-      vscode.window.showErrorMessage('ldm process is already running');
+    if (lbtCommands.run_build_status != lbtStatus.READY) {
+      vscode.window.showErrorMessage('lbt process is already running');
       return;
     }
 
-    ldmCommands.run_build_status = ldmStatus.IN_PROCESS;
+    lbtCommands.run_build_status = lbtStatus.IN_PROCESS;
 
     try {
 
-      ldmTools.update_compile_list(ignore_sources, ignore_sources_cmd);
+      lbtTools.update_compile_list(ignore_sources, ignore_sources_cmd);
 
-      const sources: string[] = ldmTools.get_sources_2_build_from_compile_list(true);
+      const sources: string[] = lbtTools.get_sources_2_build_from_compile_list(true);
       if (sources.length > 0) {
-        await ldmCommands.run_build_process(sources, false);
+        await lbtCommands.run_build_process(sources, false);
       }
       else {
         vscode.window.showInformationMessage('No sources to build');
       }
 
       BuildSummary.update();
-      ldmController.update_build_summary_timestamp();
+      lbtController.update_build_summary_timestamp();
     }
     catch (e: any) {
       vscode.window.showErrorMessage(e.message);
     }
 
-    ldmCommands.run_build_status = ldmStatus.READY;
-    ldmController.run_finished();
+    lbtCommands.run_build_status = lbtStatus.READY;
+    lbtController.run_finished();
     return;
   }
 
 
 
   public static async show_single_changes(context: vscode.ExtensionContext) {
-    const source = ldmCommands.get_current_active_source();
+    const source = lbtCommands.get_current_active_source();
 
     if (!source)
-      return ldmController.run_finished();
+      return lbtController.run_finished();
 
-    ldmCommands.show_changes(context, source);
+    lbtCommands.show_changes(context, source);
   }
 
 
@@ -347,22 +347,22 @@ export class ldmCommands {
 
   public static async show_changes(context: vscode.ExtensionContext, source?: string) {
 
-    if (ldmCommands.show_changes_status != ldmStatus.READY) {
-      vscode.window.showErrorMessage('ldm process is already running');
+    if (lbtCommands.show_changes_status != lbtStatus.READY) {
+      vscode.window.showErrorMessage('lbt process is already running');
       return;
     }
 
-    ldmCommands.show_changes_status = ldmStatus.IN_PROCESS;
+    lbtCommands.show_changes_status = lbtStatus.IN_PROCESS;
 
     const ws: string = Workspace.get_workspace();
     const config = AppConfig.get_app_config();
 
     try {
-      if (ldmTools.without_local_ldm())
-        await ldmTools.generate_source_change_lists(source);
+      if (lbtTools.without_local_lbt())
+        await lbtTools.generate_source_change_lists(source);
       else {
         logger.info(`WS: ${Workspace.get_workspace()}`);
-        let cmd = `${ldmTools.get_local_ldm_python_path()} -X utf8 ${path.join(config.general['local-ldm-dir'], 'main.py')} -a create -p .`;
+        let cmd = `${lbtTools.get_local_lbt_python_path()} -X utf8 ${path.join(config.general['local-lbt-dir'], 'main.py')} -a create -p .`;
         if (source) {
           const quote = process.platform === 'win32' ? '"' : "'";
           cmd = `${cmd} --source=${quote}${source}${quote}`;
@@ -380,9 +380,9 @@ export class ldmCommands {
       vscode.window.showInformationMessage(error.message, { modal: true });
     }
 
-    ldmCommands.show_changes_status = ldmStatus.READY;
-    ldmController.run_finished();
-    ldmController.update_build_summary_timestamp();
+    lbtCommands.show_changes_status = lbtStatus.READY;
+    lbtController.run_finished();
+    lbtController.update_build_summary_timestamp();
 
     return;
   }
@@ -403,12 +403,12 @@ export class ldmCommands {
 
   public static async reset_compiled_object_list() {
 
-    if (ldmCommands.reset_compiled_object_list_status != ldmStatus.READY) {
-      vscode.window.showErrorMessage('ldm process is already running');
+    if (lbtCommands.reset_compiled_object_list_status != lbtStatus.READY) {
+      vscode.window.showErrorMessage('lbt process is already running');
       return;
     }
 
-    ldmCommands.reset_compiled_object_list_status = ldmStatus.IN_PROCESS;
+    lbtCommands.reset_compiled_object_list_status = lbtStatus.IN_PROCESS;
 
     const config = AppConfig.get_app_config();
 
@@ -419,7 +419,7 @@ export class ldmCommands {
       const object_list_file: string = config.general['compiled-object-list'];
       let json_dict: {} = {};
 
-      const source_hashes: source.ISource[] = await ldmTools.retrieve_current_source_hashes();
+      const source_hashes: source.ISource[] = await lbtTools.retrieve_current_source_hashes();
 
       source_hashes.map((source: source.ISource) => {
         const source_name: string = Object.keys(source)[0];
@@ -435,7 +435,7 @@ export class ldmCommands {
       vscode.window.showErrorMessage(e.message);
     }
 
-    ldmCommands.reset_compiled_object_list_status = ldmStatus.READY;
+    lbtCommands.reset_compiled_object_list_status = lbtStatus.READY;
     return;
   }
 
@@ -450,28 +450,28 @@ export class ldmCommands {
    */
   public static async get_remote_source_list(): Promise<void> {
 
-    if (ldmCommands.remote_source_list_status != ldmStatus.READY) {
-      vscode.window.showErrorMessage('ldm process is already running');
+    if (lbtCommands.remote_source_list_status != lbtStatus.READY) {
+      vscode.window.showErrorMessage('lbt process is already running');
       return;
     }
 
-    ldmCommands.remote_source_list_status = ldmStatus.IN_PROCESS;
+    lbtCommands.remote_source_list_status = lbtStatus.IN_PROCESS;
 
     try {
 
       const ws = Workspace.get_workspace();
       const config = AppConfig.get_app_config();
       const remote_base_dir: string | undefined = config.general['remote-base-dir'];
-      const remote_ldm_dir: string | undefined = config.general['remote-ldm-dir'];
+      const remote_lbt_dir: string | undefined = config.general['remote-lbt-dir'];
 
-      if (!remote_base_dir || !remote_ldm_dir)
-        throw Error(`Missing 'remote_base_dir' or 'remote_ldm_dir'`);
+      if (!remote_base_dir || !remote_lbt_dir)
+        throw Error(`Missing 'remote_base_dir' or 'remote_lbt_dir'`);
 
-      const remote_ldm: string | undefined = `${config.general['remote-ldm-dir']}/venv/bin/python`;
+      const remote_lbt: string | undefined = `${config.general['remote-lbt-dir']}/venv/bin/python`;
 
-      await SSH_Tasks.transfer_files([Constants.ldm_APP_CONFIG_FILE, Constants.ldm_APP_CONFIG_USER_FILE]);
+      await SSH_Tasks.transfer_files([Constants.LBT_APP_CONFIG_FILE, Constants.LBT_APP_CONFIG_USER_FILE]);
 
-      let ssh_cmd: string = `cd '${remote_base_dir}' || exit 1; rm log/* .ldm/log/* 2>/dev/null || true; ${remote_ldm} -X utf8 ${remote_ldm_dir}/main.py -a gen_src_list -p .`;
+      let ssh_cmd: string = `cd '${remote_base_dir}' || exit 1; rm log/* .lbt/log/* 2>/dev/null || true; ${remote_lbt} -X utf8 ${remote_lbt_dir}/main.py -a gen_src_list -p .`;
       await SSH_Tasks.executeCommand(ssh_cmd);
 
       if (config.general['remote-source-list'] && config.general['source-list'])
@@ -480,13 +480,13 @@ export class ldmCommands {
       vscode.window.showInformationMessage('Remote source list transfered from remote');
     }
     catch (e: any) {
-      ldmCommands.remote_source_list_status = ldmStatus.READY;
+      lbtCommands.remote_source_list_status = lbtStatus.READY;
       vscode.window.showErrorMessage(e.message);
       vscode.window.showErrorMessage('Failed to get remote source list');
       logger.error(e.message, e.stack);
       throw e;
     }
-    ldmCommands.remote_source_list_status = ldmStatus.READY;
+    lbtCommands.remote_source_list_status = lbtStatus.READY;
 
     return;
   }
@@ -497,10 +497,10 @@ export class ldmCommands {
 
     const config = AppConfig.get_app_config();
     const remote_base_dir: string | undefined = config.general['remote-base-dir'];
-    const remote_ldm_dir: string | undefined = config.general['remote-ldm-dir'];
+    const remote_lbt_dir: string | undefined = config.general['remote-lbt-dir'];
 
-    if (!remote_base_dir || !remote_ldm_dir)
-      throw Error(`Missing config 'remote-base-dir' or 'remote-ldm-dir'`);
+    if (!remote_base_dir || !remote_lbt_dir)
+      throw Error(`Missing config 'remote-base-dir' or 'remote-lbt-dir'`);
 
     if (!config.general['compiled-object-list'])
       throw Error(`Missing config 'compiled-object-list'`);

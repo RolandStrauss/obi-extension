@@ -7,9 +7,9 @@
   </head>
   <body>
 
-    <h2>{{ global_stuff['get_text']('Use ldm in your project?') | safe }}</h2>
+    <h2>{{ global_stuff['get_text']('Use lbt in your project?') | safe }}</h2>
     <br/>
-    {{ global_stuff['get_text']('You need to open a folder containing an ldm project:') | safe }}
+    {{ global_stuff['get_text']('You need to open a folder containing an lbt project:') | safe }}
     <br/>
     <br/>
     <vscode-button id="open_folder">{{ global_stuff['get_text']('Open folder') | safe }}</vscode-button>
@@ -18,7 +18,7 @@
     <br/>
     <br/>
     <br/>
-    {{ global_stuff['get_text']('Or initialize your current folder with ldm:') | safe }}
+    {{ global_stuff['get_text']('Or initialize your current folder with lbt:') | safe }}
     <br/>
     <br/>
     <vscode-button id="initialize_folder">{{ global_stuff['get_text']('Initialize') | safe }}</vscode-button>
@@ -34,3 +34,4 @@
 
   </body>
 </html>
+

@@ -7,24 +7,24 @@ import { Constants } from '../Constants';
 
 import { AppConfig, IConfigProperties } from '../webview/controller/AppConfig';
 import { SSH_Tasks } from './SSH_Tasks';
-import * as source from '../ldm/Source';
+import * as source from '../lbt/Source';
 import { Workspace } from './Workspace';
 import * as fs from 'fs-extra';
 import { logger } from './Logger';
-import { ldmCommands } from '../ldm/ldmCommands';
+import { lbtCommands } from '../lbt/LBTCommands';
 import { LocaleText } from './LocaleText';
-import { ldmStatus } from '../ldm/ldmStatus';
-import { createBuildList } from '../ldm/compile_list/createBuildList';
+import { lbtStatus } from '../lbt/LBTStatus';
+import { createBuildList } from '../lbt/compile_list/createBuildList';
 
 
 
-export class ldmTools {
+export class lbtTools {
 
   public static ext_context?: vscode.ExtensionContext;
   public static lang: LocaleText | undefined = undefined;
 
-  public static check_remote_sources_status: ldmStatus = ldmStatus.READY;
-  public static transfer_all_status: ldmStatus = ldmStatus.READY;
+  public static check_remote_sources_status: lbtStatus = lbtStatus.READY;
+  public static transfer_all_status: lbtStatus = lbtStatus.READY;
 
   private static _dependency_list: { ['source']: string[] }|undefined = undefined;
   private static _last_loading_time: number = 0;
@@ -35,7 +35,7 @@ export class ldmTools {
 
 
   public static cancel(thread_name: string) {
-    ldmTools._threads[thread_name] = 'cancel';
+    lbtTools._threads[thread_name] = 'cancel';
   }
 
 
@@ -43,15 +43,15 @@ export class ldmTools {
    * Self check of the extension
    */
   public static self_check() {
-    if (!vscode.workspace.workspaceFolders || !ldmTools.ext_context) {
+    if (!vscode.workspace.workspaceFolders || !lbtTools.ext_context) {
       vscode.window.showErrorMessage('No workspace is opened!');
       return;
     }
 
     const ws = Workspace.get_workspace();
-    const ext_ws = path.join(ldmTools.ext_context.asAbsolutePath('.'), 'ldm-media');
-    const current_version: string = vscode.extensions.getExtension('andreas-prouza.ldm')?.packageJSON['version'];
-    let previous_version: string | undefined = ldmTools.ext_context.workspaceState.get('ldm.version');
+    const ext_ws = path.join(lbtTools.ext_context.asAbsolutePath('.'), 'lbt-media');
+    const current_version: string = vscode.extensions.getExtension('roland-strauss.lbt')?.packageJSON['version'];
+    let previous_version: string | undefined = lbtTools.ext_context.workspaceState.get('lbt.version');
     const config: AppConfig = AppConfig.get_app_config();
 
     if (config.general['local-base-dir'] == '/')
@@ -60,21 +60,21 @@ export class ldmTools {
     if (config.general['remote-base-dir'] == '/')
       throw Error("Root for 'remote-base-dir' is not allowed!");
 
-    if (config.general['local-ldm-dir'] == '/')
-      throw Error("Root for 'local-ldm-dir' is not allowed!");
+    if (config.general['local-lbt-dir'] == '/')
+      throw Error("Root for 'local-lbt-dir' is not allowed!");
 
-    if (config.general['remote-ldm-dir'] == '/')
-      throw Error("Root for 'remote-ldm-dir' is not allowed!");
+    if (config.general['remote-lbt-dir'] == '/')
+      throw Error("Root for 'remote-lbt-dir' is not allowed!");
 
 
-    if (!DirTool.dir_exists(path.join(ws, '.ldm', 'log'))) {
-      fs.mkdirSync(path.join(ws, '.ldm', 'log'), { recursive: true });
+    if (!DirTool.dir_exists(path.join(ws, '.lbt', 'log'))) {
+      fs.mkdirSync(path.join(ws, '.lbt', 'log'), { recursive: true });
     }
     if (!DirTool.dir_exists(path.join(ws, Constants.SOURCE_FILTER_FOLDER_NAME))) {
       fs.mkdirSync(path.join(ws, Constants.SOURCE_FILTER_FOLDER_NAME), { recursive: true });
     }
-    if (!DirTool.dir_exists(path.join(ws, '.ldm', 'tmp'))) {
-      fs.mkdirSync(path.join(ws, '.ldm', 'tmp'), { recursive: true });
+    if (!DirTool.dir_exists(path.join(ws, '.lbt', 'tmp'))) {
+      fs.mkdirSync(path.join(ws, '.lbt', 'tmp'), { recursive: true });
     }
     if (!DirTool.file_exists(path.join(ws, config.general['source-infos'] || 'source-infos.json'))) {
       DirTool.write_file(path.join(ws, config.general['source-infos'] || 'source-infos.json'), '[]');
@@ -91,12 +91,12 @@ export class ldmTools {
       fs.copyFileSync(path.join(ext_ws, Constants.SOURCE_FILTER_FOLDER_NAME, 'All sources.json'), path.join(ws, Constants.SOURCE_FILTER_FOLDER_NAME, 'All sources.json'));
     }
 
-    if (!DirTool.file_exists(path.join(ws, '.ldm', 'etc', 'logger_config.py'))) {
-      fs.copyFileSync(path.join(ext_ws, '.ldm', 'etc', 'logger_config.py'), path.join(ws, '.ldm', 'etc', 'logger_config.py'));
+    if (!DirTool.file_exists(path.join(ws, '.lbt', 'etc', 'logger_config.py'))) {
+      fs.copyFileSync(path.join(ext_ws, '.lbt', 'etc', 'logger_config.py'), path.join(ws, '.lbt', 'etc', 'logger_config.py'));
     }
 
-    if (!DirTool.file_exists(path.join(ws, '.ldm', 'etc', 'constants.py'))) {
-      fs.copyFileSync(path.join(ext_ws, '.ldm', 'etc', 'constants.py'), path.join(ws, '.ldm', 'etc', 'constants.py'));
+    if (!DirTool.file_exists(path.join(ws, '.lbt', 'etc', 'constants.py'))) {
+      fs.copyFileSync(path.join(ext_ws, '.lbt', 'etc', 'constants.py'), path.join(ws, '.lbt', 'etc', 'constants.py'));
     }
 
     AppConfig.self_check();
@@ -114,8 +114,8 @@ export class ldmTools {
     }
 
     if (previous_version_int <= 208) {
-      fs.copyFileSync(path.join(ext_ws, '.ldm', 'etc', 'constants.py'), path.join(ws, '.ldm', 'etc', 'constants.py'));
-      fs.copyFileSync(path.join(ext_ws, '.ldm', 'etc', 'logger_config.py'), path.join(ws, '.ldm', 'etc', 'logger_config.py'));
+      fs.copyFileSync(path.join(ext_ws, '.lbt', 'etc', 'constants.py'), path.join(ws, '.lbt', 'etc', 'constants.py'));
+      fs.copyFileSync(path.join(ext_ws, '.lbt', 'etc', 'logger_config.py'), path.join(ws, '.lbt', 'etc', 'logger_config.py'));
     }
     if (previous_version_int <= 221) {
       let config = AppConfig.get_project_app_config(Workspace.get_workspace_uri());
@@ -123,20 +123,20 @@ export class ldmTools {
       config.general['remote-source-list'] = Constants.REMOTE_SOURCE_LIST;
       config.general['source-list'] = Constants.SOURCE_LIST;
       config.general['dependency-list'] = Constants.DEPENDENCY_LIST;
-      const toml_file = path.join(Workspace.get_workspace(), Constants.ldm_APP_CONFIG_FILE);
+      const toml_file = path.join(Workspace.get_workspace(), Constants.LBT_APP_CONFIG_FILE);
       DirTool.write_toml(toml_file, config);
       AppConfig.reset();
     }
     if (previous_version_int <= 324) {
-      fs.copyFileSync(path.join(ext_ws, '.ldm', 'etc', 'constants.py'), path.join(ws, '.ldm', 'etc', 'constants.py'));
+      fs.copyFileSync(path.join(ext_ws, '.lbt', 'etc', 'constants.py'), path.join(ws, '.lbt', 'etc', 'constants.py'));
     }
     if (previous_version_int <= 607) {
-      fs.copyFileSync(path.join(ext_ws, '.ldm', 'etc', 'constants.py'), path.join(ws, '.ldm', 'etc', 'constants.py'));
+      fs.copyFileSync(path.join(ext_ws, '.lbt', 'etc', 'constants.py'), path.join(ws, '.lbt', 'etc', 'constants.py'));
     }
 
-    ldmTools.ext_context.workspaceState.update('ldm.version', current_version);
+    lbtTools.ext_context.workspaceState.update('lbt.version', current_version);
 
-    const content: {['source']: string[]}  = ldmTools.get_dependency_list();
+    const content: {['source']: string[]}  = lbtTools.get_dependency_list();
     if (!content || Object.keys(content).length === 0) {
       vscode.window.showWarningMessage('Missing source dependencies');
     }
@@ -146,45 +146,45 @@ export class ldmTools {
 
 
 
-  public static without_local_ldm(): boolean {
-    return ldmTools.get_local_ldm_python_path() == undefined;
+  public static without_local_lbt(): boolean {
+    return lbtTools.get_local_lbt_python_path() == undefined;
   }
 
 
 
-  public static get_local_ldm_python_path(): string | undefined {
+  public static get_local_lbt_python_path(): string | undefined {
 
     const config = AppConfig.get_app_config();
 
-    if (!config.general['local-ldm-dir'])
+    if (!config.general['local-lbt-dir'])
       return undefined;
 
     let venv_bin = path.join('venv', 'bin', 'python');
     if (process.platform == 'win32')
       venv_bin = path.join('venv', 'Scripts', 'python.exe');
 
-    const local_ldm_python: string = path.join(config.general['local-ldm-dir'], venv_bin);
+    const local_lbt_python: string = path.join(config.general['local-lbt-dir'], venv_bin);
 
-    logger.info(`Check ldm path ${local_ldm_python}: ${DirTool.file_exists(local_ldm_python)}`);
-    if (!DirTool.file_exists(local_ldm_python))
+    logger.info(`Check lbt path ${local_lbt_python}: ${DirTool.file_exists(local_lbt_python)}`);
+    if (!DirTool.file_exists(local_lbt_python))
       return undefined;
 
-    return local_ldm_python;
+    return local_lbt_python;
   }
 
 
 
 
-  public static async get_remote_ldm_python_path(): Promise<string | undefined> {
+  public static async get_remote_lbt_python_path(): Promise<string | undefined> {
 
     const config = AppConfig.get_app_config();
 
-    if (!config.general['remote-ldm-dir'])
+    if (!config.general['remote-lbt-dir'])
       return undefined;
 
-    const remote_ldm_python: string = `${config.general['remote-ldm-dir']}/venv/bin/python`;
+    const remote_lbt_python: string = `${config.general['remote-lbt-dir']}/venv/bin/python`;
 
-    return remote_ldm_python;
+    return remote_lbt_python;
   }
 
 
@@ -192,10 +192,10 @@ export class ldmTools {
 
   public static async check_remote(): Promise<boolean> {
 
-    if (! await ldmTools.check_remote_basics()) {
-      vscode.window.showWarningMessage('Missing ldm project on remote system.');
+    if (! await lbtTools.check_remote_basics()) {
+      vscode.window.showWarningMessage('Missing lbt project on remote system.');
       try {
-        await ldmTools.transfer_project_folder(false);
+        await lbtTools.transfer_project_folder(false);
       }
       catch {
         return false;
@@ -212,7 +212,7 @@ export class ldmTools {
 
     let check: boolean;
 
-    check = await ldmTools.check_remote_home_dir();
+    check = await lbtTools.check_remote_home_dir();
     if (!check)
       return false;
 
@@ -284,21 +284,21 @@ export class ldmTools {
 
     const config = AppConfig.get_app_config();
     const remote_base_dir: string | undefined = config.general['remote-base-dir'];
-    const remote_ldm_dir: string | undefined = config.general['remote-ldm-dir'];
-    const remote_ldm_python: string = `${config.general['remote-ldm-dir']}/venv/bin/python`;
+    const remote_lbt_dir: string | undefined = config.general['remote-lbt-dir'];
+    const remote_lbt_python: string = `${config.general['remote-lbt-dir']}/venv/bin/python`;
 
     let check: boolean;
 
-    if (!remote_base_dir || !remote_ldm_dir)
-      throw Error(`Missing 'remote_base_dir' or 'remote_ldm_dir'`);
+    if (!remote_base_dir || !remote_lbt_dir)
+      throw Error(`Missing 'remote_base_dir' or 'remote_lbt_dir'`);
 
     if (!config.general['source-dir'])
       return false;
 
     check = await SSH_Tasks.check_remote_paths([
       `${remote_base_dir}/${config.general['source-dir']}`,
-      `${remote_base_dir}/${Constants.ldm_APP_CONFIG_FILE}`,
-      remote_ldm_python
+      `${remote_base_dir}/${Constants.LBT_APP_CONFIG_FILE}`,
+      remote_lbt_python
     ]);
     if (!check)
       return false;
@@ -311,23 +311,23 @@ export class ldmTools {
 
   public static async check_remote_sources(): Promise<boolean> {
 
-    if (ldmTools.check_remote_sources_status != ldmStatus.READY) {
+    if (lbtTools.check_remote_sources_status != lbtStatus.READY) {
       vscode.window.showErrorMessage('Remote check is already running');
       return false;
     }
 
-    ldmTools.check_remote_sources_status = ldmStatus.IN_PROCESS;
+    lbtTools.check_remote_sources_status = lbtStatus.IN_PROCESS;
     let result: boolean = false;
 
     try {
-      result = await ldmTools.process_check_remote_sources();
+      result = await lbtTools.process_check_remote_sources();
     }
     catch (e: any) {
       logger.error(e, e.stack);
       vscode.window.showErrorMessage('Error occured during remote source check');
     }
 
-    ldmTools.check_remote_sources_status = ldmStatus.READY;
+    lbtTools.check_remote_sources_status = lbtStatus.READY;
 
     return result;
   }
@@ -352,7 +352,7 @@ export class ldmTools {
           message: `Check remote sources`
         });
 
-        if (!await ldmTools.check_remote()) {
+        if (!await lbtTools.check_remote()) {
           return false;
         }
 
@@ -360,20 +360,20 @@ export class ldmTools {
           message: `Get remote source hashes`
         });
 
-        await ldmCommands.get_remote_source_list();
+        await lbtCommands.get_remote_source_list();
         const remote_source_list: source.ISource = DirTool.get_json(path.join(ws, config.general['remote-source-list']));
 
         progress.report({
           message: `Get local source hashes`
         });
 
-        const current_hash_list = await ldmTools.retrieve_current_source_hashes();
+        const current_hash_list = await lbtTools.retrieve_current_source_hashes();
 
         progress.report({
           message: `Compare remote vs. local`
         });
 
-        const changed_sources: source.ISourceList = await ldmTools.compare_source_change(current_hash_list, remote_source_list);
+        const changed_sources: source.ISourceList = await lbtTools.compare_source_change(current_hash_list, remote_source_list);
         const all_sources: string[] = [...changed_sources['changed-sources'], ...changed_sources['new-objects']];
 
         if (all_sources.length) {
@@ -409,7 +409,7 @@ export class ldmTools {
   }
 
 
-  public static contains_ldm_project(): boolean {
+  public static contains_lbt_project(): boolean {
 
     if (!vscode.workspace.workspaceFolders || vscode.workspace.workspaceFolders.length == 0) {
       return false;
@@ -417,7 +417,7 @@ export class ldmTools {
 
     const ws = vscode.workspace.workspaceFolders[0].uri.fsPath;
 
-    if (!DirTool.file_exists(path.join(ws, Constants.ldm_APP_CONFIG_FILE)))
+    if (!DirTool.file_exists(path.join(ws, Constants.LBT_APP_CONFIG_FILE)))
       return false;
 
     //if (!AppConfig.attributes_missing())
@@ -430,13 +430,13 @@ export class ldmTools {
 
   public static async initialize_folder(): Promise<void> {
 
-    if (!vscode.workspace.workspaceFolders || !ldmTools.ext_context) {
+    if (!vscode.workspace.workspaceFolders || !lbtTools.ext_context) {
       vscode.window.showErrorMessage('No workspace is opened!');
       return;
     }
 
     const ws = Workspace.get_workspace();
-    const template_ws = path.join(ldmTools.ext_context.asAbsolutePath('.'), 'ldm-media');
+    const template_ws = path.join(lbtTools.ext_context.asAbsolutePath('.'), 'lbt-media');
 
     let copies: Promise<void>[] = [];
 
@@ -500,7 +500,7 @@ export class ldmTools {
 
     for (let [k, v] of Object.entries(from_dict)) {
       if (typeof v === 'object' && v !== null && to_dict[k] && !(v instanceof Array) && !(v instanceof Date))
-        v = ldmTools.override_dict(from_dict[k], to_dict[k]);
+        v = lbtTools.override_dict(from_dict[k], to_dict[k]);
 
       if (v == undefined)
         continue;
@@ -517,7 +517,7 @@ export class ldmTools {
 
 
   public static update_compile_list(ignore_sources: string[], ignore_sources_cmd: { [key: string]: [string] | null }): void {
-    let compile_list = ldmTools.get_compile_list(Workspace.get_workspace_uri());
+    let compile_list = lbtTools.get_compile_list(Workspace.get_workspace_uri());
 
     for (const level_item of (compile_list['compiles'] as any)) {
       for (const source of level_item['sources']) {
@@ -547,8 +547,8 @@ export class ldmTools {
 
     const config = AppConfig.get_app_config();
     if (!config.general['compile-list']) {
-      vscode.window.showErrorMessage('ldm config is invalid');
-      throw Error('ldm config is invalid');
+      vscode.window.showErrorMessage('lbt config is invalid');
+      throw Error('lbt config is invalid');
     }
 
     const file_path: string = path.join(workspaceUri.fsPath, config.general['compile-list']);
@@ -576,7 +576,7 @@ export class ldmTools {
 
     let sources: source.SourceCompileList[] = [];
 
-    const compile_list: {} | undefined = ldmTools.get_compile_list(Workspace.get_workspace_uri());
+    const compile_list: {} | undefined = lbtTools.get_compile_list(Workspace.get_workspace_uri());
 
     if (!compile_list || !('compiles' in compile_list))
       return sources;
@@ -597,7 +597,7 @@ export class ldmTools {
     let sources: string[] = [];
     let need_2_build: boolean = false;
 
-    const compile_list: {} | undefined = ldmTools.get_compile_list(Workspace.get_workspace_uri());
+    const compile_list: {} | undefined = lbtTools.get_compile_list(Workspace.get_workspace_uri());
 
     if (!compile_list || !('compiles' in compile_list))
       return sources;
@@ -629,7 +629,7 @@ export class ldmTools {
 
   public static is_compile_list_completed(workspaceUri: vscode.Uri): boolean {
 
-    const compile_list: {} | undefined = ldmTools.get_compile_list(workspaceUri);
+    const compile_list: {} | undefined = lbtTools.get_compile_list(workspaceUri);
 
     if (!compile_list || !('compiles' in compile_list))
       return false;
@@ -666,12 +666,12 @@ export class ldmTools {
   public static async get_changed_sources(): Promise<source.ISourceList> { // results: source.Source[]
 
     const t0 = performance.now();
-    const current_hash_list = await ldmTools.retrieve_current_source_hashes();
+    const current_hash_list = await lbtTools.retrieve_current_source_hashes();
     const t1 = performance.now();
     logger.info(`1. It took ${((t1 - t0) / 1000).toFixed(2)} seconds.`);
 
     const t2 = performance.now();
-    const changed_sources: source.ISourceList = await ldmTools.compare_source_change(current_hash_list);
+    const changed_sources: source.ISourceList = await lbtTools.compare_source_change(current_hash_list);
     const t3 = performance.now();
     logger.info(`2. It took ${((t3 - t2) / 1000).toFixed(2)} seconds.`);
 
@@ -710,12 +710,12 @@ export class ldmTools {
 
     const all_sources: string[] = Object.assign([], changed_sources['changed-sources'], changed_sources['new-objects']);
 
-    const dependency_list: { ['source']: string[] } = ldmTools.get_dependency_list();
+    const dependency_list: { ['source']: string[] } = lbtTools.get_dependency_list();
     for (const [k, v] of Object.entries(dependency_list)) {
       for (let i = 0; i < all_sources.length; i++) {
         if (v.includes(all_sources[i]) && !all_sources.includes(k) && !dependend_sources.includes(k)) {
           dependend_sources.push(k);
-          ldmTools.add_all_dependend_sources(dependend_sources, k);
+          lbtTools.add_all_dependend_sources(dependend_sources, k);
         }
       }
     }
@@ -727,12 +727,12 @@ export class ldmTools {
 
   public static add_all_dependend_sources(dependend_sources: string[], source: string): string[] {
 
-    const dependency_list: { ['source']: string[] } = ldmTools.get_dependency_list();
+    const dependency_list: { ['source']: string[] } = lbtTools.get_dependency_list();
 
     for (const [k, v] of Object.entries(dependency_list)) {
       if (v.includes(source) && source !== k && !dependend_sources.includes(k)) {
         dependend_sources.push(k);
-        ldmTools.add_all_dependend_sources(dependend_sources, k);
+        lbtTools.add_all_dependend_sources(dependend_sources, k);
       }
     }
   }
@@ -742,8 +742,8 @@ export class ldmTools {
   public static async generate_source_change_lists(source?: string): Promise<string[]> {
     const ws = Workspace.get_workspace();
 
-    DirTool.clean_dir(path.join(ws, '.ldm', 'tmp'));
-    DirTool.clean_dir(path.join(ws, '.ldm', 'build-output'));
+    DirTool.clean_dir(path.join(ws, '.lbt', 'tmp'));
+    DirTool.clean_dir(path.join(ws, '.lbt', 'build-output'));
 
     logger.info('Get changed sources');
     let changed_sources: source.ISourceList = {
@@ -752,15 +752,15 @@ export class ldmTools {
       "old-sources": []
     }
     if (!source)
-      changed_sources = await ldmTools.get_changed_sources();
+      changed_sources = await lbtTools.get_changed_sources();
 
     logger.info('Get dependend sources');
-    const dependend_sources: string[] = ldmTools.get_dependend_sources(changed_sources);
+    const dependend_sources: string[] = lbtTools.get_dependend_sources(changed_sources);
 
     createBuildList(source);
 
     logger.info('Clean dir');
-    DirTool.clean_dir(path.join(Workspace.get_workspace(), '.ldm', 'tmp'));
+    DirTool.clean_dir(path.join(Workspace.get_workspace(), '.lbt', 'tmp'));
     DirTool.write_file(path.join(Workspace.get_workspace(), Constants.CHANGED_OBJECT_LIST), JSON.stringify(changed_sources, undefined, 2));
     DirTool.write_file(path.join(Workspace.get_workspace(), Constants.DEPENDEND_OBJECT_LIST), JSON.stringify(dependend_sources, undefined, 2));
 
@@ -774,7 +774,7 @@ export class ldmTools {
 
     // Get all sources which are new or have changed
     if (!last_source_hashes)
-      last_source_hashes = ldmTools.get_source_hash_list(Workspace.get_workspace()) || {};
+      last_source_hashes = lbtTools.get_source_hash_list(Workspace.get_workspace()) || {};
 
     let changed_sources: string[] = [];
     let new_sources: string[] = [];
@@ -791,7 +791,7 @@ export class ldmTools {
 
     // check for changed sources
     results.map((source_item: source.ISource) => {
-      promise_list.push(ldmTools.check_source_change_item(source_item, last_source_hashes));
+      promise_list.push(lbtTools.check_source_change_item(source_item, last_source_hashes));
     });
     const t7 = performance.now();
     logger.info(`Start check_source_change_item: It took ${((t7 - t6) / 1000).toFixed(2)} seconds.`);
@@ -804,7 +804,7 @@ export class ldmTools {
         const t4 = performance.now();
 
         for (const k in last_source_hashes) {
-          promise_list2.push(ldmTools.check_old_source_item(k, results));
+          promise_list2.push(lbtTools.check_old_source_item(k, results));
         };
 
         const t5 = performance.now();
@@ -900,7 +900,7 @@ export class ldmTools {
   public static async retrieve_current_source_hashes(): Promise<source.ISource[]> {
 
     logger.info('Start retrieve_current_source_hashes');
-    delete ldmTools._threads['retrieve_current_source_hashes'];
+    delete lbtTools._threads['retrieve_current_source_hashes'];
     let p1 = performance.now();
 
     const config = AppConfig.get_app_config();
@@ -925,12 +925,12 @@ export class ldmTools {
     p1 = performance.now();
     if (sources) {
 
-      //ldmTools.parallel(sources, )
+      //lbtTools.parallel(sources, )
       //... eher mit dowhile und Promise.all und immer dazuhängen ...
       for (const source of sources) {
 
-        if (ldmTools._threads['retrieve_current_source_hashes'] == 'cancel') {
-          delete ldmTools._threads['retrieve_current_source_hashes'];
+        if (lbtTools._threads['retrieve_current_source_hashes'] == 'cancel') {
+          delete lbtTools._threads['retrieve_current_source_hashes'];
           throw Error('Operation canceled by user');
         }
         counter++;
@@ -985,23 +985,23 @@ export class ldmTools {
 
   public static async transfer_project_folder(silent: boolean | undefined) {
 
-    if (ldmTools.transfer_all_status != ldmStatus.READY) {
+    if (lbtTools.transfer_all_status != lbtStatus.READY) {
       vscode.window.showErrorMessage('Transfer is already running');
       return;
     }
 
-    ldmTools.transfer_all_status = ldmStatus.IN_PROCESS;
+    lbtTools.transfer_all_status = lbtStatus.IN_PROCESS;
     let result: boolean = false;
 
     try {
-      await ldmTools.process_transfer_project_folder(silent);
+      await lbtTools.process_transfer_project_folder(silent);
     }
     catch (e: any) {
       logger.error(e, e.stack);
       vscode.window.showErrorMessage('Error occured during transfer to remote');
     }
 
-    ldmTools.transfer_all_status = ldmStatus.READY;
+    lbtTools.transfer_all_status = lbtStatus.READY;
 
     return;
   }
@@ -1033,11 +1033,11 @@ export class ldmTools {
 
         case 'Only minimum':
           //Transfer minimum setup;
-          await ldmTools.transfer_minimum_now(local_dir, remote_dir);
+          await lbtTools.transfer_minimum_now(local_dir, remote_dir);
           break;
 
         case 'Yes':
-          await ldmTools.transfer_all_now(local_dir, remote_dir);
+          await lbtTools.transfer_all_now(local_dir, remote_dir);
           break;
       }
     }
@@ -1073,8 +1073,8 @@ export class ldmTools {
       return;
     }
 
-    logger.info(`Transer local dir ${local_dir}/.ldm to ${remote_dir}/.ldm`);
-    await SSH_Tasks.transfer_dir(`${local_dir}/.ldm/etc`, `${remote_dir}/.ldm/etc`);
+    logger.info(`Transer local dir ${local_dir}/.lbt to ${remote_dir}/.lbt`);
+    await SSH_Tasks.transfer_dir(`${local_dir}/.lbt/etc`, `${remote_dir}/.lbt/etc`);
     await SSH_Tasks.transfer_dir(`${local_dir}/${Constants.BUILD_OUTPUT_DIR}`, `${remote_dir}/${Constants.BUILD_OUTPUT_DIR}`);
   }
 
@@ -1082,12 +1082,12 @@ export class ldmTools {
 
   public static async get_filtered_sources_with_details(source_list_file: string): Promise<source.IQualifiedSource[] | undefined> {
 
-    const sources = await ldmTools.get_local_sources(false);
+    const sources = await lbtTools.get_local_sources(false);
 
     const source_filters: source.IQualifiedSource[] = DirTool.get_json(path.join(Workspace.get_workspace(), Constants.SOURCE_FILTER_FOLDER_NAME, source_list_file)) || [];
 
-    const filtered_sources = ldmTools.get_filtered_sources(sources, source_filters);
-    const filtered_sources_extended = ldmTools.get_extended_source_infos(filtered_sources);
+    const filtered_sources = lbtTools.get_filtered_sources(sources, source_filters);
+    const filtered_sources_extended = lbtTools.get_extended_source_infos(filtered_sources);
 
     return filtered_sources_extended;
   }
@@ -1115,7 +1115,7 @@ export class ldmTools {
 
     const config: AppConfig = AppConfig.get_app_config();
 
-    const source_infos: source.ISourceInfos = DirTool.get_json(path.join(Workspace.get_workspace(), config.general['source-infos'] || '.ldm/etc/source-infos.json')) || [];
+    const source_infos: source.ISourceInfos = DirTool.get_json(path.join(Workspace.get_workspace(), config.general['source-infos'] || '.lbt/etc/source-infos.json')) || [];
 
     return source_infos;
   }
@@ -1125,7 +1125,7 @@ export class ldmTools {
 
     const config: AppConfig = AppConfig.get_app_config();
 
-    const source_infos: source.ISourceInfos = ldmTools.get_source_infos();
+    const source_infos: source.ISourceInfos = lbtTools.get_source_infos();
 
     const full_name: string = `${source_path}/${source_member}`;
     logger.info(`Update source info for ${full_name}`);
@@ -1136,7 +1136,7 @@ export class ldmTools {
 
     source_infos[full_name]['description'] = description;
 
-    DirTool.write_file(path.join(Workspace.get_workspace(), config.general['source-infos'] || '.ldm/etc/source-infos.json'), JSON.stringify(source_infos, undefined, 2));
+    DirTool.write_file(path.join(Workspace.get_workspace(), config.general['source-infos'] || '.lbt/etc/source-infos.json'), JSON.stringify(source_infos, undefined, 2));
 
     return;
   }
@@ -1151,7 +1151,7 @@ export class ldmTools {
     let new_list: source.IQualifiedSource[] = [];
 
     const config: AppConfig = AppConfig.get_app_config();
-    const source_infos: source.ISourceInfos = ldmTools.get_source_infos();
+    const source_infos: source.ISourceInfos = lbtTools.get_source_infos();
 
     for (let source of sources) {
 
@@ -1227,7 +1227,7 @@ export class ldmTools {
   }
 
 
-  public static convert_local_filepath_2_ldm_filepath(local_file_path: string, remove_src?: boolean): string {
+  public static convert_local_filepath_2_lbt_filepath(local_file_path: string, remove_src?: boolean): string {
 
     const config = AppConfig.get_app_config();
     const src_dir: string = config.general['source-dir'] || 'src';
@@ -1243,12 +1243,12 @@ export class ldmTools {
 
 
 
-  public static async reload_ldm_extension_on_config_change() {
+  public static async reload_lbt_extension_on_config_change() {
 
     const ws_uri = Workspace.get_workspace_uri();
 
     // Create a file system watcher
-    const watcher_project = vscode.workspace.createFileSystemWatcher(new vscode.RelativePattern(ws_uri, Constants.ldm_APP_CONFIG_FILE));
+    const watcher_project = vscode.workspace.createFileSystemWatcher(new vscode.RelativePattern(ws_uri, Constants.LBT_APP_CONFIG_FILE));
     const watcher_user = vscode.workspace.createFileSystemWatcher(new vscode.RelativePattern(ws_uri, AppConfig.get_current_profile_app_config_file()));
 
     // File change events

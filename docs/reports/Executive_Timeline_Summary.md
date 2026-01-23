@@ -1,5 +1,5 @@
 # Draft - Executive Summary Next Phase Timeline
-## Lancelot Development Manager (LDM) - VS Code Extension
+## Lancelot Build Tool (LBT) - VS Code Extension
 
 **Date:** January 23, 2026
 **Audience**: C-Level Management  
@@ -11,7 +11,7 @@
 
 ## Quick Overview
 
-The Lancelot Development Manager (LDM) VS Code extension is in **final beta stage** with **85%+ functionality complete**. The product is on track for production release in Q1 2026 following completion of testing, documentation, and performance optimization work.
+The Lancelot Build Tool (LBT) VS Code extension is in **final beta stage** with **85%+ functionality complete**. The product is on track for production release in Q1 2026 following completion of testing, documentation, and performance optimization work.
 
 **Project Context:** This extension phase represents the next steps following the Lancelot MVP acceptance that was agreed upon on **Wednesday, 21 January 2026**. The project now transitions from MVP validation to full production release and subsequent feature expansion phases.
 
@@ -478,7 +478,7 @@ These items are essential for the v1.0 GA release and represent the critical pat
 
 ---
 
-**Document Owner:** Andreas Prouza  
+**Document Owner:** Roland Strauss  
 **Last Updated:** January 23, 2026  
 **Next Review:** February 23, 2026
 

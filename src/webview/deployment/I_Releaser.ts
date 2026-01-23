@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { getUri } from "../../utilities/getUri";
-import { ldmTools } from '../../utilities/ldmTools';
+import { lbtTools } from '../../utilities/LBTTools';
 import { Constants } from '../../Constants';
 import * as DeploymentConfig from './DeploymentConfig';
 import { logger } from '../../utilities/Logger';
@@ -13,7 +13,7 @@ const nunjucks = require('nunjucks');
 
 export class I_Releaser implements vscode.WebviewViewProvider {
 
-	public static readonly viewType = 'ldm.deployment';
+	public static readonly viewType = 'lbt.deployment';
 	public static i_releaser: I_Releaser;
 
 	private _view?: vscode.WebviewView;
@@ -67,7 +67,7 @@ export class I_Releaser implements vscode.WebviewViewProvider {
 
     const html = nunjucks.render(html_template,
       {
-        global_stuff: ldmTools.get_global_stuff(webviewView.webview, this._extensionUri),
+        global_stuff: lbtTools.get_global_stuff(webviewView.webview, this._extensionUri),
 				main_java_script: getUri(webviewView.webview, this._extensionUri, ["out", "i_releaser.js"]),
 				workspace_exist: vscode.workspace.workspaceFolders != undefined,
 				config: DeploymentConfig.DeploymentConfig.get_deployment_config(),
@@ -97,7 +97,7 @@ export class I_Releaser implements vscode.WebviewViewProvider {
 			return {};
 		}
 
-		const auth_token = await ldmTools.ext_context.secrets.get(`ldm|deployment|http_auth_token`);
+		const auth_token = await lbtTools.ext_context.secrets.get(`lbt|deployment|http_auth_token`);
 
 		if (!auth_token) {
 			vscode.window.showErrorMessage('Missing HTTP auth token for i-Releaser. Please check the config');

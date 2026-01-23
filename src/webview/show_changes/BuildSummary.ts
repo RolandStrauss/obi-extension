@@ -3,13 +3,13 @@ import { Disposable, Webview, WebviewPanel, window, Uri, ViewColumn } from "vsco
 import { getUri } from "../../utilities/getUri";
 import { DirTool } from '../../utilities/DirTool';
 import { Constants } from '../../Constants';
-import { ldmTools } from '../../utilities/ldmTools';
+import { lbtTools } from '../../utilities/LBTTools';
 import * as path from 'path';
 import { LogOutput } from './LogOutput';
 import { AppConfig } from '../controller/AppConfig';
 import { Workspace } from '../../utilities/Workspace';
 import { logger } from '../../utilities/Logger';
-import { ldmCommands } from '../../ldm/ldmCommands';
+import { lbtCommands } from '../../lbt/LBTCommands';
 
 /*
 https://medium.com/@andy.neale/nunjucks-a-javascript-template-engine-7731d23eb8cc
@@ -99,7 +99,7 @@ export class BuildSummary {
             return;
 
           case "run_build":
-            ldmCommands.rerun_build(message.ignore_sources, message.ignore_sources_cmd);
+            lbtCommands.rerun_build(message.ignore_sources, message.ignore_sources_cmd);
             return;
         }
       }
@@ -115,7 +115,7 @@ export class BuildSummary {
     if (BuildSummary._current_compile_list) {
       compile_list = DirTool.get_json(path.join(Workspace.get_workspace(), BuildSummary._current_compile_list));
     } else {
-      compile_list = ldmTools.get_compile_list(Workspace.get_workspace_uri());
+      compile_list = lbtTools.get_compile_list(Workspace.get_workspace_uri());
     }
     return compile_list;
   }
@@ -146,15 +146,15 @@ export class BuildSummary {
 
     const html = nunjucks.render('show_changes/index.html',
       {
-      global_stuff: ldmTools.get_global_stuff(webview, extensionUri),
+      global_stuff: lbtTools.get_global_stuff(webview, extensionUri),
       main_java_script: getUri(webview, extensionUri, ["out", "show_changes.js"]),
       //filex: encodeURIComponent(JSON.stringify(fileUri)),
       object_list: BuildSummary.get_object_list(ws),
       compile_list: compile_list,
       created_timestamp: created_timestamp,
       compile_file: DirTool.get_encoded_file_URI(BuildSummary._current_compile_list ?? config.general['compile-list']),
-      log_file: DirTool.get_encoded_file_URI(Constants.ldm_LOG_FILE),
-      run_build: !ldmTools.is_compile_list_completed(ws),
+      log_file: DirTool.get_encoded_file_URI(Constants.LBT_LOG_FILE),
+      run_build: !lbtTools.is_compile_list_completed(ws),
       ifs_path: config.general['remote-base-dir']
       }
     );
@@ -263,3 +263,6 @@ export class BuildSummary {
   }
 
 }
+
+
+

@@ -40,18 +40,18 @@ export class LocalSourceList {
             LocalSourceList.watcher_project.onDidCreate(uri => {
                 if (LocalSourceList.watcher_processing_promise.length > 0)
                     return;
-                LocalSourceList.source_loading_promise.push(LocalSourceList.refresh_ldm_stuff(uri));
+                LocalSourceList.source_loading_promise.push(LocalSourceList.refresh_lbt_stuff(uri));
             });
             LocalSourceList.watcher_project?.onDidDelete(uri => {
                 if (LocalSourceList.watcher_processing_promise.length > 0)
                     return;
-                LocalSourceList.source_loading_promise.push(LocalSourceList.refresh_ldm_stuff(uri));
+                LocalSourceList.source_loading_promise.push(LocalSourceList.refresh_lbt_stuff(uri));
             });
         }
     }
 
 
-    private static async refresh_ldm_stuff(uri: vscode.Uri) {
+    private static async refresh_lbt_stuff(uri: vscode.Uri) {
 
         const config: AppConfig = AppConfig.get_app_config();
         const ext = uri.fsPath.split('.').pop() ?? '';
@@ -62,7 +62,7 @@ export class LocalSourceList {
 
         logger.debug(`Reload some stuff`);
         await LocalSourceList.load_source_list();
-        await vscode.commands.executeCommand("ldm.source-filter.update");
+        await vscode.commands.executeCommand("lbt.source-filter.update");
         LocalSourceList.source_loading_promise = [];
     }
 

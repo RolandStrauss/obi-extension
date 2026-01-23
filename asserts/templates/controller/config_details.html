@@ -100,29 +100,29 @@
       <br />
 
 
-      <h3>{{ global_stuff['get_text']('External ldm module') | safe }} <a href="https://github.com/andreas-prouza/ldm" target="_blank">🔗</a></h3>
+      <h3>{{ global_stuff['get_text']('External lbt module') | safe }} <a href="https://github.com/roland-strauss/lbt" target="_blank">🔗</a></h3>
 
       <vscode-text-field
-        title="{{ global_stuff['get_text']('Tip: Local ldm path') | safe }}"
+        title="{{ global_stuff['get_text']('Tip: Local lbt path') | safe }}"
         class="{{ class_prefix }}_save_app"
         panel="{{ class_prefix }}_tab-1"
-        id="{{ class_prefix }}|general|local-ldm-dir"
+        id="{{ class_prefix }}|general|local-lbt-dir"
         size="80"
-        placeholder="/home/prouza/project/ldm"
-        value="{{ app_config['general']['local-ldm-dir'] | replace('"$HOME"', '$HOME' ) }}">
-        💡 {{ global_stuff['get_text']('Local ldm path (if exist)') | safe }}
+        placeholder="/home/prouza/project/lbt"
+        value="{{ app_config['general']['local-lbt-dir'] | replace('"$HOME"', '$HOME' ) }}">
+        💡 {{ global_stuff['get_text']('Local lbt path (if exist)') | safe }}
       </vscode-text-field>
       <br />
       <br />
       <vscode-text-field
-        title="{{ global_stuff['get_text']('Tip: Remote ldm path') | safe }}"
+        title="{{ global_stuff['get_text']('Tip: Remote lbt path') | safe }}"
         class="{{ class_prefix }}_save_app {% if class_prefix == 'project' %}mandatory{% endif %}"
         panel="{{ class_prefix }}_tab-1"
-        id="{{ class_prefix }}|general|remote-ldm-dir"
+        id="{{ class_prefix }}|general|remote-lbt-dir"
         size="80"
-        placeholder="/home/prouza/project/ldm"
-        value="{{ app_config['general']['remote-ldm-dir'] | replace('"$HOME"', '$HOME' ) }}">
-        💡 {{ global_stuff['get_text']('Remote ldm path') | safe }}
+        placeholder="/home/prouza/project/lbt"
+        value="{{ app_config['general']['remote-lbt-dir'] | replace('"$HOME"', '$HOME' ) }}">
+        💡 {{ global_stuff['get_text']('Remote lbt path') | safe }}
       </vscode-text-field>
     </section>
   </vscode-panel-view>
@@ -538,47 +538,47 @@
 
     <section>
 
-      <vscode-text-field class="{{ class_prefix }}_save_app {% if class_prefix == 'project' %}mandatory{% endif %}" panel="{{ class_prefix }}_tab-4" id="{{ class_prefix }}|general|compiled-object-list" placeholder=".ldm/etc/object-builds.toml"
+      <vscode-text-field class="{{ class_prefix }}_save_app {% if class_prefix == 'project' %}mandatory{% endif %}" panel="{{ class_prefix }}_tab-4" id="{{ class_prefix }}|general|compiled-object-list" placeholder=".lbt/etc/object-builds.toml"
         value="{{ app_general['compiled-object-list'] }}">{{ global_stuff['get_text']('Compiled object list') | safe }}</vscode-text-field>
 
       <br/>
       <br/>
-      <vscode-text-field class="{{ class_prefix }}_save_app {% if class_prefix == 'project' %}mandatory{% endif %}" panel="{{ class_prefix }}_tab-4" id="{{ class_prefix }}|general|remote-source-list" placeholder=".ldm/etc/source-list-remote.toml"
+      <vscode-text-field class="{{ class_prefix }}_save_app {% if class_prefix == 'project' %}mandatory{% endif %}" panel="{{ class_prefix }}_tab-4" id="{{ class_prefix }}|general|remote-source-list" placeholder=".lbt/etc/source-list-remote.toml"
         value="{{ app_general['remote-source-list'] }}">{{ global_stuff['get_text']('Remote source list') | safe }}</vscode-text-field>
 
       <br/>
       <br/>
-      <vscode-text-field class="{{ class_prefix }}_save_app {% if class_prefix == 'project' %}mandatory{% endif %}" panel="{{ class_prefix }}_tab-4" id="{{ class_prefix }}|general|source-list" placeholder=".ldm/etc/source-list-local.toml"
+      <vscode-text-field class="{{ class_prefix }}_save_app {% if class_prefix == 'project' %}mandatory{% endif %}" panel="{{ class_prefix }}_tab-4" id="{{ class_prefix }}|general|source-list" placeholder=".lbt/etc/source-list-local.toml"
         value="{{ app_general['source-list'] }}">{{ global_stuff['get_text']('Local source list') | safe }}</vscode-text-field>
 
       <br/>
       <br/>
-      <vscode-text-field class="{{ class_prefix }}_save_app {% if class_prefix == 'project' %}mandatory{% endif %}" panel="{{ class_prefix }}_tab-4" id="{{ class_prefix }}|general|source-infos" placeholder=".ldm/etc/source-infos.json"
+      <vscode-text-field class="{{ class_prefix }}_save_app {% if class_prefix == 'project' %}mandatory{% endif %}" panel="{{ class_prefix }}_tab-4" id="{{ class_prefix }}|general|source-infos" placeholder=".lbt/etc/source-infos.json"
         value="{{ app_general['source-infos'] }}">{{ global_stuff['get_text']('Extended source infos') | safe }}</vscode-text-field>
 
       <br/>
       <br/>
-      <vscode-text-field class="{{ class_prefix }}_save_app {% if class_prefix == 'project' %}mandatory{% endif %}" panel="{{ class_prefix }}_tab-4" id="{{ class_prefix }}|general|dependency-list" placeholder=".ldm/etc/dependency.toml"
+      <vscode-text-field class="{{ class_prefix }}_save_app {% if class_prefix == 'project' %}mandatory{% endif %}" panel="{{ class_prefix }}_tab-4" id="{{ class_prefix }}|general|dependency-list" placeholder=".lbt/etc/dependency.toml"
         value="{{ app_general['dependency-list'] }}">{{ global_stuff['get_text']('Dependency list') | safe }}</vscode-text-field>
 
       <br/>
       <br/>
-      <vscode-text-field class="{{ class_prefix }}_save_app {% if class_prefix == 'project' %}mandatory{% endif %}" panel="{{ class_prefix }}_tab-4" id="{{ class_prefix }}|general|deployment-object-list" placeholder=".ldm/build-output/object-list.txt"
+      <vscode-text-field class="{{ class_prefix }}_save_app {% if class_prefix == 'project' %}mandatory{% endif %}" panel="{{ class_prefix }}_tab-4" id="{{ class_prefix }}|general|deployment-object-list" placeholder=".lbt/build-output/object-list.txt"
         value="{{ app_general['deployment-object-list'] }}">{{ global_stuff['get_text']('Deployment object list') | safe }}</vscode-text-field>
 
       <br/>
       <br/>
-      <vscode-text-field class="{{ class_prefix }}_save_app {% if class_prefix == 'project' %}mandatory{% endif %}" panel="{{ class_prefix }}_tab-4" id="{{ class_prefix }}|general|build-output-dir" placeholder=".ldm/build-output/objects"
+      <vscode-text-field class="{{ class_prefix }}_save_app {% if class_prefix == 'project' %}mandatory{% endif %}" panel="{{ class_prefix }}_tab-4" id="{{ class_prefix }}|general|build-output-dir" placeholder=".lbt/build-output/objects"
         value="{{ app_general['build-output-dir'] }}">{{ global_stuff['get_text']('Build output dir') | safe }}</vscode-text-field>
 
       <br/>
       <br/>
-      <vscode-text-field class="{{ class_prefix }}_save_app {% if class_prefix == 'project' %}mandatory{% endif %}" panel="{{ class_prefix }}_tab-4" id="{{ class_prefix }}|general|compile-list" placeholder=".ldm/build-output/compile-list.json"
+      <vscode-text-field class="{{ class_prefix }}_save_app {% if class_prefix == 'project' %}mandatory{% endif %}" panel="{{ class_prefix }}_tab-4" id="{{ class_prefix }}|general|compile-list" placeholder=".lbt/build-output/compile-list.json"
         value="{{ app_general['compile-list'] }}">{{ global_stuff['get_text']('Compile list') | safe }}</vscode-text-field>
 
       <br/>
       <br/>
-      <vscode-text-field class="{{ class_prefix }}_save_app {% if class_prefix == 'project' %}mandatory{% endif %}" panel="{{ class_prefix }}_tab-4" id="{{ class_prefix }}|general|compiled-object-list-md" placeholder=".ldm/build-output/compiled-object-list.md"
+      <vscode-text-field class="{{ class_prefix }}_save_app {% if class_prefix == 'project' %}mandatory{% endif %}" panel="{{ class_prefix }}_tab-4" id="{{ class_prefix }}|general|compiled-object-list-md" placeholder=".lbt/build-output/compiled-object-list.md"
         value="{{ app_general['compiled-object-list-md'] }}">{{ global_stuff['get_text']('Compiled object list md') | safe }}</vscode-text-field>
 
 

@@ -20,7 +20,7 @@
     <div>
       {{ global_stuff['get_text']('Created at') | safe }} <b><u>{{ compile_list['timestamp'] }}</u></b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
       <a href='command:vscode.open?{{ compile_file }}'>{{ global_stuff['get_text']('open JSON file') | safe }}</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      <a href='command:vscode.open?{{ log_file }}'>{{ global_stuff['get_text']('open ldm log') | safe }}</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <a href='command:vscode.open?{{ log_file }}'>{{ global_stuff['get_text']('open lbt log') | safe }}</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
       {% if run_build %}&nbsp;&nbsp;&nbsp;<vscode-button style="height:35px" onclick="run_build()" style="vertical-align: super;" id="run_build" appearance="primary">{{ global_stuff['get_text']('Run build') | safe }}</vscode-button>{% endif %}
     </div>
     <br/>
@@ -153,3 +153,4 @@
 
   </body>
 </html>
+

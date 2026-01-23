@@ -1,15 +1,15 @@
 ---
 applyTo: '*'
-description: 'LDM (Lancelot Development Manager) extension architecture, workflow, and development instructions for maintainers and contributors.'
+description: 'LBT (Lancelot Build Tool) extension architecture, workflow, and development instructions for maintainers and contributors.'
 ---
 
-# LDM Extension Instructions
+# LBT Extension Instructions
 
 ## Project Overview
 
-LDM (Lancelot Development Manager) is a VS Code extension that provides automated build workflows specifically designed for IBM i development. It enables local-first development with remote compilation via SSH, integrating modern development practices (VS Code, Git) with IBM i systems.
+LBT (Lancelot Build Tool) is a VS Code extension that provides automated build workflows specifically designed for IBM i development. It enables local-first development with remote compilation via SSH, integrating modern development practices (VS Code, Git) with IBM i systems.
 
-**Key Architecture**: The extension runs in VS Code, communicates with IBM i via SSH, manages build orchestration locally, and executes compilations remotely on IBM i using the ldm backend scripts.
+**Key Architecture**: The extension runs in VS Code, communicates with IBM i via SSH, manages build orchestration locally, and executes compilations remotely on IBM i using the LBT backend scripts.
 
 ## Branch & Commit Naming
 
@@ -69,11 +69,11 @@ These rules prevent the common accessibility error "Blocked aria-hidden on an el
 
 ### Integration Architecture
 
-31. Use `src/obi/` for build orchestration and compilation workflow.
+31. Use `src/lbt/` for build orchestration and compilation workflow.
 32. Use `src/utilities/SSH_Tasks.ts` for SSH communication with IBM i.
 33. Use `src/webview/` for UI components and user interaction.
 34. Use `src/utilities/` for shared services (logging, workspace, configuration).
-35. Integrate IBM i compilation/deployment with ldm backend scripts via SSH.
+35. Integrate IBM i compilation/deployment with LBT backend scripts via SSH.
 
 ## Build & Deployment Workflow
 
@@ -83,7 +83,7 @@ These rules prevent the common accessibility error "Blocked aria-hidden on an el
 37. Resolve dependencies to determine build order and affected sources.
 38. Sort builds by object type priority (files before programs, etc.).
 39. Transfer sources to IBM i IFS via SSH.
-40. Execute remote ldm backend compilation scripts.
+40. Execute remote LBT backend compilation scripts.
 41. Download build logs and parse compilation results.
 42. Display build summaries with joblog, spool file, and error details.
 43. Support profile-based configuration for different environments.
@@ -91,7 +91,7 @@ These rules prevent the common accessibility error "Blocked aria-hidden on an el
 ### Error Handling & User Feedback
 
 44. Use robust error handling with SSH connection retry and timeout management.
-45. Provide comprehensive logging via Winston logger to `.ldm/log/main.log`.
+45. Provide comprehensive logging via Winston logger to `.LBT/log/main.log`.
 46. Display user-friendly error messages with actionable remediation steps.
 47. Show compilation progress with real-time feedback in Build Summary webview.
 
@@ -158,7 +158,7 @@ These rules prevent the common accessibility error "Blocked aria-hidden on an el
 80. Update `ToDo.md` with planned features and improvements.
 81. Include code snippets, design decisions, and challenges in reports as applicable.
 82. **Version Management**: Follow the auto-increment version management rules detailed in `.github/instructions/auto-version-increment.instructions.md` for all VSIX releases and documentation updates.
-83. **Core Docs:** Keep `launch.json`, `tasks.json`, and `CHANGELOG.md` synchronized with the ongoing LDM work. Update them as the project evolves so that the workspace launch/tasks configs represent current scripts, and the changelog records every release or notable state change.
+83. **Core Docs:** Keep `launch.json`, `tasks.json`, and `CHANGELOG.md` synchronized with the ongoing LBT work. Update them as the project evolves so that the workspace launch/tasks configs represent current scripts, and the changelog records every release or notable state change.
 
 ### Changelog Standards
 
@@ -186,22 +186,22 @@ See `.github/skills/changelog-management/SKILL.md` for comprehensive CHANGELOG.m
 - Validate all changes with comprehensive testing and update documentation accordingly.
 - Request user input for unclear requirements or missing information.
 - Follow security-first development practices with comprehensive logging.
-- Ensure compatibility with ldm backend scripts on IBM i.
+- Ensure compatibility with LBT backend scripts on IBM i.
 - Break down complex tasks into manageable subtasks with clear acceptance criteria.
 
 ### Webview and Tree View Feature Parity
 
 See `.github/skills/webview-tree-parity/SKILL.md` for comprehensive guidance on maintaining feature parity between Webview and Tree View implementations, shared-service patterns, and code examples.
 
-## LDM Backend Integration
+## LBT Backend Integration
 
-### Backend ldm Scripts
+### Backend LBT Scripts
 
 The extension depends on separate Python/shell scripts on IBM i:
-- **Repository**: `andreas-prouza/ldm` - Backend build scripts and tools
-- **Version check**: `Constants.ldm_BACKEND_VERSION` - Ensures compatibility
-- **Installation**: User must clone the ldm repository on IBM i and run `setup.sh`
-- **Location**: Configured via `general.ldm-path` in app-config.toml
+- **Repository**: `roland-strauss/LBT` - Backend build scripts and tools
+- **Version check**: `Constants.lbt_BACKEND_VERSION` - Ensures compatibility
+- **Installation**: User must clone the LBT repository on IBM i and run `setup.sh`
+- **Location**: Configured via `general.LBT-path` in app-config.toml
 
 ### SSH Integration
 
@@ -217,56 +217,56 @@ All IBM i communication is handled via `src/utilities/SSH_Tasks.ts`:
 
 1. Local source changes detected via hash comparison
 2. Sources transferred to IBM i IFS (location: `general.ifs-build-source-path`)
-3. ldm backend scripts executed remotely
-4. Build logs downloaded to `.ldm/build-output/`
-5. Build history stored in `.ldm/build-history/`
+3. LBT backend scripts executed remotely
+4. Build logs downloaded to `.LBT/build-output/`
+5. Build history stored in `.LBT/build-history/`
 
 ## Build Process Flow
 
 ```
 User triggers build
     ↓
-ldmCommands.show_changes() / run_build()
+lbtCommands.show_changes() / run_build()
     ↓
-createBuildList(source?) in src/obi/compile_list/
+createBuildList(source?) in src/lbt/compile_list/
     ↓
 1. getFiles() - Scan source directory
 2. getChangedSources() - Hash comparison (SHA-256)
 3. getBuildOrder() - Resolve dependencies
 4. orderBuilds() - Sort by object type priority
     ↓
-Write to .ldm/tmp/compile-list.json
+Write to .LBT/tmp/compile-list.json
     ↓
 SSH_Tasks transfers source files to IFS
     ↓
-SSH_Tasks executes remote ldm Python/shell scripts
+SSH_Tasks executes remote LBT Python/shell scripts
     ↓
-Download build logs to .ldm/build-output/
+Download build logs to .LBT/build-output/
     ↓
 BuildSummary panel displays results
 ```
 
 ### Key Build Files
 
-- `src/obi/compile_list/createBuildList.ts` - Main build orchestration
-- `src/obi/compile_list/modules/dependency.ts` - Dependency resolution
-- `src/obi/compile_list/modules/build_cmds.ts` - Object type ordering
-- `src/obi/OBICommands.ts` - Command handlers for build operations
+- `src/lbt/compile_list/createBuildList.ts` - Main build orchestration
+- `src/lbt/compile_list/modules/dependency.ts` - Dependency resolution
+- `src/lbt/compile_list/modules/build_cmds.ts` - Object type ordering
+- `src/lbt/LBTCommands.ts` - Command handlers for build operations
 
 ### Hash-Based Change Detection
 
-Build state stored in `.ldm/etc/object-builds.json`:
+Build state stored in `.LBT/etc/object-builds.json`:
 ```json
 {
   "lib/file/member.rpgle.pgm": "sha256-hash-of-source"
 }
 ```
 
-Only sources with changed hashes or new sources are compiled. Reset via `ldm.reset-compiled-object-list` command.
+Only sources with changed hashes or new sources are compiled. Reset via `LBT.reset-compiled-object-list` command.
 
 ### Dependency System
 
-Stored in `.ldm/etc/dependency.json`:
+Stored in `.LBT/etc/dependency.json`:
 ```json
 {
   "program.rpgle.pgm": ["file.pf.file", "screen.dspf.file"],
@@ -280,11 +280,11 @@ Stored in `.ldm/etc/dependency.json`:
 3. Sorts by dependency order (prerequisites first)
 4. Further sorts by object type priority (files before programs)
 
-Edit dependencies via `ldm.source.maintain-source-dependency` command (opens webview UI).
+Edit dependencies via `LBT.source.maintain-source-dependency` command (opens webview UI).
 
 ## Source Organization
 
-### Source Filters (`.ldm/source-list/*.json`)
+### Source Filters (`.LBT/source-list/*.json`)
 
 ```json
 {
@@ -330,7 +330,7 @@ Final Config = deepmerge(
 
 ### Configuration Validation
 
-The extension validates config on every change via `fs.watchFile()` in `ldmTools.reload_ldm_extension_on_config_change()`. Invalid config triggers a full extension reload and displays ConfigInvalid webview.
+The extension validates config on every change via `fs.watchFile()` in `lbtTools.reload_lbt_extension_on_config_change()`. Invalid config triggers a full extension reload and displays ConfigInvalid webview.
 
 ## Webview Pattern
 
@@ -357,7 +357,7 @@ class MyWebviewPanel {
 
     // Use getUri() for all resource URLs
     return nunjucks.render('path/to/template.html', {
-      global_stuff: ldmTools.get_global_stuff(webview, extensionUri),
+      global_stuff: lbtTools.get_global_stuff(webview, extensionUri),
       main_java_script: getUri(webview, extensionUri, ["out", "script.js"]),
       ...data
     });
@@ -368,7 +368,7 @@ class MyWebviewPanel {
 **Critical Functions**:
 - `getUri()` - Converts paths to `vscode-resource://` URIs with proper CSP nonces
 - `getNonce()` - Generates CSP nonce for inline scripts
-- `ldmTools.get_global_stuff()` - Provides common assets (Bootstrap, CSS, etc.)
+- `lbtTools.get_global_stuff()` - Provides common assets (Bootstrap, CSS, etc.)
 
 ### Webview ↔ Extension Communication
 
@@ -390,11 +390,11 @@ Strings defined in `package.nls.json` (English) and `package.nls.<lang>.json`:
 
 ```json
 {
-  "ldm.run_build": "ldm: Run build"
+  "LBT.run_build": "LBT: Run build"
 }
 ```
 
-In TypeScript: `LocaleText.get('ldm.run_build')`
+In TypeScript: `LocaleText.get('LBT.run_build')`
 
 **Command Titles**: VS Code automatically loads correct `package.nls.<lang>.json` based on `vscode.env.language`.
 
@@ -436,19 +436,19 @@ Quick Settings will provide rapid access to frequently used configuration option
 - Webview provider: `src/webview/quick_settings/QuickSettings.ts`
 - Registered in extension.ts but disabled via context variable
 
-### Lancelot Integration (Local ldm Mode)
+### Lancelot Integration (Local LBT Mode)
 
 **Status**: Planned integration
 **Integration Point**: Project Lancelot extension (`C:\Roland_Batcave\Repos\GitHub\Lancelot-extension`)
 
-Local ldm Mode allows running ldm build scripts locally on the developer's machine instead of via SSH to IBM i:
-- Uses local Python environment to execute ldm backend scripts
+Local LBT Mode allows running LBT build scripts locally on the developer's machine instead of via SSH to IBM i:
+- Uses local Python environment to execute LBT backend scripts
 - Faster build iteration for development/testing
 - Reduces network latency for small builds
 - Integrates with Lancelot extension for enhanced IBM i development workflow
 
-**Detection**: `ldmTools.without_local_ldm()` checks for local ldm Python installation
-**Context Variable**: `ldm.run_native` indicates local mode is active
+**Detection**: `lbtTools.without_local_ldm()` checks for local LBT Python installation
+**Context Variable**: `LBT.run_native` indicates local mode is active
 
 **Lancelot Integration Benefits**:
 - Unified IBM i development experience
@@ -506,7 +506,7 @@ Run tests: `npm run test`
 
 ```typescript
 // WRONG - loads single file
-const config = DirTool.read_toml(Constants.ldm_APP_CONFIG_FILE);
+const config = DirTool.read_toml(Constants.lbt_APP_CONFIG_FILE);
 
 // CORRECT - merges project + user config
 const config = AppConfig.get_app_config();
@@ -548,7 +548,7 @@ IBM i IFS paths are Unix-style even when extension runs on Windows.
 1. **Register in extension.ts**:
 ```typescript
 context.subscriptions.push(
-  vscode.commands.registerCommand('ldm.my-command', () => {
+  vscode.commands.registerCommand('LBT.my-command', () => {
     MyHandler.execute();
   })
 );
@@ -558,8 +558,8 @@ context.subscriptions.push(
 ```json
 {
   "commands": [{
-    "command": "ldm.my-command",
-    "title": "%ldm.my-command%",
+    "command": "LBT.my-command",
+    "title": "%LBT.my-command%",
     "icon": "$(icon-name)"
   }]
 }
@@ -568,7 +568,7 @@ context.subscriptions.push(
 3. **Add i18n strings** to `package.nls.json`:
 ```json
 {
-  "ldm.my-command": "ldm: My Command Description"
+  "LBT.my-command": "LBT: My Command Description"
 }
 ```
 
@@ -577,8 +577,8 @@ context.subscriptions.push(
 {
   "menus": {
     "view/title": [{
-      "command": "ldm.my-command",
-      "when": "ldm.contains_ldm_project && ldm.valid-config && view == ldm.controller",
+      "command": "LBT.my-command",
+      "when": "LBT.contains_lbt_project && LBT.valid-config && view == LBT.controller",
       "group": "navigation@10"
     }]
   }
@@ -602,7 +602,7 @@ When adding UI elements, always check required `when` clauses in `package.json`.
 ## Performance Considerations
 
 ### Source List Caching
-`LocalSourceList.load_source_list()` caches source directory structure. Refresh via `ldm.source-filter.update` command.
+`LocalSourceList.load_source_list()` caches source directory structure. Refresh via `LBT.source-filter.update` command.
 
 ### Large Projects
 Build list generation is synchronous and can block on large codebases (10,000+ files). Consider progress notifications for long operations.
@@ -612,12 +612,12 @@ Single persistent SSH connection reused across operations. Connection timeout: 3
 
 ## External Dependencies
 
-**Backend ldm**: Extension depends on separate Python/shell scripts on IBM i:
-- Repository: `andreas-prouza/ldm`
-- Version check: `Constants.ldm_BACKEND_VERSION`
+**Backend LBT**: Extension depends on separate Python/shell scripts on IBM i:
+- Repository: `roland-strauss/LBT`
+- Version check: `Constants.lbt_BACKEND_VERSION`
 - Installation: User must clone and run `setup.sh` on IBM i
 
-**Transfer on Update**: `ldmTools.self_check()` copies templates to `.ldm/etc/` on extension version changes.
+**Transfer on Update**: `lbtTools.self_check()` copies templates to `.LBT/etc/` on extension version changes.
 
 ## Development Roadmap
 
@@ -630,7 +630,7 @@ Single persistent SSH connection reused across operations. Connection timeout: 3
 ### Q2 2026: Advanced Features (v1.1-1.2)
 - **Enable Deployment Module** - Full release management
 - **Quick Settings Panel** - Rapid configuration access
-- **Lancelot Integration** - Local ldm mode with enhanced workflow
+- **Lancelot Integration** - Local LBT mode with enhanced workflow
 - Automatic dependency detection
 - Build analytics and reporting
 
@@ -642,9 +642,9 @@ Single persistent SSH connection reused across operations. Connection timeout: 3
 
 ## Related Projects
 
-- **ldm Backend**: `andreas-prouza/ldm` - Python/shell scripts for IBM i
+- **LBT Backend**: `roland-strauss/LBT` - Python/shell scripts for IBM i
 - **Project Lancelot**: `C:\Roland_Batcave\Repos\GitHub\Lancelot-extension` - Companion IBM i development extension
-- **ldm Documentation**: `andreas-prouza/ibm-i-build-ldm` - Comprehensive ldm documentation
+- **LBT Documentation**: `roland-strauss/ibm-i-build-LBT` - Comprehensive LBT documentation
 
 When making changes that affect build orchestration, configuration management, or SSH communication, consider impact on these integration points.
 

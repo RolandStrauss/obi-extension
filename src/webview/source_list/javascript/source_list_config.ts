@@ -4,7 +4,7 @@ import {
   Button
 } from "@vscode/webview-ui-toolkit";
 
-import * as source from '../../../ldm/Source';
+import * as source from '../../../lbt/Source';
 import { showAlert } from "../../tools/javascript/alertBox";
 
 // In order to use all the Webview UI Toolkit web components they

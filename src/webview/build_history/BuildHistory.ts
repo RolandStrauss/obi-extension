@@ -5,10 +5,10 @@ import { getNonce } from "../../utilities/getNonce";
 import { DirTool } from '../../utilities/DirTool';
 import * as path from 'path';
 import { Constants } from '../../Constants';
-import { ldmTools } from '../../utilities/ldmTools';
+import { lbtTools } from '../../utilities/LBTTools';
 import { AppConfig } from '../controller/AppConfig';
 import { Workspace } from '../../utilities/Workspace';
-import * as source from '../../ldm/Source';
+import * as source from '../../lbt/Source';
 
 /*
 https://medium.com/@andy.neale/nunjucks-a-javascript-template-engine-7731d23eb8cc
@@ -48,16 +48,16 @@ export class BuildHistory {
 
         switch (command) {
           case "show_build_summary":
-            ldmCommands.show_build_summary(message.file);
+            lbtCommands.show_build_summary(message.file);
             return;
 
           case "delete_item":
-            ldmCommands.delete_compile_list_item(message.level, message.source);
+            lbtCommands.delete_compile_list_item(message.level, message.source);
             BuildHistory.update();
             return;
 
           case "delete_level":
-            ldmCommands.delete_compile_list_level(message.level);
+            lbtCommands.delete_compile_list_level(message.level);
             BuildHistory.update();
             return;
         }
@@ -87,3 +87,5 @@ export class BuildHistory {
   }
 
 }
+
+

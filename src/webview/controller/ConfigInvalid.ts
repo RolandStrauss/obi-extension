@@ -3,7 +3,7 @@ import { Disposable, Webview, WebviewPanel, window, Uri, ViewColumn } from "vsco
 import { getUri } from "../../utilities/getUri";
 import { getNonce } from "../../utilities/getNonce";
 import { DirTool } from '../../utilities/DirTool';
-import { ldmTools } from '../../utilities/ldmTools';
+import { lbtTools } from '../../utilities/LBTTools';
 import { Constants } from '../../Constants';
 
 /*
@@ -19,7 +19,7 @@ const nunjucks = require('nunjucks');
 export class ConfigInvalid implements vscode.WebviewViewProvider {
 
 
-	public static readonly viewType = 'ldm-config-invalid';
+	public static readonly viewType = 'lbt-config-invalid';
 
 	private _view?: vscode.WebviewView;
   private _context?: vscode.WebviewViewResolveContext;
@@ -60,7 +60,7 @@ export class ConfigInvalid implements vscode.WebviewViewProvider {
     nunjucks.configure(Constants.HTML_TEMPLATE_DIR);
     const html = nunjucks.render(html_template,
       {
-        global_stuff: ldmTools.get_global_stuff(webviewView.webview, this._extensionUri),
+        global_stuff: lbtTools.get_global_stuff(webviewView.webview, this._extensionUri),
 				main_java_script: getUri(webviewView.webview, this._extensionUri, ["out", "config_invalid.js"])
       }
     );
@@ -70,7 +70,7 @@ export class ConfigInvalid implements vscode.WebviewViewProvider {
 			switch (data.command) {
 				case 'initialize_folder':
 					{
-						ldmTools.initialize_folder();
+						lbtTools.initialize_folder();
 						break;
 					}
 				case 'reload_workspace':
@@ -80,7 +80,7 @@ export class ConfigInvalid implements vscode.WebviewViewProvider {
 					}
 				case 'config':
 					{
-						vscode.commands.executeCommand('ldm.controller.config');
+						vscode.commands.executeCommand('lbt.controller.config');
 						break;
 					}
 			}
@@ -90,3 +90,5 @@ export class ConfigInvalid implements vscode.WebviewViewProvider {
 
 
 }
+
+

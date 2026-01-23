@@ -14,12 +14,12 @@ export class WorkspaceSettings {
 export class Workspace {
 
   public static update_workspace_settings(settings: WorkspaceSettings) {
-    DirTool.write_json(path.join(Workspace.get_workspace(), Constants.ldm_WORKSPACE_SETTINGS_FILE), settings);
+    DirTool.write_json(path.join(Workspace.get_workspace(), Constants.LBT_WORKSPACE_SETTINGS_FILE), settings);
   }
 
   public static get_workspace_settings(): WorkspaceSettings {
 
-    const result: WorkspaceSettings = DirTool.get_json(path.join(Workspace.get_workspace(), Constants.ldm_WORKSPACE_SETTINGS_FILE)) ?? {};
+    const result: WorkspaceSettings = DirTool.get_json(path.join(Workspace.get_workspace(), Constants.LBT_WORKSPACE_SETTINGS_FILE)) ?? {};
     return result;
   }
 
@@ -44,3 +44,4 @@ export class Workspace {
   }
 
 }
+

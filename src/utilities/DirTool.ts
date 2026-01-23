@@ -6,7 +6,7 @@ import { logger } from './Logger';
 import { AppConfig } from "../webview/controller/AppConfig";
 
 import * as path from 'path';
-import * as source from "../ldm/Source";
+import * as source from '../lbt/Source';
 import * as fs from 'fs';
 import { Workspace } from "./Workspace";
 

@@ -4,7 +4,7 @@ import { getUri } from "../../utilities/getUri";
 import { getNonce } from "../../utilities/getNonce";
 import { DirTool } from '../../utilities/DirTool';
 import { Constants } from '../../Constants';
-import { ldmTools } from '../../utilities/ldmTools';
+import { lbtTools } from '../../utilities/LBTTools';
 import * as path from 'path';
 import { AppConfig } from '../controller/AppConfig';
 import { BuildSummary } from './BuildSummary';
@@ -143,3 +143,5 @@ export class LogOutput {
   }
 
 }
+
+

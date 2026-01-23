@@ -1,3 +1,15 @@
+## [Unreleased]
+
+### Changed
+
+- **BREAKING CHANGE**: Complete rebrand from 'ldm' (Lancelot Development Manager) to 'lbt' (Lancelot Build Tool)
+- Renamed extension from `ldm` to `lbt`
+- All commands now use `lbt.*` prefix instead of `ldm.*`
+- Workspace folder changed from `.ldm/` to `.lbt/`
+- All context variables updated (`lbt.contains_lbt_project`, `lbt.valid-config`)
+- Source folder renamed from `src/obi/` to `src/lbt/`
+- This is a clean break with no backward compatibility
+
 ## [0.6.12]
 
 * Improve design in build summary (button, timestamp)

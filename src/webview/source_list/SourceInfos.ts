@@ -5,10 +5,10 @@ import { getNonce } from "../../utilities/getNonce";
 import { DirTool } from '../../utilities/DirTool';
 import * as path from 'path';
 import { Constants } from '../../Constants';
-import { ldmTools } from '../../utilities/ldmTools';
+import { lbtTools } from '../../utilities/LBTTools';
 import { AppConfig, ConfigCompileSettings } from '../controller/AppConfig';
 import { Workspace } from '../../utilities/Workspace';
-import * as source from '../../ldm/Source';
+import * as source from '../../lbt/Source';
 import { SourceListProvider } from './SourceListProvider';
 
 /*
@@ -86,13 +86,13 @@ export class SourceInfos {
       html_template = 'source_list/source-infos-config.html';
     }
 
-    const sources = await ldmTools.get_local_sources();
-    const source_list: source.IQualifiedSource[] = ldmTools.get_extended_source_infos(sources)||[];
+    const sources = await lbtTools.get_local_sources();
+    const source_list: source.IQualifiedSource[] = lbtTools.get_extended_source_infos(sources)||[];
 
     nunjucks.configure(Constants.HTML_TEMPLATE_DIR);
     const html = nunjucks.render(html_template,
       {
-        global_stuff: ldmTools.get_global_stuff(webview, extensionUri),
+        global_stuff: lbtTools.get_global_stuff(webview, extensionUri),
         config_css: getUri(webview, extensionUri, ["asserts/css", "config.css"]),
         main_java_script: getUri(webview, extensionUri, ["out", "source_infos.js"]),
         source_list: source_list,
@@ -148,7 +148,7 @@ export class SourceInfos {
 
   private static save_infos(sources: source.ISourceInfos) {
 
-    const json_file: string = path.join(Workspace.get_workspace(), AppConfig.get_app_config().general['source-infos']||'.ldm/etc/source-infos.json');
+    const json_file: string = path.join(Workspace.get_workspace(), AppConfig.get_app_config().general['source-infos']||'.lbt/etc/source-infos.json');
     let source_infos: source.ISourceInfos = DirTool.get_json(json_file) || [];
 
     for (const [k, v] of Object.entries(sources)) {
@@ -162,8 +162,8 @@ export class SourceInfos {
 
   private static createNewPanel(extensionUri : Uri) {
     return window.createWebviewPanel(
-      'ldm_source_infos_config', // Identifies the type of the webview. Used internally
-      'ldm Source infos', // Title of the panel displayed to the user
+      'lbt_source_infos_config', // Identifies the type of the webview. Used internally
+      'lbt source infos', // Title of the panel displayed to the user
       // The editor column the panel should be displayed in
       ViewColumn.One,
       // Extra panel configurations
