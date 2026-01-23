@@ -365,7 +365,7 @@
       "activitybar": [
         {
           "id": "ldm-bar",
-          "title": "Object Builder for i",
+          "title": "Lancelot Developemnt Manager",
           "icon": "$(code)"
         }
       ]

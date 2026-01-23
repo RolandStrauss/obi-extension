@@ -1,6 +1,6 @@
-# ldm README
+# Lancelot Developemnt Manager README
 
-Object builder for i (ldm) is an automatic build tool.
+Lancelot Developemnt Manager (LDM) is an automatic build tool.
 
 <p align="center">
   <a href="https://www.buymeacoffee.com/prouza"><img src="https://img.shields.io/badge/%F0%9F%8D%BA-Buy%20me%20a%20beer-red?style=flat" alt="Buy me a beer"></a>
