@@ -1,0 +1,30 @@
+{
+  "version": "2.0",
+  "metadata": {
+    "createdAt": "2026-01-21T06:31:25.429Z",
+    "lastModified": "2026-01-21T06:31:25.444Z",
+    "lastOperation": "initialized"
+  },
+  "project": {
+    "id": 662,
+    "name": "ibmi demo company system",
+    "path_with_namespace": "mmerge/wisdom-well/ibmi-demo-company-system",
+    "default_branch": "Roland_Wacka_2010",
+    "apiBaseUrl": "",
+    "webUrl": "https://grouptech-git.metmom.mmih.biz/mmerge/wisdom-well/ibmi-demo-company-system"
+  },
+  "git": {
+    "branch": "main",
+    "cloneMethod": "new",
+    "clonedAt": "2026-01-21T06:31:25.429Z",
+    "sparseCheckoutEnabled": false,
+    "selectedPaths": [],
+    "selectedBranch": "Roland_Wacka_2010"
+  },
+  "projectId": 662,
+  "repositoryId": 662,
+  "projectName": "ibmi demo company system",
+  "repositoryName": "ibmi demo company system",
+  "createdAt": "2026-01-21T06:31:25.429Z",
+  "lastModified": "2026-01-21T06:31:25.444Z"
+}
