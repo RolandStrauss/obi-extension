@@ -2,7 +2,7 @@ import * as vscode from 'vscode';
 import { findGit } from '../platform/gitDetection';
 
 export function registerGitStatusBar(ctx: vscode.ExtensionContext) {
-  const item = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 100);
+  const item = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
   item.name = 'Lancelot Git Status';
   item.command = 'ldm.tools.checkGit'; // click opens your existing check flow
   ctx.subscriptions.push(item);

@@ -4,6 +4,18 @@ import { findGit } from '../platform/gitDetection';
 import { handleMissingGit } from '../platform/gitInstallPrompt';
 
 export function registerCheckGitCommand(ctx: vscode.ExtensionContext) {
+  // Toggle Git status bar visibility
+  const toggleVisibility = vscode.commands.registerCommand('ldm.gitStatus.toggleVisibility', async () => {
+    const config = vscode.workspace.getConfiguration();
+    const current = config.get<boolean>('ldm.gitStatus.showWhenAvailable', true);
+    await config.update('ldm.gitStatus.showWhenAvailable', !current, false);
+    vscode.window.showInformationMessage(
+      `Git status bar ${!current ? 'shown' : 'hidden'}.`
+    );
+  });
+  ctx.subscriptions.push(toggleVisibility);
+
+  // Check Git availability
   const d = vscode.commands.registerCommand('ldm.tools.checkGit', async () => {
     try {
       const gitPath = await findGit();

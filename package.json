@@ -44,6 +44,11 @@
         "category": "Lancelot"
       },
       {
+        "command": "ldm.gitStatus.toggleVisibility",
+        "title": "Toggle Git Status Bar",
+        "category": "Lancelot"
+      },
+      {
         "command": "ldm.show_changes",
         "title": "%ldm.show_changes%",
         "icon": "$(check-all)",
