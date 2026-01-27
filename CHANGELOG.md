@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ## [Unreleased]
 
 ### Changed
@@ -9,6 +10,13 @@
 - All context variables updated (`lbt.contains_lbt_project`, `lbt.valid-config`)
 - Source folder renamed from `src/obi/` to `src/lbt/`
 - This is a clean break with no backward compatibility
+=======
+## [0.6.13]
+
+* Bugfix
+* Design
+
+>>>>>>> 63a25c0bca92c5c72e52d1fd6b9214c654417820
 
 ## [0.6.12]
 
