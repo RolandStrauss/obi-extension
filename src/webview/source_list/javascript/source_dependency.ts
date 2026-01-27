@@ -23,10 +23,10 @@ function main() {
 
   let button = document.getElementById("add_dependency_1") as Button;
   button?.addEventListener("click", add_dependency_1);
-  
+
   button = document.getElementById("add_dependency_2") as Button;
   button?.addEventListener("click", add_dependency_2);
-  
+
   let delete_buttons = document.getElementsByClassName(`delete_dependency_1`);
   for (let i = 0; i < delete_buttons.length; i++) {
     const e = delete_buttons[i];
@@ -34,7 +34,7 @@ function main() {
         delete_dependency(1, e.id);
     });
   }
-  
+
   delete_buttons = document.getElementsByClassName(`delete_dependency_2`);
   for (let i = 0; i < delete_buttons.length; i++) {
     const e = delete_buttons[i];
@@ -52,7 +52,7 @@ function main() {
 
 
 function delete_dependency(type: number, id: string) {
-  
+
   const button = document.getElementById(id);
   let source: string|null|undefined = button?.getAttribute('source');
 
@@ -68,7 +68,7 @@ function delete_dependency(type: number, id: string) {
 
 
 function add_dependency_1() {
-  
+
   const new_source: string = (document.getElementById("source_list_1") as TextField).value;
 
   add_dependency(1, new_source);
@@ -87,7 +87,7 @@ function add_dependency(type: number, source: string) {
 
   console.log(`Add dependency ${source}, type: ${type}`);
 
-  if (source.trim() == "") {
+  if (source.trim() === "") {
     showAlert("Please choose a source.", "info");
     return;
   }
@@ -97,7 +97,7 @@ function add_dependency(type: number, source: string) {
     source: source.trim()
   });
   reload();
-  
+
 }
 
 
@@ -117,7 +117,7 @@ function receive_message(e: MessageEvent) {
   switch (e.data.command) {
 
     case 'run_finished':
- 
+
       break;
 
   }

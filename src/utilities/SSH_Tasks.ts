@@ -28,7 +28,7 @@ export class SSH_Tasks {
 
   public static get_ssh_user(): string | undefined {
     // Execute command in bash shell
-    if (!SSH_Tasks.ssh_user || SSH_Tasks.ssh_user.length == 0) {
+    if (!SSH_Tasks.ssh_user || SSH_Tasks.ssh_user.length === 0) {
       const config = AppConfig.get_app_config();
       SSH_Tasks.ssh_user = config.connection['ssh-user'];
     }
@@ -59,20 +59,20 @@ export class SSH_Tasks {
     const ssh_key = config.connection['ssh-key'];
 
 
-    if (!host || host.length == 0) {
+    if (!host || host.length === 0) {
       host = await vscode.window.showInputBox({ title: `Enter an IBM i hostname/IP`, placeHolder: "my-ibm-i" });
       if (! host)
         {throw new Error('Canceled by user. No host provided');}
     }
 
-    if (!ssh_user || ssh_user.length == 0) {
+    if (!ssh_user || ssh_user.length === 0) {
       ssh_user = await vscode.window.showInputBox({ title: `Enter your user for ${host}`, placeHolder: "usrprf" });
       if (! ssh_user)
         {throw new Error('Canceled by user. No user provided');}
     }
 
     let pwd: string | undefined = await SSH_Tasks.context.secrets.get(`lbt|${host}|${ssh_user}`);
-    if (! pwd && (!ssh_key || ssh_key.length == 0)) {
+    if (! pwd && (!ssh_key || ssh_key.length === 0)) {
       pwd = await vscode.window.showInputBox({ title: `Enter your password for ${ssh_user}@${host}`, placeHolder: "password", password: true });
       if (! pwd)
         {throw new Error('Canceled by user. No password provided');}
@@ -124,7 +124,7 @@ export class SSH_Tasks {
     if (result.stderr.length > 0)
       {logger.error(`STDERR: ${result.stderr}`);}
 
-    if (result.code != 0)
+    if (result.code !== 0)
       {throw Error(result.stderr);}
 
   }
@@ -225,7 +225,7 @@ export class SSH_Tasks {
     if (result.stderr.length > 0)
       {logger.error(`STDERR: ${result.stderr}`);}
 
-    return result.code == 0;
+    return result.code === 0;
   }
 
 
@@ -305,7 +305,7 @@ export class SSH_Tasks {
       vscode.window.showErrorMessage(result.stderr);
     }
 
-    return_value = result.code == 0;
+    return_value = result.code === 0;
     logger.info(`Finished cleanup: ${return_value}`);
     return return_value;
   }
@@ -364,7 +364,7 @@ export class SSH_Tasks {
 
     await SSH_Tasks.ssh.putFiles(transfer_list, {concurrency: config.connection['ssh-concurrency'] ?? 5 });
 
-    if (transfer_list.length == 1)
+    if (transfer_list.length === 1)
       {vscode.window.showInformationMessage(`1 source transfered`);}
     else
       {vscode.window.showInformationMessage(`${transfer_list.length} sources transfered`);}

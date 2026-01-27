@@ -1,9 +1,9 @@
 {
-  "name": "lbt",
-  "displayName": "Lancelot Build Tool (LBT)",
+  "name": "ldm",
+  "displayName": "Lancelot Development Manager (LDM)",
   "description": "Automated build tool for IBM i",
   "publisher": "roland-strauss",
-  "version": "0.7.00",
+  "version": "0.6.12",
   "icon": "asserts/img/ext/logo.png",
   "keywords": [
     "ibm i",
@@ -15,14 +15,16 @@
     "build"
   ],
   "author": {
-    "name": "Roland Strauss"
+    "name": "Roland Strauss",
+    "url": "https://www.prouza.at"
   },
   "license": "MIT",
   "repository": {
     "url": "https://github.com/RolandStrauss/lbt-extension"
   },
   "engines": {
-    "vscode": "^1.100.0"
+    "vscode": ">=1.80.0 <2.0.0",
+    "node": "^20 || ^22 || ^24"
   },
   "categories": [
     "Other"
@@ -31,179 +33,182 @@
     "onStartupFinished"
   ],
   "main": "./out/extension.js",
+  "extensionDependencies": [
+    "vscode.git"
+  ],
   "contributes": {
     "commands": [
       {
-        "command": "lbt.show_changes",
-        "title": "%lbt.show_changes%",
+        "command": "ldm.show_changes",
+        "title": "%ldm.show_changes%",
         "icon": "$(check-all)",
-        "when": "lbt.contains_lbt_project && lbt.valid-config"
+        "when": "ldm.contains_ldm_project && ldm.valid-config"
       },
       {
-        "command": "lbt.show_single_changes",
-        "title": "%lbt.show_single_changes%",
+        "command": "ldm.show_single_changes",
+        "title": "%ldm.show_single_changes%",
         "icon": "$(check)",
-        "when": "lbt.contains_lbt_project && lbt.valid-config"
+        "when": "ldm.contains_ldm_project && ldm.valid-config"
       },
       {
-        "command": "lbt.run_build",
-        "title": "%lbt.run_build%",
+        "command": "ldm.run_build",
+        "title": "%ldm.run_build%",
         "icon": "$(run-all)",
-        "when": "lbt.contains_lbt_project && lbt.valid-config"
+        "when": "ldm.contains_ldm_project && ldm.valid-config"
       },
       {
-        "command": "lbt.run_single_build",
-        "title": "%lbt.run_single_build%",
+        "command": "ldm.run_single_build",
+        "title": "%ldm.run_single_build%",
         "icon": "$(run)",
-        "when": "lbt.contains_lbt_project && lbt.valid-config"
+        "when": "ldm.contains_ldm_project && ldm.valid-config"
       },
       {
-        "command": "lbt.source-filter.update",
-        "title": "%lbt.source-filter.update%",
+        "command": "ldm.source-filter.update",
+        "title": "%ldm.source-filter.update%",
         "icon": "$(refresh)",
-        "when": "lbt.contains_lbt_project && lbt.valid-config"
+        "when": "ldm.contains_ldm_project && ldm.valid-config"
       },
       {
-        "command": "lbt.source-filter.add",
-        "title": "%lbt.source-filter.add%",
+        "command": "ldm.source-filter.add",
+        "title": "%ldm.source-filter.add%",
         "icon": "$(add)",
-        "when": "lbt.contains_lbt_project && lbt.valid-config"
+        "when": "ldm.contains_ldm_project && ldm.valid-config"
       },
       {
-        "command": "lbt.get-remote-compiled-object-list",
-        "title": "%lbt.get-remote-compiled-object-list%",
+        "command": "ldm.get-remote-compiled-object-list",
+        "title": "%ldm.get-remote-compiled-object-list%",
         "icon": "$(arrow-circle-down)",
-        "when": "lbt.contains_lbt_project && lbt.valid-config && false"
+        "when": "ldm.contains_ldm_project && ldm.valid-config && false"
       },
       {
-        "command": "lbt.copy-profile-config",
-        "title": "%lbt.copy-profile-config%",
+        "command": "ldm.copy-profile-config",
+        "title": "%ldm.copy-profile-config%",
         "icon": "$(person-add)",
-        "when": "lbt.contains_lbt_project && lbt.valid-config"
+        "when": "ldm.contains_ldm_project && ldm.valid-config"
       },
       {
-        "command": "lbt.reset-compiled-object-list",
-        "title": "%lbt.reset-compiled-object-list%",
+        "command": "ldm.reset-compiled-object-list",
+        "title": "%ldm.reset-compiled-object-list%",
         "icon": "$(extensions)",
-        "when": "lbt.contains_lbt_project && lbt.valid-config"
+        "when": "ldm.contains_ldm_project && ldm.valid-config"
       },
       {
-        "command": "lbt.get-remote-source-list",
-        "title": "%lbt.get-remote-source-list%",
+        "command": "ldm.get-remote-source-list",
+        "title": "%ldm.get-remote-source-list%",
         "icon": "$(arrow-down)",
-        "when": "lbt.contains_lbt_project && lbt.valid-config && false"
+        "when": "ldm.contains_ldm_project && ldm.valid-config && false"
       },
       {
-        "command": "lbt.check-remote-sources",
-        "title": "%lbt.check-remote-sources%",
+        "command": "ldm.check-remote-sources",
+        "title": "%ldm.check-remote-sources%",
         "icon": "$(tasklist)",
-        "when": "lbt.contains_lbt_project && lbt.valid-config && false"
+        "when": "ldm.contains_ldm_project && ldm.valid-config && false"
       },
       {
-        "command": "lbt.controller.config",
-        "title": "%lbt.controller.config%",
+        "command": "ldm.controller.config",
+        "title": "%ldm.controller.config%",
         "icon": "$(settings-gear)",
-        "when": "lbt.contains_lbt_project"
+        "when": "ldm.contains_ldm_project"
       },
       {
-        "command": "lbt.controller.dependency-list",
-        "title": "%lbt.controller.dependency-list%",
+        "command": "ldm.controller.dependency-list",
+        "title": "%ldm.controller.dependency-list%",
         "icon": "$(outline-view-icon)",
-        "when": "lbt.contains_lbt_project && lbt.valid-config"
+        "when": "ldm.contains_ldm_project && ldm.valid-config"
       },
       {
-        "command": "lbt.source.edit-compile-config",
-        "title": "%lbt.source.edit-compile-config%",
+        "command": "ldm.source.edit-compile-config",
+        "title": "%ldm.source.edit-compile-config%",
         "icon": "$(settings-gear)",
-        "when": "lbt.contains_lbt_project"
+        "when": "ldm.contains_ldm_project"
       },
       {
-        "command": "lbt.transfer-all",
-        "title": "%lbt.transfer-all%",
+        "command": "ldm.transfer-all",
+        "title": "%ldm.transfer-all%",
         "icon": "$(cloud-upload)",
-        "when": "lbt.contains_lbt_project && lbt.valid-config"
+        "when": "ldm.contains_ldm_project && ldm.valid-config"
       },
       {
-        "command": "lbt.source-filter.show-view",
-        "title": "%lbt.source-filter.show-view%",
+        "command": "ldm.source-filter.show-view",
+        "title": "%ldm.source-filter.show-view%",
         "icon": "$(preview)",
-        "when": "lbt.contains_lbt_project && lbt.valid-config"
+        "when": "ldm.contains_ldm_project && ldm.valid-config"
       },
       {
-        "command": "lbt.source-filter.edit-config",
-        "title": "%lbt.source-filter.edit-config%",
+        "command": "ldm.source-filter.edit-config",
+        "title": "%ldm.source-filter.edit-config%",
         "icon": "$(settings-gear)",
-        "when": "lbt.contains_lbt_project && lbt.valid-config"
+        "when": "ldm.contains_ldm_project && ldm.valid-config"
       },
       {
-        "command": "lbt.source-filter.delete-config",
-        "title": "%lbt.source-filter.delete-config%",
+        "command": "ldm.source-filter.delete-config",
+        "title": "%ldm.source-filter.delete-config%",
         "icon": "$(trash)",
-        "when": "lbt.contains_lbt_project && lbt.valid-config"
+        "when": "ldm.contains_ldm_project && ldm.valid-config"
       },
       {
-        "command": "lbt.source-filter.view-source-infos",
-        "title": "%lbt.source-filter.view-source-infos%",
+        "command": "ldm.source-filter.view-source-infos",
+        "title": "%ldm.source-filter.view-source-infos%",
         "icon": "$(preview)",
-        "when": "lbt.contains_lbt_project && lbt.valid-config"
+        "when": "ldm.contains_ldm_project && ldm.valid-config"
       },
       {
-        "command": "lbt.source-filter.maintain-source-infos",
-        "title": "%lbt.source-filter.maintain-source-infos%",
+        "command": "ldm.source-filter.maintain-source-infos",
+        "title": "%ldm.source-filter.maintain-source-infos%",
         "icon": "$(settings-gear)",
-        "when": "lbt.contains_lbt_project && lbt.valid-config"
+        "when": "ldm.contains_ldm_project && ldm.valid-config"
       },
       {
-        "command": "lbt.source-filter.add-source-file",
-        "title": "%lbt.source-filter.add-source-file%",
+        "command": "ldm.source-filter.add-source-file",
+        "title": "%ldm.source-filter.add-source-file%",
         "icon": "$(add)",
-        "when": "lbt.contains_lbt_project && lbt.valid-config"
+        "when": "ldm.contains_ldm_project && ldm.valid-config"
       },
       {
-        "command": "lbt.source-filter.add-source-member",
-        "title": "%lbt.source-filter.add-source-member%",
+        "command": "ldm.source-filter.add-source-member",
+        "title": "%ldm.source-filter.add-source-member%",
         "icon": "$(add)",
-        "when": "lbt.contains_lbt_project && lbt.valid-config"
+        "when": "ldm.contains_ldm_project && ldm.valid-config"
       },
       {
-        "command": "lbt.source-filter.change-source-description",
-        "title": "%lbt.source-filter.change-source-description%",
+        "command": "ldm.source-filter.change-source-description",
+        "title": "%ldm.source-filter.change-source-description%",
         "icon": "$(preview)",
-        "when": "lbt.contains_lbt_project && lbt.valid-config"
+        "when": "ldm.contains_ldm_project && ldm.valid-config"
       },
       {
-        "command": "lbt.source-filter.rename-source-member",
-        "title": "%lbt.source-filter.rename-source-member%",
-        "when": "lbt.contains_lbt_project && lbt.valid-config"
+        "command": "ldm.source-filter.rename-source-member",
+        "title": "%ldm.source-filter.rename-source-member%",
+        "when": "ldm.contains_ldm_project && ldm.valid-config"
       },
       {
-        "command": "lbt.source-filter.delete-source-member",
-        "title": "%lbt.source-filter.delete-source-member%",
-        "when": "lbt.contains_lbt_project && lbt.valid-config"
+        "command": "ldm.source-filter.delete-source-member",
+        "title": "%ldm.source-filter.delete-source-member%",
+        "when": "ldm.contains_ldm_project && ldm.valid-config"
       },
       {
-        "command": "lbt.source.maintain-source-dependency",
-        "title": "%lbt.source.maintain-source-dependency%",
+        "command": "ldm.source.maintain-source-dependency",
+        "title": "%ldm.source.maintain-source-dependency%",
         "icon": "$(combine)",
-        "when": "lbt.contains_lbt_project && lbt.valid-config"
+        "when": "ldm.contains_ldm_project && ldm.valid-config"
       },
       {
-        "command": "lbt.deployment.maintain",
-        "title": "%lbt.deployment.maintain%",
+        "command": "ldm.deployment.maintain",
+        "title": "%ldm.deployment.maintain%",
         "icon": "$(settings-gear)",
-        "when": "1==2 && lbt.contains_lbt_project && lbt.valid-config"
+        "when": "1==2 && ldm.contains_ldm_project && ldm.valid-config"
       },
       {
-        "command": "lbt.build-history.update",
+        "command": "ldm.build-history.update",
         "title": "Update Build History"
       },
       {
-        "command": "lbt.build-history.delete-item",
+        "command": "ldm.build-history.delete-item",
         "title": "Delete Build History Item",
         "icon": "$(trash)"
       },
       {
-        "command": "lbt.build-history.delete-date",
+        "command": "ldm.build-history.delete-date",
         "title": "Delete Build History for Date",
         "icon": "$(trash)"
       }
@@ -211,151 +216,151 @@
     "menus": {
       "view/title": [
         {
-          "command": "lbt.source-filter.add",
-          "when": "lbt.contains_lbt_project && lbt.valid-config && view == lbt.source-filter",
+          "command": "ldm.source-filter.add",
+          "when": "ldm.contains_ldm_project && ldm.valid-config && view == ldm.source-filter",
           "group": "navigation@1"
         },
         {
-          "command": "lbt.source-filter.view-source-infos",
-          "when": "lbt.contains_lbt_project && lbt.valid-config && view == lbt.source-filter",
+          "command": "ldm.source-filter.view-source-infos",
+          "when": "ldm.contains_ldm_project && ldm.valid-config && view == ldm.source-filter",
           "group": "navigation@2"
         },
         {
-          "command": "lbt.source-filter.maintain-source-infos",
-          "when": "lbt.contains_lbt_project && lbt.valid-config && view == lbt.source-filter",
+          "command": "ldm.source-filter.maintain-source-infos",
+          "when": "ldm.contains_ldm_project && ldm.valid-config && view == ldm.source-filter",
           "group": "navigation@3"
         },
         {
-          "command": "lbt.source-filter.update",
-          "when": "lbt.contains_lbt_project && lbt.valid-config && view == lbt.source-filter",
+          "command": "ldm.source-filter.update",
+          "when": "ldm.contains_ldm_project && ldm.valid-config && view == ldm.source-filter",
           "group": "navigation@5"
         },
         {
-          "command": "lbt.get-remote-source-list",
-          "when": "false && lbt.contains_lbt_project && (view == lbt.controller || (!lbt.valid-config && view == ldm-config-invalid))",
+          "command": "ldm.get-remote-source-list",
+          "when": "false && ldm.contains_ldm_project && (view == ldm.controller || (!ldm.valid-config && view == ldm-config-invalid))",
           "group": "navigation@20"
         },
         {
-          "command": "lbt.get-remote-compiled-object-list",
-          "when": "false && lbt.contains_lbt_project && (view == lbt.controller || (!lbt.valid-config && view == ldm-config-invalid))",
+          "command": "ldm.get-remote-compiled-object-list",
+          "when": "false && ldm.contains_ldm_project && (view == ldm.controller || (!ldm.valid-config && view == ldm-config-invalid))",
           "group": "navigation@30"
         },
         {
-          "command": "lbt.reset-compiled-object-list",
-          "when": "lbt.contains_lbt_project && (view == lbt.controller || (!lbt.valid-config && view == ldm-config-invalid))",
+          "command": "ldm.reset-compiled-object-list",
+          "when": "ldm.contains_ldm_project && (view == ldm.controller || (!ldm.valid-config && view == ldm-config-invalid))",
           "group": "navigation@40"
         },
         {
-          "command": "lbt.check-remote-sources",
-          "when": "false && lbt.contains_lbt_project && (view == lbt.controller || (!lbt.valid-config && view == ldm-config-invalid))",
+          "command": "ldm.check-remote-sources",
+          "when": "false && ldm.contains_ldm_project && (view == ldm.controller || (!ldm.valid-config && view == ldm-config-invalid))",
           "group": "navigation@50"
         },
         {
-          "command": "lbt.transfer-all",
-          "when": "lbt.contains_lbt_project && (view == lbt.controller || (!lbt.valid-config && view == ldm-config-invalid))",
+          "command": "ldm.transfer-all",
+          "when": "ldm.contains_ldm_project && (view == ldm.controller || (!ldm.valid-config && view == ldm-config-invalid))",
           "group": "navigation@60"
         },
         {
-          "command": "lbt.controller.dependency-list",
-          "when": "lbt.contains_lbt_project && (view == lbt.controller || (!lbt.valid-config && view == ldm-config-invalid))",
+          "command": "ldm.controller.dependency-list",
+          "when": "ldm.contains_ldm_project && (view == ldm.controller || (!ldm.valid-config && view == ldm-config-invalid))",
           "group": "navigation@65"
         },
         {
-          "command": "lbt.controller.config",
-          "when": "lbt.contains_lbt_project && (view == lbt.controller || (!lbt.valid-config && view == ldm-config-invalid))",
+          "command": "ldm.controller.config",
+          "when": "ldm.contains_ldm_project && (view == ldm.controller || (!ldm.valid-config && view == ldm-config-invalid))",
           "group": "navigation@70"
         },
         {
-          "command": "lbt.deployment.maintain",
-          "when": "lbt.contains_lbt_project && lbt.valid-config && view == lbt.deployment",
+          "command": "ldm.deployment.maintain",
+          "when": "ldm.contains_ldm_project && ldm.valid-config && view == ldm.deployment",
           "group": "navigation@1"
         }
       ],
       "editor/title/context": [
         {
-          "command": "lbt.source.edit-compile-config",
-          "when": "lbt.contains_lbt_project"
+          "command": "ldm.source.edit-compile-config",
+          "when": "ldm.contains_ldm_project"
         },
         {
-          "command": "lbt.source-filter.change-source-description",
-          "when": "lbt.contains_lbt_project"
+          "command": "ldm.source-filter.change-source-description",
+          "when": "ldm.contains_ldm_project"
         },
         {
-          "command": "lbt.source.maintain-source-dependency",
-          "when": "lbt.contains_lbt_project"
+          "command": "ldm.source.maintain-source-dependency",
+          "when": "ldm.contains_ldm_project"
         }
       ],
       "explorer/context": [
         {
-          "command": "lbt.source.edit-compile-config",
-          "when": "lbt.contains_lbt_project"
+          "command": "ldm.source.edit-compile-config",
+          "when": "ldm.contains_ldm_project"
         },
         {
-          "command": "lbt.source-filter.change-source-description",
-          "when": "lbt.contains_lbt_project"
+          "command": "ldm.source-filter.change-source-description",
+          "when": "ldm.contains_ldm_project"
         },
         {
-          "command": "lbt.source.maintain-source-dependency",
-          "when": "lbt.contains_lbt_project"
+          "command": "ldm.source.maintain-source-dependency",
+          "when": "ldm.contains_ldm_project"
         }
       ],
       "view/item/context": [
         {
-          "command": "lbt.source-filter.show-view",
-          "when": "lbt.contains_lbt_project && view == lbt.source-filter && viewItem == source-list",
+          "command": "ldm.source-filter.show-view",
+          "when": "ldm.contains_ldm_project && view == ldm.source-filter && viewItem == source-list",
           "group": "inline@0"
         },
         {
-          "command": "lbt.source-filter.edit-config",
-          "when": "lbt.contains_lbt_project && view == lbt.source-filter && viewItem == source-list",
+          "command": "ldm.source-filter.edit-config",
+          "when": "ldm.contains_ldm_project && view == ldm.source-filter && viewItem == source-list",
           "group": "inline@2"
         },
         {
-          "command": "lbt.source-filter.delete-config",
-          "when": "lbt.contains_lbt_project && view == lbt.source-filter && viewItem == source-list",
+          "command": "ldm.source-filter.delete-config",
+          "when": "ldm.contains_ldm_project && view == ldm.source-filter && viewItem == source-list",
           "group": "inline@3"
         },
         {
-          "command": "lbt.source.edit-compile-config",
-          "when": "lbt.contains_lbt_project && view == lbt.source-filter && viewItem == lbt-source",
+          "command": "ldm.source.edit-compile-config",
+          "when": "ldm.contains_ldm_project && view == ldm.source-filter && viewItem == ldm-source",
           "group": "inline@0"
         },
         {
-          "command": "lbt.source.maintain-source-dependency",
-          "when": "lbt.contains_lbt_project && view == lbt.source-filter && viewItem == lbt-source",
+          "command": "ldm.source.maintain-source-dependency",
+          "when": "ldm.contains_ldm_project && view == ldm.source-filter && viewItem == ldm-source",
           "group": "inline@1"
         },
         {
-          "command": "lbt.source-filter.change-source-description",
-          "when": "lbt.contains_lbt_project && view == lbt.source-filter && viewItem == lbt-source",
+          "command": "ldm.source-filter.change-source-description",
+          "when": "ldm.contains_ldm_project && view == ldm.source-filter && viewItem == ldm-source",
           "group": "inline@1"
         },
         {
-          "command": "lbt.source-filter.rename-source-member",
-          "when": "lbt.contains_lbt_project && view == lbt.source-filter && viewItem == lbt-source"
+          "command": "ldm.source-filter.rename-source-member",
+          "when": "ldm.contains_ldm_project && view == ldm.source-filter && viewItem == ldm-source"
         },
         {
-          "command": "lbt.source-filter.delete-source-member",
-          "when": "lbt.contains_lbt_project && view == lbt.source-filter && viewItem == lbt-source"
+          "command": "ldm.source-filter.delete-source-member",
+          "when": "ldm.contains_ldm_project && view == ldm.source-filter && viewItem == ldm-source"
         },
         {
-          "command": "lbt.source-filter.add-source-member",
-          "when": "lbt.contains_lbt_project && view == lbt.source-filter && viewItem == source-file",
+          "command": "ldm.source-filter.add-source-member",
+          "when": "ldm.contains_ldm_project && view == ldm.source-filter && viewItem == source-file",
           "group": "inline@0"
         },
         {
-          "command": "lbt.source-filter.add-source-file",
-          "when": "lbt.contains_lbt_project && view == lbt.source-filter && viewItem == source-lib",
+          "command": "ldm.source-filter.add-source-file",
+          "when": "ldm.contains_ldm_project && view == ldm.source-filter && viewItem == source-lib",
           "group": "inline@0"
         },
         {
-          "command": "lbt.build-history.delete-item",
-          "when": "view == lbt.build-history && viewItem == buildHistoryFile",
+          "command": "ldm.build-history.delete-item",
+          "when": "view == ldm.build-history && viewItem == buildHistoryFile",
           "group": "inline"
         },
         {
-          "command": "lbt.build-history.delete-date",
-          "when": "view == lbt.build-history && viewItem == buildHistoryDate",
+          "command": "ldm.build-history.delete-date",
+          "when": "view == ldm.build-history && viewItem == buildHistoryDate",
           "group": "inline"
         }
       ]
@@ -363,96 +368,96 @@
     "viewsContainers": {
       "activitybar": [
         {
-          "id": "lbt-bar",
-          "title": "Lancelot Build Tool",
+          "id": "ldm-bar",
+          "title": "Lancelot Development Manager",
           "icon": "$(code)"
         }
       ]
     },
     "views": {
-      "lbt-bar": [
+      "ldm-bar": [
         {
           "type": "webview",
-          "id": "lbt.controller",
-          "name": "lbt Build",
-          "when": "lbt.contains_lbt_project && lbt.valid-config"
+          "id": "ldm.controller",
+          "name": "ldm Build",
+          "when": "ldm.contains_ldm_project && ldm.valid-config"
         },
         {
           "type": "tree",
-          "id": "lbt.build-history",
+          "id": "ldm.build-history",
           "name": "Build history",
-          "when": "lbt.contains_lbt_project && lbt.valid-config"
+          "when": "ldm.contains_ldm_project && ldm.valid-config"
         },
         {
           "type": "tree",
-          "id": "lbt.source-filter",
+          "id": "ldm.source-filter",
           "name": "%Source filters%",
-          "when": "lbt.contains_lbt_project && lbt.valid-config"
+          "when": "ldm.contains_ldm_project && ldm.valid-config"
         },
         {
           "type": "webview",
-          "id": "lbt.quick-settings",
+          "id": "ldm.quick-settings",
           "name": "%Quick settings%",
-          "when": "false && lbt.contains_lbt_project && lbt.valid-config"
+          "when": "false && ldm.contains_ldm_project && ldm.valid-config"
         },
         {
           "type": "webview",
-          "id": "lbt.deployment",
+          "id": "ldm.deployment",
           "name": "%deployment%",
-          "when": "1==2 && lbt.contains_lbt_project && lbt.valid-config"
+          "when": "1==2 && ldm.contains_ldm_project && ldm.valid-config"
         },
         {
           "type": "webview",
-          "id": "lbt-welcome",
+          "id": "ldm-welcome",
           "name": "%Welcome%",
-          "when": "lbt.contains_lbt_project == false"
+          "when": "ldm.contains_ldm_project == false"
         },
         {
           "type": "webview",
-          "id": "lbt-config-invalid",
+          "id": "ldm-config-invalid",
           "name": "%Invalid config%",
-          "when": "lbt.contains_lbt_project && !lbt.valid-config"
+          "when": "ldm.contains_ldm_project && !ldm.valid-config"
         }
       ]
     }
   },
   "scripts": {
-    "vscode:prepublish": "npm run package --omit=dev",
+    "vscode:prepublish": "npm run package",
     "compile": "node ./esbuild.js",
-    "package": "NODE_ENV=production node ./esbuild.js",
+    "package": "cross-env NODE_ENV=production node ./esbuild.js",
     "watch": "tsc -watch -p ./",
     "pretest": "npm run compile && npm run lint",
     "lint": "eslint src --ext ts",
-    "test": "vscode-test",
-    "postinstall": "if exist node_modules\\ssh2\\test rd /s /q node_modules\\ssh2\\test"
+    "test": "npm exec --package=@vscode/test-electron vscode-test"
   },
   "devDependencies": {
-    "@types/jquery": "^3.5.33",
-    "@types/mocha": "^10.0.10",
-    "@types/node": "^22.14.0",
-    "@types/vscode": "^1.100.0",
+    "@types/node": "^20",
+    "@types/vscode": "^1.80.0",
     "@types/vscode-webview": "^1.57.5",
-    "@typescript-eslint/eslint-plugin": "latest",
-    "@typescript-eslint/parser": "latest",
-    "@vscode/test-cli": "^0.0.12",
+    "@typescript-eslint/eslint-plugin": "^8",
+    "@typescript-eslint/parser": "^8",
     "@vscode/test-electron": "^2.5.2",
-    "eslint": "latest",
-    "ovsx": "latest"
+    "@vscode/vsce": "^3.7.1",
+    "cross-env": "^10.1.0",
+    "esbuild": "^0.25.10",
+    "eslint": "^9",
+    "typescript": "^5.6"
   },
   "dependencies": {
     "@emnapi/core": "^1.4.3",
     "@emnapi/runtime": "^1.4.3",
+    "@exodus/bytes": "^0.1.2",
     "@tybys/wasm-util": "^0.9.0",
     "@vscode/webview-ui-toolkit": "^1.4.0",
     "deepmerge": "^4.3.1",
-    "esbuild": "^0.25.10",
     "fs-extra": "^11.2.0",
     "hasha": "^6.0.0",
     "node-ssh": "^13.2.0",
     "nunjucks": "^3.2.4",
     "smol-toml": "^1.3.0",
     "wildcard-match": "latest",
-    "winston": "latest",
-    "winston-transport": "latest"
-  }
+    "winston": "^3",
+    "winston-transport": "^4"
+  },
+  "packageManager": "npm@10"
 }

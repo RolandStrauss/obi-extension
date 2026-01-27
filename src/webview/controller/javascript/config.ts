@@ -447,7 +447,7 @@ function check_panel_missing(panel: string) {
 
   for (let i = 0; i < missing_elements.length; i++) {
     const el = missing_elements[i];
-    if (el.getAttribute('panel') != panel)
+    if (el.getAttribute('panel') !== panel)
       {continue;}
     found = true;
   }
@@ -478,7 +478,7 @@ function check_input(element: Element) {
     found_missing = true;
     for (let i=0; i < list_values.length; i++) {
 
-      if (list_values[i].length == 0)
+      if (list_values[i].length === 0)
         {continue;}
       found_missing = false;
       break;
@@ -497,7 +497,7 @@ function check_input(element: Element) {
 
     found_missing = true;
     for (let i=0; i < list_values.length; i++) {
-      if (list_values[i].length == 0)
+      if (list_values[i].length === 0)
         {continue;}
 
       found_missing = false;
@@ -511,7 +511,7 @@ function check_input(element: Element) {
     return;
   }
 
-  if (elem_value.length == 0) {
+  if (elem_value.length === 0) {
     set_element_missing_value(element);
   }
 
@@ -532,7 +532,7 @@ function check_inputs() {
   }
 
   check_missing_hint();
-  return document.getElementsByClassName(`missing_value`).length == 0;
+  return document.getElementsByClassName(`missing_value`).length === 0;
 
 }
 
@@ -654,12 +654,12 @@ function save_config(class_prefix:string) {
 
     const elem_value = (app_elements[i] as HTMLInputElement).value.replaceAll('\\', '\\\\').replaceAll('"', '\\\"');
 
-    if (elem_value.length == 0 || elem_value == 'NaN')
+    if (elem_value.length === 0 || elem_value === 'NaN')
       {continue;}
 
     // Standard element
     let json_value = `"${elem_value.replaceAll('\n', '\\n')}"`;
-    if (app_elements[i].getAttribute('type') == 'number') {
+    if (app_elements[i].getAttribute('type') === 'number') {
       json_value = elem_value;
     }
 
@@ -677,7 +677,7 @@ function save_config(class_prefix:string) {
 
       for (let i=0; i < list_values.length; i++) {
 
-        if (list_values[i].length == 0)
+        if (list_values[i].length === 0)
           {continue;}
 
         if (i > 0)
@@ -693,7 +693,7 @@ function save_config(class_prefix:string) {
       const list_values = elem_value.split('\n');
 
       for (let i=0; i < list_values.length; i++) {
-        if (list_values[i].length == 0)
+        if (list_values[i].length === 0)
           {continue;}
 
         if (i > 0)

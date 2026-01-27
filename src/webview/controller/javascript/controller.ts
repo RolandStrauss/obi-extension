@@ -80,7 +80,7 @@ function run_build() {
   if (run_build_ring)
     {run_build_ring.style.display='flex';}
 
-  if (get_run_type() == "all") {
+  if (get_run_type() === "all") {
     command = 'run_build';
   }
 
@@ -98,7 +98,7 @@ function show_changes() {
   if (running_ring)
     {running_ring.style.display='flex';}
 
-  if (get_run_type() == "all") {
+  if (get_run_type() === "all") {
     command = 'show_changes';
   }
 
@@ -149,7 +149,7 @@ function receive_message(e: MessageEvent) {
     case 'update_build_summary_timestamp':
 
       let display = 'flex';
-      if (!e.data.build_counts || e.data.build_counts == 0)
+      if (!e.data.build_counts || e.data.build_counts === 0)
         {display = 'none';}
 
       let open_build_summary = document.getElementById("open_build_summary");

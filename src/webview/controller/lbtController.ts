@@ -26,18 +26,18 @@ const nunjucks = require('nunjucks');
 export class lbtController implements vscode.WebviewViewProvider {
 
 
-	public static readonly viewType = 'lbt.controller';
+  public static readonly viewType = 'lbt.controller';
   public static view_object: lbtController;
   public static current_run_type: string | undefined;
 
-	private _view?: vscode.WebviewView;
-	private _context?: vscode.WebviewViewResolveContext;
-	private _token?: vscode.CancellationToken;
+  private _view?: vscode.WebviewView;
+  private _context?: vscode.WebviewViewResolveContext;
+  private _token?: vscode.CancellationToken;
   private readonly _extensionUri: vscode.Uri
   private static is_config_watcher_set: boolean = false;
 
 
-	constructor(extensionUri: vscode.Uri) {
+  constructor(extensionUri: vscode.Uri) {
     this._extensionUri = extensionUri;
     lbtController.view_object = this;
 
@@ -83,8 +83,8 @@ export class lbtController implements vscode.WebviewViewProvider {
 
   public static check_lbt_response() {
 
-    const ws = Workspace.get_workspace();
-    const lbt_status_file = ws ? path.join(ws, Constants.LBT_STATUS_FILE) : '';
+    const wsPath = Workspace.get_workspace();
+    const lbt_status_file = wsPath ? path.join(wsPath, Constants.LBT_STATUS_FILE) : '';
 
     if (DirTool.file_exists(lbt_status_file)) {
       const status = DirTool.get_json(lbt_status_file);
@@ -182,27 +182,27 @@ export class lbtController implements vscode.WebviewViewProvider {
 
 
 
-	public resolveWebviewView(
-		webviewView: vscode.WebviewView,
-		context: vscode.WebviewViewResolveContext,
-		token: vscode.CancellationToken,
-	) {
-		this._view = webviewView;
+  public resolveWebviewView(
+    webviewView: vscode.WebviewView,
+    context: vscode.WebviewViewResolveContext,
+    token: vscode.CancellationToken,
+  ) {
+    this._view = webviewView;
     this._context = context;
     this._token = token;
 
-		webviewView.webview.options = {
-			// Allow scripts in the webview
-			enableScripts: true,
+    webviewView.webview.options = {
+      // Allow scripts in the webview
+      enableScripts: true,
       enableCommandUris: true,
-			localResourceRoots: [
+      localResourceRoots: [
         vscode.Uri.joinPath(this._extensionUri, "out"),
         vscode.Uri.joinPath(this._extensionUri, "asserts")
-			]
-		};
+      ]
+    };
     (webviewView as any).retainContextWhenHidden = true;
 
-    if (vscode.workspace.workspaceFolders == undefined) {
+    if (vscode.workspace.workspaceFolders === undefined) {
       vscode.window.showErrorMessage('No workspace defined');
       return;
     }
@@ -223,17 +223,17 @@ export class lbtController implements vscode.WebviewViewProvider {
         builds_exist: compile_list ? compile_list['compiles'].length : undefined
       }
     );
-		webviewView.webview.html = html;
+    webviewView.webview.html = html;
 
     lbtController.update_build_summary_timestamp();
 
     // Listener
-		webviewView.webview.onDidReceiveMessage(data => {
+    webviewView.webview.onDidReceiveMessage(data => {
 
-			switch (data.command) {
-				case 'test':
-					vscode.window.showInformationMessage('Message from controller');
-					break;
+      switch (data.command) {
+        case 'test':
+          vscode.window.showInformationMessage('Message from controller');
+          break;
 
         case 'refresh':
           this.resolveWebviewView(webviewView, context, token);
@@ -282,10 +282,10 @@ export class lbtController implements vscode.WebviewViewProvider {
           DirTool.delete_file(path.join(Workspace.get_workspace(), current_profile));
           lbtController.update_current_profile();
           break;
-			}
-		});
+      }
+    });
 
-	}
+  }
 
 
     // lbt.source-filter.add-source-file

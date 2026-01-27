@@ -118,7 +118,7 @@ export class DirTool {
     const fs = require('fs');
     const files = fs.readdirSync(path.join(rootdir, dir), { withFileTypes: true });
 
-    if (files.length == 0) {
+    if (files.length === 0) {
       const path_array: string[] = dir.split('/');
       const src_lib = path_array[0] ?? null;
       const src_file = path_array[1] ?? null;
@@ -130,7 +130,7 @@ export class DirTool {
       if (file.isDirectory()) {
         call_list.push(DirTool.get_all_files_in_dir3(rootdir, path.join(dir, file.name), file_extensions));
       } else {
-        if (file_extensions == undefined || file_extensions.includes(file.name.split('.').pop())) {
+        if (file_extensions === undefined || file_extensions.includes(file.name.split('.').pop())) {
           const source: string = path.join(dir, file.name).replaceAll('\\', '/');
           const source_arr: string[] = source.split('/').reverse();
           const src_mbr = source_arr[0];
@@ -443,11 +443,11 @@ export class DirTool {
     for (var i=0; i < content_list.length; i++) {
 
       const line = content_list[i].trim().split('#');
-      if (line[0].length == 0)
+      if (line[0].length === 0)
         {continue;}
 
       const line2 = content_list[i].trim().split('source ');
-      if (line2[0].length == 0)
+      if (line2[0].length === 0)
         {continue;}
 
       const k_v: string[] = line[0].trim().split('=');

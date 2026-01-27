@@ -141,7 +141,7 @@ export class ConfigGeneral {
       !this['remote-base-dir'] ||
       !this['source-dir'] ||
       !this['remote-lbt-dir'] ||
-      (!this['supported-object-types'] || this['supported-object-types'].length == 0) ||
+      (!this['supported-object-types'] || this['supported-object-types'].length === 0) ||
       !this['file-system-encoding'] ||
       !this['console-output-encoding'] ||
       !this['compiled-object-list'] ||
@@ -398,7 +398,7 @@ export class AppConfig {
 
 
   private static get_string(value: string|undefined): string|undefined {
-    if (!value || value.length == 0)
+    if (!value || value.length === 0)
       {return undefined;}
     return value.trim();
   }
@@ -412,7 +412,7 @@ export class AppConfig {
     const files = DirTool.list_dir(path.join(ws, Constants.LBT_APP_CONFIG_DIR));
 
     for (const file of files) {
-      if (file.endsWith('.toml') && (file.startsWith('.user-app-config') && file != Constants.LBT_APP_CONFIG && file != Constants.LBT_APP_CONFIG_USER)) {
+      if (file.endsWith('.toml') && (file.startsWith('.user-app-config') && file !== Constants.LBT_APP_CONFIG && file !== Constants.LBT_APP_CONFIG_USER)) {
         configs.push({'alias': file.replace('.user-app-config-', '').replace('.toml', ''), 'file': file});
       }
     }

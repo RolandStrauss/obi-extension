@@ -325,5 +325,5 @@ git branch -m feature/roland/short-description
 
 - [Conventional Commits Specification](https://www.conventionalcommits.org/)
 - [Semantic Versioning](https://semver.org/)
-- Lancelot Instructions: `.github/instructions/lancelot_built_tool.instructions.md`
+- Lancelot Instructions: `.github/instructions/lancelot.instructions.md`
 - Contributing Guide: `CONTRIBUTING.md`

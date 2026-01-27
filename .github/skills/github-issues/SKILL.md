@@ -154,6 +154,19 @@ State values: `open`, `closed`
 }
 ```
 
+### Example: Estimate Table Template
+
+Use this simple table format when providing implementation effort estimates within issues:
+
+| Task | Estimated Effort | Dependencies |
+|------|------------------|--------------:|
+| WebView Infrastructure | 8 hours | None |
+| Feature Parity (MVP) | 16 hours | Infrastructure |
+| UI Enhancements | 12 hours | Feature Parity |
+| Testing (Unit + Integration) | 12 hours | All features |
+| Documentation | 6 hours | All features |
+| **Total** | **54 hours** | — |
+
 ## Create a Lancelot Issue (Quick Start)
 
 **When to use**: Architecture/DevSecOps topics, complex cross-system changes, or features with significant security/reliability impact.

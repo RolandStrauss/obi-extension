@@ -1,0 +1,20 @@
+# Document Control
+- **Document ID**: 
+- **Title**: 
+- **Owner**: 
+- **Status**: Draft
+- **Confidentiality**: Controlled (Uncontrolled if printed)
+- **Location**: 
+- **Effective Date**: 
+- **Supersedes**: 
+- **Related Artifacts**: 
+
+## Revision / Version History
+| Date       | Version | Author | Reviewer | Approver | Change Summary                 | Reference |
+|------------|---------|--------|----------|----------|--------------------------------|-----------|
+| YYYY-MM-DD | 0.01    |        |          |          | Initial draft                  |           |
+
+## Approvals
+- **Role**: Project Sponsor — **Name**: __________ — **Signature**: __________ — **Date**: _____
+- **Role**: Architecture — **Name**: __________ — **Signature**: __________ — **Date**: _____
+- **Role**: Delivery/QA — **Name**: __________ — **Signature**: __________ — **Date**: _____

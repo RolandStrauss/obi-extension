@@ -61,7 +61,7 @@ export class QuickSettings implements vscode.WebviewViewProvider {
 			]
 		};
 
-    if (vscode.workspace.workspaceFolders == undefined) {
+    if (vscode.workspace.workspaceFolders === undefined) {
       vscode.window.showErrorMessage('No workspace defined');
       return;
     }
@@ -101,5 +101,3 @@ export class QuickSettings implements vscode.WebviewViewProvider {
 
 
 }
-
-

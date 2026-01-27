@@ -59,14 +59,14 @@ export class lbtCommands {
         if (!sources)
           {source_list = await lbtTools.generate_source_change_lists();}
 
-        if (source_list.length == 0) {
+        if (source_list.length === 0) {
           vscode.window.showWarningMessage("No changed sources to build");
           return;
         }
 
         // Ask if they should be build
         if (source_list.length > 0) {
-          const source = `source${source_list.length > 1 ? 's' : ''}`;
+          const source = `source${source_list.length > 1 ? 's' : ''}`;  // Already correct with >0
           const answer = await vscode.window.showInformationMessage(`${source_list.length} ${source} will be build. Do you want to proceed?`, { modal: true }, ...['Yes', 'No']);
           switch (answer) {
             case 'No':
@@ -137,7 +137,7 @@ export class lbtCommands {
 
       let cmd = `${lbtTools.get_local_lbt_python_path()} -X utf8 ${path.join(config.general['local-lbt-dir'], 'main.py')} -a create -p .`;
 
-      if (source_list.length == 1) {
+      if (source_list.length === 1) {
         const quote = process.platform === 'win32' ? '"' : "'";
         cmd = `${cmd} --source=${quote}${source_list[0]}${quote}`;
       }
@@ -160,7 +160,7 @@ export class lbtCommands {
         message: `Generate build script on remote. If it takes too long, use lbt locally (see documentation).`
       });
       let ssh_cmd: string = `cd '${remote_base_dir}' || exit 1; rm log/* .lbt/log/* 2> /dev/null || true; ${remote_lbt} -X utf8 ${remote_lbt_dir}/main.py -a create -p .`;
-      if (source_list.length == 1) {
+      if (source_list.length === 1) {
         const quote = process.platform === 'win32' ? '"' : "'";
         ssh_cmd = `${ssh_cmd} --source=${quote}${source_list[0]}${quote}`;
       }
@@ -227,7 +227,7 @@ export class lbtCommands {
       const source_hashes: source.ISource = lbtTools.get_source_hash_list(Workspace.get_workspace()) || {};
 
       for (const source of sources) {
-        if (source.status == 'success') {
+        if (source.status === 'success') {
           source_hashes[source.source] = source.hash;
         }
       }
@@ -248,7 +248,7 @@ export class lbtCommands {
 
     let source = vscode.window.activeTextEditor.document.fileName.replace(path.join(Workspace.get_workspace(), AppConfig.get_app_config().general['source-dir'] || 'src'), '');
     source = source.replaceAll('\\', '/');
-    if (source.charAt(0) == '/')
+    if (source.charAt(0) === '/')
       {source = source.substring(1);}
 
     if (!config.general['supported-object-types'].includes(source.split('.').pop())) {
@@ -283,7 +283,7 @@ export class lbtCommands {
 
   public static async run_build(context: vscode.ExtensionContext, source?: string) {
 
-    if (lbtCommands.run_build_status != lbtStatus.READY) {
+    if (lbtCommands.run_build_status !== lbtStatus.READY) {
       vscode.window.showErrorMessage('lbt process is already running');
       return;
     }
@@ -300,7 +300,7 @@ export class lbtCommands {
 
   public static async rerun_build(ignore_sources: string[], ignore_sources_cmd: { [key: string]: [string] | null }) {
 
-    if (lbtCommands.run_build_status != lbtStatus.READY) {
+    if (lbtCommands.run_build_status !== lbtStatus.READY) {
       vscode.window.showErrorMessage('lbt process is already running');
       return;
     }
@@ -347,7 +347,7 @@ export class lbtCommands {
 
   public static async show_changes(context: vscode.ExtensionContext, source?: string) {
 
-    if (lbtCommands.show_changes_status != lbtStatus.READY) {
+    if (lbtCommands.show_changes_status !== lbtStatus.READY) {
       vscode.window.showErrorMessage('lbt process is already running');
       return;
     }
@@ -403,7 +403,7 @@ export class lbtCommands {
 
   public static async reset_compiled_object_list() {
 
-    if (lbtCommands.reset_compiled_object_list_status != lbtStatus.READY) {
+    if (lbtCommands.reset_compiled_object_list_status !== lbtStatus.READY) {
       vscode.window.showErrorMessage('lbt process is already running');
       return;
     }
@@ -450,7 +450,7 @@ export class lbtCommands {
    */
   public static async get_remote_source_list(): Promise<void> {
 
-    if (lbtCommands.remote_source_list_status != lbtStatus.READY) {
+    if (lbtCommands.remote_source_list_status !== lbtStatus.READY) {
       vscode.window.showErrorMessage('lbt process is already running');
       return;
     }

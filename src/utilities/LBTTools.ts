@@ -54,16 +54,16 @@ export class lbtTools {
     let previous_version: string | undefined = lbtTools.ext_context.workspaceState.get('lbt.version');
     const config: AppConfig = AppConfig.get_app_config();
 
-    if (config.general['local-base-dir'] == '/')
+    if (config.general['local-base-dir'] === '/')
       {throw Error("Root for 'local-base-dir' is not allowed!");}
 
-    if (config.general['remote-base-dir'] == '/')
+    if (config.general['remote-base-dir'] === '/')
       {throw Error("Root for 'remote-base-dir' is not allowed!");}
 
-    if (config.general['local-lbt-dir'] == '/')
+    if (config.general['local-lbt-dir'] === '/')
       {throw Error("Root for 'local-lbt-dir' is not allowed!");}
 
-    if (config.general['remote-lbt-dir'] == '/')
+    if (config.general['remote-lbt-dir'] === '/')
       {throw Error("Root for 'remote-lbt-dir' is not allowed!");}
 
 
@@ -147,7 +147,7 @@ export class lbtTools {
 
 
   public static without_local_lbt(): boolean {
-    return lbtTools.get_local_lbt_python_path() == undefined;
+    return lbtTools.get_local_lbt_python_path() === undefined;
   }
 
 
@@ -160,7 +160,7 @@ export class lbtTools {
       {return undefined;}
 
     let venv_bin = path.join('venv', 'bin', 'python');
-    if (process.platform == 'win32')
+    if (process.platform === 'win32')
       {venv_bin = path.join('venv', 'Scripts', 'python.exe');}
 
     const local_lbt_python: string = path.join(config.general['local-lbt-dir'], venv_bin);
@@ -311,7 +311,7 @@ export class lbtTools {
 
   public static async check_remote_sources(): Promise<boolean> {
 
-    if (lbtTools.check_remote_sources_status != lbtStatus.READY) {
+    if (lbtTools.check_remote_sources_status !== lbtStatus.READY) {
       vscode.window.showErrorMessage('Remote check is already running');
       return false;
     }
@@ -411,7 +411,7 @@ export class lbtTools {
 
   public static contains_lbt_project(): boolean {
 
-    if (!vscode.workspace.workspaceFolders || vscode.workspace.workspaceFolders.length == 0) {
+    if (!vscode.workspace.workspaceFolders || vscode.workspace.workspaceFolders.length === 0) {
       return false;
     }
 
@@ -471,7 +471,7 @@ export class lbtTools {
     const nonce = getNonce();
 
     let theme_mode = 'light';
-    if (vscode.window.activeColorTheme.kind == vscode.ColorThemeKind.Dark)
+    if (vscode.window.activeColorTheme.kind === vscode.ColorThemeKind.Dark)
       {theme_mode = 'dark';}
 
     const ws: string | undefined = Workspace.get_workspace();
@@ -495,18 +495,18 @@ export class lbtTools {
 
 
   public static override_dict(from_dict: {}, to_dict: {}): any {
-    if (to_dict == undefined)
+    if (to_dict === undefined)
       {to_dict = {};}
 
     for (let [k, v] of Object.entries(from_dict)) {
       if (typeof v === 'object' && v !== null && to_dict[k] && !(v instanceof Array) && !(v instanceof Date))
         {v = lbtTools.override_dict(from_dict[k], to_dict[k]);}
 
-      if (v == undefined)
+      if (v === undefined)
         {continue;}
-      if ((typeof v === 'string') && v.length == 0)
+      if ((typeof v === 'string') && v.length === 0)
         {continue;}
-      if (v instanceof Array && v.length == 0)
+      if (v instanceof Array && v.length === 0)
         {continue;}
 
       to_dict[k] = v;
@@ -558,9 +558,31 @@ export class lbtTools {
 
     let compile_list_string: string = fs.readFileSync(file_path).toString();
     // Converting to JSON
-    const compile_list = JSON.parse(compile_list_string);
+      const compile_list = JSON.parse(compile_list_string);
 
-    if (typeof compile_list !== 'object' || compile_list == null || (compile_list instanceof Array) || (compile_list instanceof Date))
+      if (typeof compile_list !== 'object' || compile_list === null || (compile_list instanceof Array) || (compile_list instanceof Date))
+        {return undefined;}
+
+      if (!compile_list['compiles'] || !compile_list['timestamp'])
+        {return undefined;}
+
+      return compile_list
+    }
+
+    public static has_build_failed(compile_list: any): boolean {
+
+      if (!compile_list || !compile_list['compiles'])
+        {return false;}
+
+      for (const level_item of (compile_list['compiles'] as any)) {
+        for (const source of level_item['sources']) {
+          for (const cmd of source['cmds']) {
+            if (cmd['status'] !== 'success')
+              {return false;}
+          }
+        }
+      }
+
       {return undefined;}
 
     if (!compile_list['compiles'] || !compile_list['timestamp'])
@@ -611,7 +633,7 @@ export class lbtTools {
 
         need_2_build = false;
         for (const cmd of source['cmds']) {
-          if (cmd['status'] != 'success') {
+          if (cmd['status'] !== 'success') {
             need_2_build = true;
             break;
           }
@@ -637,7 +659,7 @@ export class lbtTools {
     for (const level_item of (compile_list['compiles'] as any)) {
       for (const source of level_item['sources']) {
         for (const cmd of source['cmds']) {
-          if (cmd['status'] != 'success')
+          if (cmd['status'] !== 'success')
             {return false;}
         }
       }
@@ -882,7 +904,7 @@ export class lbtTools {
 
     if (k_source in last_source_hashes) {
 
-      if (last_source_hashes[k_source] == v_hash) {
+      if (last_source_hashes[k_source] === v_hash) {
         source_changed = false;
         return { "changed-sources": [], "new-objects": [] };
       }
@@ -930,7 +952,7 @@ export class lbtTools {
       //... eher mit dowhile und Promise.all und immer dazuhängen ...
       for (const source of sources) {
 
-        if (lbtTools._threads['retrieve_current_source_hashes'] == 'cancel') {
+        if (lbtTools._threads['retrieve_current_source_hashes'] === 'cancel') {
           delete lbtTools._threads['retrieve_current_source_hashes'];
           throw Error('Operation canceled by user');
         }
@@ -986,7 +1008,7 @@ export class lbtTools {
 
   public static async transfer_project_folder(silent: boolean | undefined) {
 
-    if (lbtTools.transfer_all_status != lbtStatus.READY) {
+    if (lbtTools.transfer_all_status !== lbtStatus.READY) {
       vscode.window.showErrorMessage('Transfer is already running');
       return;
     }
@@ -1211,7 +1233,7 @@ export class lbtTools {
           const re_lib = new RegExp(`^${lib}$`);
           const re_file = new RegExp(`^${file}$`);
           const re_mbr = new RegExp(`^${mbr}$`);
-          isMatch = (src_lib.toLowerCase().match(re_lib) != null && src_file.toLowerCase().match(re_file) != null && src_mbr.toLowerCase().match(re_mbr) != null);
+          isMatch = (src_lib.toLowerCase().match(re_lib) !== null && src_file.toLowerCase().match(re_file) !== null && src_mbr.toLowerCase().match(re_mbr) !== null);
         }
         else {
           const wc_lib = wcmatch(lib);

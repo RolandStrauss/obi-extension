@@ -202,14 +202,14 @@ export class lbtSourceDependency {
     let dependency_list: {['source']: string[]} = lbtTools.get_dependency_list();
 
     // Add dependency to current source
-    if (type == 1) {
+      if (type === 1) {
       if (!dependency_list[lbtSourceDependency.source])
         {dependency_list[lbtSourceDependency.source] = [];}
       dependency_list[lbtSourceDependency.source].push(new_source);
     }
 
     // Add current source as dependency to other source
-    if (type == 2) {
+      if (type === 2) {
       if (!dependency_list[new_source])
         {dependency_list[new_source] = [];}
       dependency_list[new_source].push(lbtSourceDependency.source);
@@ -226,12 +226,12 @@ export class lbtSourceDependency {
     let key: string;
     let value: string;
 
-    if (type == 1) {
+      if (type === 1) {
       key = lbtSourceDependency.source;
       value = source;
     }
 
-    if (type == 2) {
+      if (type === 2) {
       key = source;
       value = lbtSourceDependency.source;
     }

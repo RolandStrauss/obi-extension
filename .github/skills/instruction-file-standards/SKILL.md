@@ -205,7 +205,7 @@ Before applying this instruction, verify:
 ## SQL Injection Prevention
 [500 lines of SQL injection guidance]
 
-# api-security.instructions.md
+# api-security.instructions.md  
 ## SQL Injection Prevention
 [Same 500 lines duplicated]
 ```
@@ -228,7 +228,7 @@ Additional API-specific guidance:
 ### Instruction File Hierarchy
 
 **High Priority (Specific):**
-1. Project-specific: `lancelot_built_tool.instructions.md`
+1. Project-specific: `lancelot.instructions.md`
 2. Feature-specific: `webview-parity.instructions.md`
 3. Tool-specific: `playwright-typescript.instructions.md`
 
@@ -246,7 +246,7 @@ Additional API-specific guidance:
 
 **Priority Order** (highest to lowest):
 
-1. `lancelot_built_tool.instructions.md` - Primary source for Lancelot development
+1. `lancelot.instructions.md` - Primary source for Lancelot development
 2. Domain-specific instructions (TypeScript, Security, Performance)
 3. This file - General workspace guidance only
 ```
@@ -309,7 +309,7 @@ Before committing instruction file:
 **Example Organization:**
 ```
 .github/instructions/
-├── lancelot_built_tool.instructions.md (project-specific, highest priority)
+├── lancelot.instructions.md (project-specific, highest priority)
 ├── typescript-5-es2022.instructions.md (language rules)
 ├── security-and-owasp.instructions.md (security practices)
 ├── performance-optimization.instructions.md (performance patterns)
@@ -333,7 +333,7 @@ When creating new instruction files, update the parent instruction file's list:
 ```markdown
 **Core Instructions** (reference as needed):
 
-- **Project**: `instructions/lancelot_built_tool.instructions.md`
+- **Project**: `instructions/lancelot.instructions.md`
 - **Language**: `instructions/typescript-5-es2022.instructions.md`
 - **Security**: `instructions/security-and-owasp.instructions.md`
 - **NEW**: `instructions/your-new-topic.instructions.md`
@@ -392,7 +392,7 @@ description: 'Enforce OWASP Top 10 security practices for all code'
 
 ❌ Bad: Copying 500 lines from another instruction file
 
-✅ Good:
+✅ Good: 
 ```markdown
 For security practices, see `instructions/security-and-owasp.instructions.md`.
 This file adds project-specific security configurations:

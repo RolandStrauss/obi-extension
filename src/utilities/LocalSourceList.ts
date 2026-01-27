@@ -57,7 +57,7 @@ export class LocalSourceList {
         const ext = uri.fsPath.split('.').pop() ?? '';
 
         logger.debug(`File changed: ${uri.fsPath}`);
-        if (ext == 'log')
+        if (ext === 'log')
             {return;}
 
         logger.debug(`Reload some stuff`);
@@ -68,7 +68,7 @@ export class LocalSourceList {
 
 
     public static async load_source_list(): Promise<void> {
-        if (LocalSourceList.source_loading_promise.length == 0) {
+        if (LocalSourceList.source_loading_promise.length === 0) {
             LocalSourceList.source_loading_promise.push(LocalSourceList._load_source_list());
         }
 

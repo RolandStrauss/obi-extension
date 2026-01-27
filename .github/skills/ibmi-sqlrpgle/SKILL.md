@@ -11,11 +11,11 @@ metadata:
 
 ## Overview
 
-SQLRPGLE is a key technology for the IBM i-integrated features of Lancelot. This skill teaches Copilot how to support SQLRPGLE-focused workstreams such as compile/deploy automation, release documentation, secure configuration, and telemetry. Always align SQLRPGLE guidance to the companion `instructions/ibmi-sqlrpgle.instructions.md` and the broader IBM i instructions (`instructions/ibm-i-extension-management.instructions.md` and `instructions/lancelot_built_tool.instructions.md`).
+SQLRPGLE is a key technology for the IBM i-integrated features of Lancelot. This skill teaches Copilot how to support SQLRPGLE-focused workstreams such as compile/deploy automation, release documentation, secure configuration, and telemetry. Always align SQLRPGLE guidance to the companion `instructions/ibmi-sqlrpgle.instructions.md` and the broader IBM i instructions (`instructions/ibm-i-extension-management.instructions.md` and `instructions/lancelot.instructions.md`).
 
 ## When to activate this skill
 
-- A change touches SQLRPGLE sources (`src/ibmi/`, `ibmi-scripts/`, or similar) or introduces new RPG/SQL objects.
+- A change touches SQLRPGLE sources (`src/ibmi/`, `ibmi-scripts/`, `qrpglesrc`, `qrpgleref`, or similar) or introduces new RPG/SQL objects.
 - You are defining configuration keys, documentation, or telemetry specifically for SQLRPGLE workflows (e.g., compile library, target job, SQL host, or in-flight telemetry events).
 - SQLRPGLE behavior (compilation, deployment, validation) is part of release notes, packaging, or troubleshooting workflows.
 - There is a need for secure telemetry, credential handling, or audit logging tied to SQLRPGLE automation (trackEvent instrumentation, auditing compile results, etc.).

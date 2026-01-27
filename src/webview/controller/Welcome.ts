@@ -59,7 +59,7 @@ export class Welcome implements vscode.WebviewViewProvider {
 			{
 				global_stuff: lbtTools.get_global_stuff(webviewView.webview, this._extensionUri),
 				main_java_script: getUri(webviewView.webview, this._extensionUri, ["out", "welcome.js"]),
-				workspace_exist: vscode.workspace.workspaceFolders != undefined
+				workspace_exist: vscode.workspace.workspaceFolders !== undefined
 			}
 		);
 		webviewView.webview.html = html;
@@ -88,5 +88,3 @@ export class Welcome implements vscode.WebviewViewProvider {
 
 
 }
-
-

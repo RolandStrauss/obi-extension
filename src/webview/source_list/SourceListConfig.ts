@@ -159,7 +159,7 @@ export class SourceListConfig {
     const sl: source.IQualifiedSource[] = DirTool.get_json(json_file) || [];
 
     for (let i=0; i<sl.length; i++) {
-      if (sl[i]['source-lib'] == lib && sl[i]['source-file'] == file && sl[i]['source-member'] == member) {
+      if (sl[i]['source-lib'] === lib && sl[i]['source-file'] === file && sl[i]['source-member'] === member) {
         sl.splice(i, 1);
         i--;
       }
@@ -177,7 +177,7 @@ export class SourceListConfig {
 
     // check if it already exist
     for (let i=0; i<sl.length; i++) {
-      if (sl[i]['source-lib'] == lib && sl[i]['source-file'] == file && sl[i]['source-member'] == member) {
+      if (sl[i]['source-lib'] === lib && sl[i]['source-file'] === file && sl[i]['source-member'] === member) {
         return;
       }
     }

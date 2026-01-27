@@ -22,21 +22,36 @@ Use this skill when you need to:
 
 - **Triage** an issue: categorize, assign labels, determine priority, suggest assignees
 - **Analyze** an issue: understand root cause, map impacts, identify dependencies
+- **Analyze by number**: Given issue #XXX, quickly assess problem, root cause, solution
 - **Plan** an issue: create implementation roadmap, estimate effort, break into subtasks
 - **Review** an issue: assess completeness, identify missing information, suggest improvements
+- **Resolve** an issue: close issue after implementation, document solution, confirm acceptance criteria met
 - **Update** an issue: add structured analysis, implementation plan, or triage metadata
+
+**Typical Issue Number Requests**:
+- "Analyze issue #551"
+- "What's issue #540 about?"
+- "Resolve issue #537"
+- "Close issue #551 - it's done"
+- "Triage issue #530 and estimate effort"
 
 **Do NOT use** for creating new issues from scratch — use the `github-issues` skill instead.
 
 ## Available MCP Tools
 
-| Tool | Purpose |
-|------|---------|
-| `mcp__github__get_issue` | Fetch issue details |
-| `mcp__github__update_issue` | Update issue with analysis/plan |
-| `mcp__github__add_issue_comment` | Add comments with findings |
-| `mcp__github__search_issues` | Find related/duplicate issues |
-| `mcp__github__list_issues` | List repository issues |
+| Tool | Purpose | Use When |
+|------|---------|----------|
+| `mcp_github_issue_read` | Fetch detailed issue information | Starting analysis, need current state |
+| `mcp_github_issue_write` | Update/close issue, change status | Applying triage decisions, resolving issues |
+| `mcp_github_add_issue_comment` | Add comments with findings | Sharing analysis without updating body |
+| `mcp_github_search_issues` | Find related/duplicate issues | Searching context, dependencies, blockers |
+| `mcp_github_pull_request_read` | Fetch PR details if issue links to PR | Understanding implementation status |
+
+**Key Parameters**:
+- `owner`: Repository owner (e.g., "RolandStrauss")
+- `repo`: Repository name (e.g., "Lancelot-extension")
+- `issue_number`: Issue number as integer (e.g., 551)
+- `method`: For issue_write, use "update" or "get"; for closure use "update" with `state: "closed"`
 
 ## Workflow
 
@@ -102,6 +117,114 @@ Report results to user:
 - Highlight key findings from analysis
 - Confirm issue URL and next recommended actions
 - Mention any blockers or open questions identified
+
+## Issue Analysis by Number
+
+When given an issue number (e.g., #551), follow this fast-track analysis workflow:
+
+### Quick Analysis Routine
+
+```
+Given: Issue number (e.g., #551)
+↓
+1. FETCH: mcp_github_issue_read(owner, repo, issue_number)
+2. REVIEW: Read full issue body, comments, labels, status
+3. CATEGORIZE: Identify type, priority, complexity at a glance
+4. IDENTIFY: Extract key problems, root causes, blocked dependencies
+5. ASSESS: Determine resolution pathway (documentation, code fix, config change)
+6. REPORT: Summarize findings and recommended action
+```
+
+### Analysis Template for Issue #XXX
+
+When analyzing issue #XXX, provide:
+
+1. **Issue Summary**
+   - Type: [Bug | Feature | Enhancement | Task | Documentation | Architecture]
+   - Current Status: [Open/Closed/In Progress]
+   - Priority: [Critical | High | Medium | Low]
+   - Severity: [Critical | High | Medium | Low]
+
+2. **Problem Statement**
+   - What's broken/requested?
+   - Who is affected?
+   - What's the impact?
+
+3. **Key Findings**
+   - Root cause (if bug)
+   - Dependencies identified
+   - Blockers or constraints
+   - Related issues discovered
+
+4. **Recommended Actions**
+   - Immediate next step
+   - Assignee recommendation
+   - Effort estimate
+   - Success criteria
+
+5. **Resolution Pathway**
+   - Is this a code fix, documentation update, configuration change, or architectural work?
+   - What components/files are impacted?
+   - Are there acceptance criteria that must pass?
+
+### Resolving Issues by Number
+
+When resolving an issue #XXX, use this workflow:
+
+#### Prerequisites
+- Issue is analyzed and root cause identified
+- Solution approach approved by stakeholders (if architectural)
+- Implementation plan exists (if complex)
+- All dependencies are resolved/closed
+
+#### Resolution Steps
+
+1. **Implement Solution**
+   - Write code, update docs, or modify configuration
+   - Follow acceptance criteria from issue body
+   - Include tests and security validation
+
+2. **Verify Resolution**
+   - Confirm acceptance criteria all pass
+   - Automated tests passing
+   - Code review approved (if applicable)
+   - Security audit complete (if needed)
+
+3. **Close Issue & Document**
+   ```
+   Call: mcp_github_issue_write(
+     owner: "RolandStrauss",
+     repo: "Lancelot-extension",
+     issue_number: 551,
+     method: "update",
+     state: "closed",
+     state_reason: "completed",
+     body: "[Updated body with resolution summary]"
+   )
+   ```
+
+4. **Add Resolution Comment**
+   ```
+   Call: mcp_github_add_issue_comment(
+     owner: "RolandStrauss",
+     repo: "Lancelot-extension",
+     issue_number: 551,
+     body: "## Resolution Summary\n[What was done]\n[PR/Commit references]\n[Success metrics achieved]"
+   )
+   ```
+
+5. **Reference Related Work**
+   - Link closing PR or commit: "Closes #551 via PR #XXX"
+   - Cross-reference related issues that were resolved together
+   - Update milestone if tracked
+
+#### Closure Reasons
+
+| Reason | When to Use | State |
+|--------|-----------|-------|
+| `completed` | Issue fully resolved, accepted by stakeholders | closed |
+| `not_planned` | Issue won't be addressed (design decision, out of scope, wontfix) | closed |
+| `duplicate` | Duplicate of another issue | closed |
 
 ## Triage Criteria Quick Reference
 
@@ -293,8 +416,107 @@ Full framework with templates: [references/planning-framework.md](references/pla
    - **Effort**: 4-6 hours (Small)
    - **Testing**: Mock token expiry scenarios, measure latency improvement
    - **Success Metrics**: API call latency p95 <500ms (vs current 5-10s)
-6. **Update**: Call `mcp__github__update_issue` with root cause analysis and implementation plan
+6. **Update**: Call `mcp_github_issue_write` with root cause analysis and implementation plan
 7. **Confirm**: "Root cause identified in issue #555: unnecessary token refresh on every API call. Proposed fix: cache token validity. Estimated 4-6h effort. Latency should drop to <500ms."
+
+### Example 5: Fast-Track Analysis of Issue #551
+
+**User**: "Analyze issue #551"
+
+**Action**:
+1. **FETCH**: Call `mcp_github_issue_read(owner="RolandStrauss", repo="Lancelot-extension", issue_number=551)`
+   - Retrieve current issue state, labels, comments, assignees, milestone
+2. **REVIEW**: Read issue body and recent comments
+   - Identify problem statement, reproduction steps, environment details
+   - Scan comments for additional context, debugging attempts, or decisions
+3. **CATEGORIZE**: At-a-glance classification
+   - Type: Feature/Bug/Enhancement based on language and context
+   - Priority: Assess urgency from labels, impact statement, number of affected users
+   - Complexity: Simple/Medium/Complex based on scope and dependencies
+4. **IDENTIFY Key Elements**:
+   - Root cause (if bug): What's actually wrong?
+   - Dependencies: Does this issue block other work? Is it blocked?
+   - Related issues: Find referenced issues or duplicates
+   - Hidden blockers: Missing information, unstated assumptions
+5. **ASSESS Resolution Path**:
+   - Is this a:
+     - Code fix (file list, component changes)?
+     - Documentation update (which docs)?
+     - Configuration change (which settings)?
+     - Architectural decision (design implications)?
+   - What's the acceptance criteria?
+   - Who should implement this?
+6. **REPORT Summary**:
+   ```
+   **Issue #551: [Title]**
+
+   Type: [Bug/Feature/Enhancement]
+   Priority: [High/Medium/Low]
+   Effort: [S/M/L hours]
+
+   **Problem**: [1-2 sentence summary]
+
+   **Solution**: [Proposed approach]
+
+   **Next Step**: [Immediate action]
+   ```
+
+### Example 6: Resolving Issue #551
+
+**User**: "Resolve issue #551 - the implementation is done and tests pass"
+
+**Action**:
+1. **Verify Acceptance Criteria**
+   - Fetch issue #551 again to confirm all acceptance criteria
+   - Review: Must/Should/Nice-to-have - verify Must criteria are met
+   - Check: Tests passing, code review approved, security audit complete
+
+2. **Implement Resolution Update**
+   - Prepare summary of what was done
+   - Gather PR/commit references: "Closes #551 via PR #XYZ"
+   - Document any trade-offs or deviations from original plan
+
+3. **Call Closure Tool**
+   ```
+   Call: mcp_github_issue_write(
+     owner="RolandStrauss",
+     repo="Lancelot-extension",
+     issue_number=551,
+     method="update",
+     state="closed",
+     state_reason="completed",
+     body="[Original body with ### Resolution section appended]"
+   )
+   ```
+
+4. **Post Resolution Comment**
+   ```
+   Call: mcp_github_add_issue_comment(
+     owner="RolandStrauss",
+     repo="Lancelot-extension",
+     issue_number=551,
+     body="""## ✅ Resolution Summary
+
+**What was done**:
+- [Implementation detail 1]
+- [Implementation detail 2]
+- [Testing approach]
+
+**Related PR**: #XYZ
+**Commits**: abc123 def456
+
+**Success Metrics**:
+- [Metric 1 achieved]
+- [Metric 2 achieved]
+
+All acceptance criteria passed. Issue ready for deployment."""
+   )
+   ```
+
+5. **Confirm Closure**
+   - "Issue #551 closed successfully"
+   - "All acceptance criteria verified"
+   - "Related PR #XYZ merged and deployed to staging"
 
 ## Integration with GitHub Issues Skill
 
@@ -315,11 +537,122 @@ This skill **complements** the `github-issues` skill:
 - "Triage issue #123" → `github-issue-triage`
 - "Plan how to implement issue #456" → `github-issue-triage`
 - "Review issue #789 for completeness" → `github-issue-triage`
+- "Analyze issue #551" → `github-issue-triage`
+- "Resolve issue #537" → `github-issue-triage`
+
+## Advanced Issue Analysis Workflows
+
+### Deep Dive Analysis for Complex Issues
+
+When an issue appears to have architectural implications or cross-system impacts:
+
+1. **Fetch & Scan** (2 min)
+   - Get issue details
+   - Read all comments for context, debate, alternatives considered
+   - Check linked PRs/issues for related work
+
+2. **Impact Mapping** (5-10 min)
+   - Which services are affected? (GitLab client, IBM i integration, telemetry, etc.)
+   - What configurations change?
+   - What users are impacted and how?
+   - Create mermaid diagram if complex
+
+3. **Dependency Analysis** (5-10 min)
+   - Find all related issues using search:
+     - Same feature area
+     - Same impacted service
+     - Issues that block this one
+     - Issues this one blocks
+   - Map dependency graph
+
+4. **Risk Assessment** (3-5 min)
+   - What could break if we fix this incorrectly?
+   - Security implications?
+   - Performance implications?
+   - Backward compatibility concerns?
+
+5. **Solution Exploration** (10-15 min)
+   - Propose 2-3 approaches with pros/cons
+   - Recommendation with rationale
+   - Alternative mitigation strategies
+
+6. **Effort & Resource Planning** (3-5 min)
+   - Realistic estimate with breakdown
+   - Suggest team members with relevant expertise
+   - Identify knowledge gaps needing research
+
+7. **Document & Summarize** (2-3 min)
+   - Update issue with structured analysis
+   - Post detailed comment with findings
+   - Create GitHub discussion if needed for decision debate
+
+**Total time**: 30-50 minutes for thorough deep-dive analysis
+
+### Root Cause Analysis for Bugs
+
+When analyzing bug reports, follow the diagnostic chain:
+
+```
+Problem Statement
+    ↓
+Symptom Analysis (what users see)
+    ↓
+Reproduction Steps (can we make it happen consistently?)
+    ↓
+Environment Factors (OS, version, config that matter)
+    ↓
+Code Paths (which code is executing when bug occurs?)
+    ↓
+State Analysis (what's the data state when bug happens?)
+    ↓
+Root Cause (why does this code path produce wrong result?)
+    ↓
+Solution Space (how many ways to fix this?)
+    ↓
+Recommended Fix (least risky, most maintainable)
+```
+
+Example: "Login timeout error after 10s"
+- Symptom: User sees "Connection timeout" dialog
+- Reproduction: Login via VS Code -> wait 15s -> times out
+- Environment: Affects all users, especially slow networks (>100ms latency)
+- Code: `src/authentication/authService.ts:42` calls GitLab OAuth endpoint
+- State: Network request pending, no retry or timeout handling
+- Root Cause: Hardcoded 10s timeout insufficient for slow networks
+- Solutions: (1) Increase timeout, (2) Make timeout configurable, (3) Implement adaptive timeout
+- Recommendation: Option 2 (configurable timeout, default 30s) - balances user experience with system responsiveness
+
+### Triaging Issue Backlogs
+
+When faced with many untriaged issues:
+
+1. **Quick Triage Pass** (5 sec/issue)
+   - Type? Priority? Obvious labels?
+   - Add `needs-triage` if unclear
+   - Skip complex analysis on first pass
+
+2. **Priority Sorting**
+   - Separate into buckets: Critical | High | Medium | Low | Needs More Info
+   - Critical/High issues get deep analysis immediately
+   - Medium/Low items queued for sprint planning
+   - Needs-Info issues get comment requests
+
+3. **Batch Similar Issues**
+   - Group by component/feature area
+   - Spot duplicates and consolidate
+   - Find interdependencies
+
+4. **Assign & Schedule**
+   - Critical → assign to on-call developer
+   - High → assign to relevant team during sprint planning
+   - Medium → add to backlog, revisit next sprint
+   - Low → nice-to-have, assign if capacity available
 
 ## Tips
 
-- **Always fetch first**: Use `mcp__github__get_issue` to get current state before making recommendations
-- **Search for context**: Use `mcp__github__search_issues` to find related issues, duplicates, or prior discussions
+- **Always fetch first**: Use `mcp_github_issue_read` to get current state before making recommendations
+- **Search for context**: Use `mcp_github_search_issues` to find related issues, duplicates, or prior discussions
+- **Quick number analysis**: When given issue #XXX, extract key information fast—categorize, identify blockers, recommend action
 - **Be specific with labels**: Use the full Lancelot label taxonomy, not just generic labels
 - **Estimate conservatively**: Round effort up to account for unknowns, testing, and documentation
 - **Include diagrams**: Use mermaid for logic flow, data flow, architecture when planning complex issues
@@ -327,4 +660,6 @@ This skill **complements** the `github-issues` skill:
 - **Link related work**: Always cross-reference related issues, dependencies, and blockers
 - **Consider security**: Flag DevSecOps concerns, shift-left opportunities, and compliance requirements
 - **Think holistically**: Consider impact on users, systems, CI/CD, telemetry, documentation, testing
-
+- **Verify before closing**: Always confirm all Must acceptance criteria pass before calling issue closed
+- **Document resolution**: Leave a comment explaining what was done, PR/commit refs, and success metrics
+- **Use closure reasons**: Set `state_reason` to "completed"/"not_planned"/"duplicate" for clarity

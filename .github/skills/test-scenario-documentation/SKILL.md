@@ -515,6 +515,6 @@ Before submitting test scenarios document:
 
 ## References
 
-- Lancelot Instructions: `.github/instructions/lancelot_built_tool.instructions.md` (Rule #68)
+- Lancelot Instructions: `.github/instructions/lancelot.instructions.md` (Rule #68)
 - Test Framework: Mocha/Chai (see `test/` directory)
 - VS Code Testing: https://code.visualstudio.com/api/working-with-extensions/testing-extension

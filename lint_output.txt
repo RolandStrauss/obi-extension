@@ -1,0 +1,117 @@
+
+> lbt@0.7.0 lint
+> eslint src --ext ts
+
+
+C:\Roland_Batcave\Repos\GitHub\ldm-extension\src\lbt\LBTCommands.ts
+  140:30  warning  Expected '===' and instead saw '=='  eqeqeq
+  163:30  warning  Expected '===' and instead saw '=='  eqeqeq
+  286:38  warning  Expected '!==' and instead saw '!='  eqeqeq
+
+C:\Roland_Batcave\Repos\GitHub\ldm-extension\src\utilities\LBTTools.ts
+   150:49   warning  Expected '===' and instead saw '=='  eqeqeq
+   163:26   warning  Expected '===' and instead saw '=='  eqeqeq
+   314:46   warning  Expected '!==' and instead saw '!='  eqeqeq
+   414:88   warning  Expected '===' and instead saw '=='  eqeqeq
+   474:45   warning  Expected '===' and instead saw '=='  eqeqeq
+   498:17   warning  Expected '===' and instead saw '=='  eqeqeq
+   505:13   warning  Expected '===' and instead saw '=='  eqeqeq
+   507:47   warning  Expected '===' and instead saw '=='  eqeqeq
+   509:42   warning  Expected '===' and instead saw '=='  eqeqeq
+   563:58   warning  Expected '===' and instead saw '=='  eqeqeq
+   614:29   warning  Expected '!==' and instead saw '!='  eqeqeq
+   640:29   warning  Expected '!==' and instead saw '!='  eqeqeq
+   885:40   warning  Expected '===' and instead saw '=='  eqeqeq
+   933:65   warning  Expected '===' and instead saw '=='  eqeqeq
+   989:38   warning  Expected '!==' and instead saw '!='  eqeqeq
+  1214:58   warning  Expected '!==' and instead saw '!='  eqeqeq
+  1214:107  warning  Expected '!==' and instead saw '!='  eqeqeq
+  1214:154  warning  Expected '!==' and instead saw '!='  eqeqeq
+
+C:\Roland_Batcave\Repos\GitHub\ldm-extension\src\utilities\LocalSourceList.ts
+  60:17  warning  Expected '===' and instead saw '=='  eqeqeq
+  71:59  warning  Expected '===' and instead saw '=='  eqeqeq
+
+C:\Roland_Batcave\Repos\GitHub\ldm-extension\src\utilities\SSH_Tasks.ts
+  308:32  warning  Expected '===' and instead saw '=='  eqeqeq
+
+C:\Roland_Batcave\Repos\GitHub\ldm-extension\src\webview\controller\AppConfig.ts
+  144:81   warning  Expected '===' and instead saw '=='  eqeqeq
+  401:32   warning  Expected '===' and instead saw '=='  eqeqeq
+  415:82   warning  Expected '!==' and instead saw '!='  eqeqeq
+  415:118  warning  Expected '!==' and instead saw '!='  eqeqeq
+
+C:\Roland_Batcave\Repos\GitHub\ldm-extension\src\webview\controller\ConfigInvalid.ts
+  53:43  warning  Expected '===' and instead saw '=='  eqeqeq
+
+C:\Roland_Batcave\Repos\GitHub\ldm-extension\src\webview\controller\LBTSourceDependency.ts
+  205:14  warning  Expected '===' and instead saw '=='  eqeqeq
+  212:14  warning  Expected '===' and instead saw '=='  eqeqeq
+  229:14  warning  Expected '===' and instead saw '=='  eqeqeq
+  234:14  warning  Expected '===' and instead saw '=='  eqeqeq
+
+C:\Roland_Batcave\Repos\GitHub\ldm-extension\src\webview\controller\Welcome.ts
+  62:56  warning  Expected '!==' and instead saw '!='  eqeqeq
+
+C:\Roland_Batcave\Repos\GitHub\ldm-extension\src\webview\controller\javascript\config.ts
+  450:34  warning  Expected '!==' and instead saw '!='  eqeqeq
+  481:33  warning  Expected '===' and instead saw '=='  eqeqeq
+  500:33  warning  Expected '===' and instead saw '=='  eqeqeq
+  514:25  warning  Expected '===' and instead saw '=='  eqeqeq
+  535:66  warning  Expected '===' and instead saw '=='  eqeqeq
+  657:27  warning  Expected '===' and instead saw '=='  eqeqeq
+  657:46  warning  Expected '===' and instead saw '=='  eqeqeq
+  662:46  warning  Expected '===' and instead saw '=='  eqeqeq
+  680:35  warning  Expected '===' and instead saw '=='  eqeqeq
+  696:35  warning  Expected '===' and instead saw '=='  eqeqeq
+
+C:\Roland_Batcave\Repos\GitHub\ldm-extension\src\webview\controller\javascript\controller.ts
+   83:22  warning  Expected '===' and instead saw '=='  eqeqeq
+  101:22  warning  Expected '===' and instead saw '=='  eqeqeq
+  152:55  warning  Expected '===' and instead saw '=='  eqeqeq
+
+C:\Roland_Batcave\Repos\GitHub\ldm-extension\src\webview\controller\lbtController.ts
+  205:43  warning  Expected '===' and instead saw '=='  eqeqeq
+
+C:\Roland_Batcave\Repos\GitHub\ldm-extension\src\webview\deployment\I_Releaser.ts
+  72:56  warning  Expected '!==' and instead saw '!='  eqeqeq
+
+C:\Roland_Batcave\Repos\GitHub\ldm-extension\src\webview\quick_settings\QuickSettings.ts
+  64:43  warning  Expected '===' and instead saw '=='  eqeqeq
+
+C:\Roland_Batcave\Repos\GitHub\ldm-extension\src\webview\show_changes\LogOutput.ts
+  109:17  warning  Expected '!==' and instead saw '!='  eqeqeq
+  114:32  warning  Expected '!==' and instead saw '!='  eqeqeq
+
+C:\Roland_Batcave\Repos\GitHub\ldm-extension\src\webview\source_list\SourceListConfig.ts
+  162:31  warning  Expected '===' and instead saw '=='  eqeqeq
+  162:62  warning  Expected '===' and instead saw '=='  eqeqeq
+  162:96  warning  Expected '===' and instead saw '=='  eqeqeq
+  180:31  warning  Expected '===' and instead saw '=='  eqeqeq
+  180:62  warning  Expected '===' and instead saw '=='  eqeqeq
+  180:96  warning  Expected '===' and instead saw '=='  eqeqeq
+
+C:\Roland_Batcave\Repos\GitHub\ldm-extension\src\webview\source_list\SourceListProvider.ts
+  307:52   warning  Expected '!==' and instead saw '!='  eqeqeq
+  392:78   warning  Expected '===' and instead saw '=='  eqeqeq
+  431:30   warning  Expected '===' and instead saw '=='  eqeqeq
+  463:60   warning  Expected '!==' and instead saw '!='  eqeqeq
+  463:101  warning  Expected '!==' and instead saw '!='  eqeqeq
+  466:15   warning  Expected '===' and instead saw '=='  eqeqeq
+  541:62   warning  Expected '===' and instead saw '=='  eqeqeq
+  544:20   warning  Expected '===' and instead saw '=='  eqeqeq
+  557:20   warning  Expected '!==' and instead saw '!='  eqeqeq
+
+C:\Roland_Batcave\Repos\GitHub\ldm-extension\src\webview\source_list\javascript\source_dependency.ts
+  90:21  warning  Expected '===' and instead saw '=='  eqeqeq
+
+C:\Roland_Batcave\Repos\GitHub\ldm-extension\src\webview\source_list\javascript\source_list_config.ts
+   81:21  warning  Expected '===' and instead saw '=='  eqeqeq
+   83:22  warning  Expected '===' and instead saw '=='  eqeqeq
+   85:24  warning  Expected '===' and instead saw '=='  eqeqeq
+  121:19  warning  Expected '===' and instead saw '=='  eqeqeq
+  123:20  warning  Expected '===' and instead saw '=='  eqeqeq
+  125:22  warning  Expected '===' and instead saw '=='  eqeqeq
+
+Γ£û 74 problems (0 errors, 74 warnings)
+

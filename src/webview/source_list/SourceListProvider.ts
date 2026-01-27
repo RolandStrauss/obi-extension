@@ -36,7 +36,7 @@ export class SourceListProvider implements vscode.TreeDataProvider<SourceListIte
 
   getTreeItem(element: SourceListItem): vscode.TreeItem {
 
-    if (element.list_level != 'source-member')
+    if (element.list_level !== 'source-member')
       {return element;}
 
     return element;
@@ -107,15 +107,15 @@ export class SourceListProvider implements vscode.TreeDataProvider<SourceListIte
 
     const sources: source.IQualifiedSource[] | undefined = await SourceListProvider.source_lists[element['source_list']];
 
-    if (element.list_level == 'source-list') {
+    if (element.list_level === 'source-list') {
       level = 'source-lib';
     }
-    if (element.list_level == 'source-lib') {
+    if (element.list_level === 'source-lib') {
       level = 'source-file';
       lib = element.label;
       collapsibleState = vscode.TreeItemCollapsibleState.Collapsed;
     }
-    if (element.list_level == 'source-file') {
+    if (element.list_level === 'source-file') {
       level = 'source-member';
       lib = element.src_lib;
       file = element.label;
@@ -127,8 +127,8 @@ export class SourceListProvider implements vscode.TreeDataProvider<SourceListIte
     // Read each source list entry
     for (const entry of content_list) {
 
-      if (level == 'source-member') {
-        if (entry['source-member'] == '') {
+      if (level === 'source-member') {
+        if (entry['source-member'] === '') {
           continue;
         }
         description = entry['description'] || undefined;
@@ -153,7 +153,7 @@ export class SourceListProvider implements vscode.TreeDataProvider<SourceListIte
   async add_new_source_filter(): Promise<string|undefined> {
 
     const source_list: string | undefined = await vscode.window.showInputBox({ title: `Name of source filter`, placeHolder: "source filter name", validateInput(value) {
-      if (value.replace(/[\/|\\:*?"<>]/g, " ") != value)
+      if (value.replace(/[\/|\\:*?"<>]/g, " ") !== value)
         {return "Not allowed characters: \\, /, |, :, *, ?, \", <, >";}
       return null;
     },});
@@ -175,7 +175,7 @@ export class SourceListProvider implements vscode.TreeDataProvider<SourceListIte
     const app_config = AppConfig.get_app_config();
 
     const source_file_folder: string | undefined = await vscode.window.showInputBox({ title: `Name of source folder for ${item.src_lib}`, placeHolder: "qrpglesrc", validateInput(value) {
-      if (value.replace(/[\/|\\:*?"<>]/g, " ") != value)
+      if (value.replace(/[\/|\\:*?"<>]/g, " ") !== value)
         {return "Not allowed characters: \\, /, |, :, *, ?, \", <, >";}
       return null;
     },});
@@ -205,7 +205,7 @@ export class SourceListProvider implements vscode.TreeDataProvider<SourceListIte
       { title: `Name of source member for ${item.src_lib}/${item.label}`,
         placeHolder: "source member name",
         validateInput(value) {
-          if (value.replace(/[\/|\\:*?"<>]/g, " ") != value)
+          if (value.replace(/[\/|\\:*?"<>]/g, " ") !== value)
             {return "Not allowed characters: \\, /, |, :, *, ?, \", <, >";}
           const ext = path.extname(value).replace('.', '').toLowerCase();
           if (app_config.general['supported-object-types'] && !app_config.general['supported-object-types'].includes(ext)) {
@@ -304,7 +304,7 @@ export class SourceListProvider implements vscode.TreeDataProvider<SourceListIte
       title: `Rename source member for ${item.src_member}`,
       value: item.src_member,
       validateInput(value) {
-          if (value.replace(/[\/|\\:*?"<>]/g, " ") != value)
+          if (value.replace(/[\/|\\:*?"<>]/g, " ") !== value)
             {return "Not allowed characters: \\, /, |, :, *, ?, \", <, >";}
           const ext = path.extname(value).replace('.', '').toLowerCase();
           if (app_config.general['supported-object-types'] && !app_config.general['supported-object-types'].includes(ext)) {
@@ -389,7 +389,7 @@ export class SourceListProvider implements vscode.TreeDataProvider<SourceListIte
 
     vscode.commands.registerCommand('lbt.source-filter.delete-config', async (item: SourceListItem) => {
 
-      if (SourceListConfig.currentPanel && SourceListConfig.source_list_file == item.source_list)
+      if (SourceListConfig.currentPanel && SourceListConfig.source_list_file === item.source_list)
         {SourceListConfig.currentPanel.dispose();}
       const ws = Workspace.get_workspace();
       fs.rmSync(path.join(ws || '', Constants.SOURCE_FILTER_FOLDER_NAME, item.source_list));
@@ -428,7 +428,7 @@ export class SourceListProvider implements vscode.TreeDataProvider<SourceListIte
     // setup: events
     tree.onDidChangeSelection(e => {
       logger.info(`onDidChangeSelection: ${e}`); // breakpoint here for debug
-      if (e.selection.length == 0)
+      if (e.selection.length === 0)
         {return;}
       logger.info(e); // breakpoint here for debug
     });
@@ -460,10 +460,10 @@ export class SourceListProvider implements vscode.TreeDataProvider<SourceListIte
       const value = element[key];
       item = {};
       item[key] = value;
-      if (result.some(e => e[key] === value) || lib && lib != element['source-lib'] || file && file != element['source-file'])
+      if (result.some(e => e[key] === value) || lib && lib !== element['source-lib'] || file && file !== element['source-file'])
         {continue;}
 
-      if (key == 'source-member')
+      if (key === 'source-member')
         {item['description'] = element.description;}
 
       item[key] = element[key];
@@ -538,10 +538,10 @@ export class SourceListItem extends vscode.TreeItem {
       ws = vscode.workspace.workspaceFolders[0].uri.fsPath
     }
 
-    if (['source-member', 'source_list'].indexOf(list_level) == -1)
+    if (['source-member', 'source_list'].indexOf(list_level) === -1)
       {return;}
 
-    if (list_level == 'source-member') {
+    if (list_level === 'source-member') {
       this.member_path_lbt = lbtTools.convert_local_filepath_2_lbt_filepath(path.join(this.src_lib || '', this.src_file || ''));
       this.member_path = path.join(AppConfig.get_app_config().general['source-dir']||'src', this.member_path_lbt);
       member_file_path = path.join(this.member_path, this.src_member || '');
@@ -554,7 +554,7 @@ export class SourceListItem extends vscode.TreeItem {
       dark: vscode.Uri.file(path.join(__filename, '..', '..', '..', '..', 'asserts', 'img', 'dark', icon))
     };
 
-    if (list_level != 'source-member')
+    if (list_level !== 'source-member')
       {return;}
 
     this.contextValue = 'lbt-source';

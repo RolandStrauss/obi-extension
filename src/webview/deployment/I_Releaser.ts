@@ -69,7 +69,7 @@ export class I_Releaser implements vscode.WebviewViewProvider {
       {
         global_stuff: lbtTools.get_global_stuff(webviewView.webview, this._extensionUri),
 				main_java_script: getUri(webviewView.webview, this._extensionUri, ["out", "i_releaser.js"]),
-				workspace_exist: vscode.workspace.workspaceFolders != undefined,
+				workspace_exist: vscode.workspace.workspaceFolders !== undefined,
 				config: DeploymentConfig.DeploymentConfig.get_deployment_config(),
 				workflows: await I_Releaser.get_workflows()
       }

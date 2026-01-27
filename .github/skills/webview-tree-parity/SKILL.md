@@ -76,19 +76,19 @@ export interface IUiSyncService {
      * @returns Promise resolving to array of items
      */
     getItems(): Promise<ISelectableItem[]>;
-
+    
     /**
      * Select an item in either view
      * @param id - Unique identifier of item to select
      */
     selectItem(id: string): Promise<void>;
-
+    
     /**
      * Get currently selected item
      * @returns Currently selected item or null
      */
     getSelectedItem(): ISelectableItem | null;
-
+    
     /**
      * Subscribe to item changes
      * @param callback - Called when items change
@@ -108,7 +108,7 @@ import { IUiSyncService, ISelectableItem } from './uiShared';
 export class ProjectService implements IUiSyncService {
     private selectedItemId: string | null = null;
     private changeEmitter = new vscode.EventEmitter<ISelectableItem[]>();
-
+    
     async getItems(): Promise<ISelectableItem[]> {
         // Single source of truth for data
         const projects = await this.fetchProjects();
@@ -120,22 +120,22 @@ export class ProjectService implements IUiSyncService {
             metadata: { url: p.webUrl }
         }));
     }
-
+    
     async selectItem(id: string): Promise<void> {
         // Single selection logic
         this.selectedItemId = id;
         await this.handleSelection(id);
-
+        
         // Notify both views
         const items = await this.getItems();
         this.changeEmitter.fire(items);
     }
-
+    
     getSelectedItem(): ISelectableItem | null {
         // Single source of selected state
         return this.items.find(i => i.id === this.selectedItemId) || null;
     }
-
+    
     onDidChange(callback: (items: ISelectableItem[]) => void): vscode.Disposable {
         return this.changeEmitter.event(callback);
     }
@@ -156,13 +156,13 @@ export class ProjectsWebview {
             this.updateWebviewContent(items);
         });
     }
-
+    
     async initialize() {
         // Get items from shared service
         const items = await this.projectService.getItems();
         this.renderItems(items);
     }
-
+    
     private renderItems(items: ISelectableItem[]) {
         // Webview-specific rendering
         const html = `
@@ -177,7 +177,7 @@ export class ProjectsWebview {
         `;
         this.panel.webview.html = html;
     }
-
+    
     private async handleMessage(message: any) {
         if (message.command === 'selectItem') {
             // Use shared service
@@ -197,18 +197,18 @@ import { ProjectService } from '../../core/projectService';
 export class ProjectsTreeProvider implements vscode.TreeDataProvider<ProjectTreeItem> {
     private _onDidChangeTreeData = new vscode.EventEmitter<void>();
     readonly onDidChangeTreeData = this._onDidChangeTreeData.event;
-
+    
     constructor(private projectService: ProjectService) {
         // Subscribe to changes from shared service
         this.projectService.onDidChange(() => {
             this._onDidChangeTreeData.fire();
         });
     }
-
+    
     async getChildren(): Promise<ProjectTreeItem[]> {
         // Get items from shared service
         const items = await this.projectService.getItems();
-
+        
         // TreeView-specific rendering
         return items.map(item => new ProjectTreeItem(
             item.label,
@@ -217,7 +217,7 @@ export class ProjectsTreeProvider implements vscode.TreeDataProvider<ProjectTree
             item.id
         ));
     }
-
+    
     async selectItem(item: ProjectTreeItem) {
         // Use shared service
         await this.projectService.selectItem(item.id);
@@ -235,7 +235,7 @@ Add new capability to shared interface:
 // src/core/uiShared.ts
 export interface IUiSyncService {
     // ... existing methods
-
+    
     /**
      * Filter items by search term
      * @param searchTerm - Text to search for
@@ -251,10 +251,10 @@ export interface IUiSyncService {
 // src/core/projectService.ts
 async filterItems(searchTerm: string): Promise<ISelectableItem[]> {
     const allItems = await this.getItems();
-
+    
     if (!searchTerm) return allItems;
-
-    return allItems.filter(item =>
+    
+    return allItems.filter(item => 
         item.label.toLowerCase().includes(searchTerm.toLowerCase()) ||
         item.description?.toLowerCase().includes(searchTerm.toLowerCase())
     );
@@ -267,15 +267,15 @@ async filterItems(searchTerm: string): Promise<ISelectableItem[]> {
 // src/ui/webview/projectsWebview.ts
 private addSearchBox() {
     const html = `
-        <input
-            type="text"
+        <input 
+            type="text" 
             id="search"
             placeholder="Search projects..."
             oninput="handleSearch(this.value)"
         />
         <div id="results"></div>
     `;
-
+    
     this.panel.webview.html = html;
 }
 
@@ -293,12 +293,12 @@ private async handleMessage(message: any) {
 // src/ui/treeview/projectsTreeView.ts
 export class ProjectsTreeProvider {
     private searchTerm: string = '';
-
+    
     setSearchTerm(term: string) {
         this.searchTerm = term;
         this._onDidChangeTreeData.fire();
     }
-
+    
     async getChildren(): Promise<ProjectTreeItem[]> {
         // Use shared service with filter
         const items = await this.projectService.filterItems(this.searchTerm);
@@ -492,6 +492,6 @@ Both views use `src/core/uiShared.ts` interfaces:
 
 ## References
 
-- Lancelot Instructions: `.github/instructions/lancelot_built_tool.instructions.md` (Webview and Tree View Feature Parity section)
+- Lancelot Instructions: `.github/instructions/lancelot.instructions.md` (Webview and Tree View Feature Parity section)
 - Architecture Documentation: `docs/architecture/ui-architecture.md`
 - Shared Service Pattern: `src/core/uiShared.ts`
