@@ -1,11 +1,16 @@
 // Place your settings in this file to overwrite default and user settings.
 {
-	"files.exclude": {
-		"out": false // set this to true to hide the "out" folder with the compiled JS files
-	},
-	"search.exclude": {
-		"out": true // set this to false to include "out" folder in search results
-	},
-	// Turn off tsc task auto detection since we have the necessary tasks as npm scripts
-	"typescript.tsc.autoDetect": "off"
+  "files.exclude": {
+    "out": false // set this to true to hide the "out" folder with the compiled JS files
+  },
+  "search.exclude": {
+    "out": true // set this to false to include "out" folder in search results
+  },
+  // Turn off tsc task auto detection since we have the necessary tasks as npm scripts
+  "typescript.tsc.autoDetect": "off",
+  // Lancelot Git Status - documentation link for Git installation guide
+  // Set this to your organization's Git installation guide (e.g., Software Center, internal wiki, etc.)
+  // When Git is not found, users will see a link to this URL for help
+  // Users can override this in their personal user settings.json if needed
+  "ldm.docs.gitInstallUrl": "https://mmiholdingsltd.sharepoint.com/:w:/s/ProjectLancelot/<doc-id>"
 }

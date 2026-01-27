@@ -16,14 +16,14 @@
   ],
   "author": {
     "name": "Roland Strauss",
-    "url": "https://www.prouza.at"
+    "url": "https://www.momentum.co.za"
   },
   "license": "MIT",
   "repository": {
     "url": "https://github.com/RolandStrauss/lbt-extension"
   },
   "engines": {
-    "vscode": ">=1.80.0 <2.0.0",
+    "vscode": ">=1.100.0 <2.0.0",
     "node": "^20 || ^22 || ^24"
   },
   "categories": [
@@ -38,6 +38,11 @@
   ],
   "contributes": {
     "commands": [
+      {
+        "command": "ldm.tools.checkGit",
+        "title": "Lancelot: Check Git",
+        "category": "Lancelot"
+      },
       {
         "command": "ldm.show_changes",
         "title": "%ldm.show_changes%",
@@ -419,6 +424,26 @@
           "when": "ldm.contains_ldm_project && !ldm.valid-config"
         }
       ]
+    },
+    "configuration": {
+      "title": "Lancelot",
+      "properties": {
+        "ldm.gitStatus.showWhenAvailable": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show the Git status item even when Git is available. If disabled, the item only appears when Git is missing."
+        },
+        "ldm.gitStatus.refreshOnWindowFocus": {
+          "type": "boolean",
+          "default": true,
+          "description": "Refresh the Git status when the VS Code window gains focus."
+        },
+        "ldm.docs.gitInstallUrl": {
+          "type": "string",
+          "default": "",
+          "description": "URL of the internal guide that shows how to install Git from Software Center (SharePoint/Confluence link)."
+        }
+      }
     }
   },
   "scripts": {
@@ -432,7 +457,7 @@
   },
   "devDependencies": {
     "@types/node": "^20",
-    "@types/vscode": "^1.80.0",
+    "@types/vscode": "^1.100.0",
     "@types/vscode-webview": "^1.57.5",
     "@typescript-eslint/eslint-plugin": "^8",
     "@typescript-eslint/parser": "^8",

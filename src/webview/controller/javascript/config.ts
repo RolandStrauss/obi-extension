@@ -9,6 +9,9 @@ import { showAlert } from "../../tools/javascript/alertBox";
 
 const deepmerge = require('deepmerge');
 
+// jQuery is loaded globally via the HTML template
+declare const $: any;
+
 // In order to use all the Webview UI Toolkit web components they
 // must be registered with the browser (i.e. webview) using the
 // syntax below.
@@ -124,7 +127,7 @@ function main() {
 
     if (app_elements[i].getAttribute('regex_validator'))
       {app_elements[i]?.addEventListener('change', () => {
-        vaidate(app_elements[i] as HTMLInputElement);
+        validate(app_elements[i] as HTMLInputElement);
       });}
 
     if (!app_elements[i]?.classList.contains('mandatory'))
@@ -378,7 +381,7 @@ function add_language_settings(class_prefix: string, language: string) {
 
 
 
-function vaidate (element: HTMLInputElement): void {
+function validate (element: HTMLInputElement): void {
 
   const attr: string|null = element.getAttribute('regex_validator');
   const hint = (document.getElementById(`hint_${element.id}`) as HTMLLabelElement);

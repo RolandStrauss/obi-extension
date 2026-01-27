@@ -1,5 +1,8 @@
 import * as path from 'path';
 import * as vscode from 'vscode';
+import { findGit } from './platform/gitDetection';
+import { handleMissingGit } from './platform/gitInstallPrompt';
+import { registerGitStatusBar } from './ui/gitStatusBar';
 import { BuildSummary } from './webview/show_changes/BuildSummary';
 import { lbtController } from './webview/controller/lbtController';
 import { SourceListItem, SourceListProvider } from './webview/source_list/SourceListProvider';
@@ -25,6 +28,28 @@ import { BuildHistoryProvider } from './webview/build_history/BuildHistoryProvid
 
 export function activate(context: vscode.ExtensionContext) {
 
+  // Non-blocking Git check (don't slow down activation)
+  (async () => {
+    const suppressKey = 'lbt.gitCheck.suppress';
+    if (context.globalState.get<boolean>(suppressKey)) {
+      return;
+    }
+
+    const gitPath = await findGit();
+    if (!gitPath) {
+      const choice = await vscode.window.showWarningMessage(
+        'Git is required for Lancelot workflows, but it was not found.',
+        'Fix it now',
+        "Don't ask again"
+      );
+      if (choice === 'Fix it now') {
+        await handleMissingGit();
+      } else if (choice === "Don't ask again") {
+        await context.globalState.update(suppressKey, true);
+      }
+    }
+  })();
+
   logger.info('Congratulations, your extension "lbt" is now active!');
   const rootPath =
     vscode.workspace.workspaceFolders && vscode.workspace.workspaceFolders.length > 0
@@ -48,6 +73,9 @@ export function activate(context: vscode.ExtensionContext) {
 
   // Add support for multi language
   LocaleText.init(vscode.env.language, context);
+
+  // Register the Git Status Bar
+  registerGitStatusBar(context);
 
   //const fileUri = vscode.Uri.file('/home/andreas/projekte/opensource/extensions/lbt/README.md');
   //vscode.commands.executeCommand('vscode.open', fileUri);
@@ -306,5 +334,6 @@ export function activate(context: vscode.ExtensionContext) {
   });
 
   LocalSourceList.load_source_list();
-
 }
+
+export function deactivate() {}
