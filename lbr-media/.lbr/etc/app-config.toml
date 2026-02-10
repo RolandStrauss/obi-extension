@@ -7,7 +7,7 @@ local-base-dir = "."
 source-dir = "src"
 check-remote-source-on-startup = false
 use-remote-lbr = false
-#remote-lbr-dir = "/home/prouzat1/lbr"
+#remote-lbr-dir = "/home/lancelott1/lbr"
 supported-object-types = [ "pgm", "file", "srvpgm", "obj", "cpy" ]
 file-system-encoding = "utf-8"
 console-output-encoding = "utf-8"
@@ -31,13 +31,13 @@ TGTCCSID = "*JOB"
 STGMDL = "*SNGLVL"
 ACTGRP = "*CALLER"
 LIBL = [ "$(TARGET_LIB)", "QGPL" ]
-#INCLUDE_BNDDIR = "prouzadir"
+#INCLUDE_BNDDIR = "lancelotdir"
 INCDIR_RPGLE = "'./src'"
 INCDIR_SQLRPGLE = "''./src'' ''./src''"
 
 [global.settings.general.TARGET_LIB_MAPPING]
-#prouzalib = "prouzat1"
-#prouzalib2 = "prouzat2"
+#tobjlib = "lancelott1"
+#tobjlib2 = "lancelott2"
 
 [global.settings.language]
 [global.settings.language."sqlrpgle.srvpgm"]

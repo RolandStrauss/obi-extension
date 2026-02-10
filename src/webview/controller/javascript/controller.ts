@@ -26,23 +26,23 @@ function main() {
 
   const run_build_button = document.getElementById("run_build") as Button;
   run_build_button?.addEventListener("click", run_build);
-  
+
   const show_changes_button = document.getElementById("show_changes") as Button;
   show_changes_button?.addEventListener("click", show_changes);
-    
+
   const cancel_running_button = document.getElementById("cancel_running") as Button;
   cancel_running_button?.addEventListener("click", cancel_running);
-  
+
   const delete_current_profile_button = document.getElementById("btn_delete_current_profile") as Button;
   delete_current_profile_button?.addEventListener("click", delete_current_profile);
-  
+
   const copy_profile_button = document.getElementById("btn_copy_profile") as Button;
   copy_profile_button?.addEventListener("click", copy_profile);
-  
+
   const drp_use_profile = document.getElementById("drp_use_profile") as Button;
   drp_use_profile?.addEventListener("change", change_profile);
-  
-  const previousState = vscode.getState();
+
+  const previousState: any = vscode.getState();
   if (previousState && previousState.selected_profile) {
     drp_use_profile.value = previousState.selected_profile;
   }
@@ -56,7 +56,7 @@ function change_profile(event: Event) {
 
   const value = (event.target as HTMLSelectElement).value || "";
   console.log(`Profile changed to ${value}`);
-  
+
   vscode.setState({ selected_profile: value });
 
   vscode.postMessage({
@@ -79,7 +79,7 @@ function run_build() {
 
   if (run_build_ring)
     run_build_ring.style.display='flex';
-  
+
   if (get_run_type() == "all") {
     command = 'run_build';
   }
@@ -97,7 +97,7 @@ function show_changes() {
   const running_ring = document.getElementById("running_ring");
   if (running_ring)
     running_ring.style.display='flex';
-  
+
   if (get_run_type() == "all") {
     command = 'show_changes';
   }
@@ -165,10 +165,8 @@ function receive_message(e: MessageEvent) {
     case 'update_current_profile':
       const drp_use_profile = document.getElementById("drp_use_profile") as HTMLSelectElement;
       drp_use_profile.value = e.data.current_profile;
-      
+
       vscode.setState({ selectedVal: e.data.current_profile });
       break;
   }
 }
-
-

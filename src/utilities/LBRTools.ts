@@ -26,7 +26,7 @@ export class LBRTools {
   public static check_remote_sources_status: LBRStatus = LBRStatus.READY;
   public static transfer_all_status: LBRStatus = LBRStatus.READY;
 
-  private static _dependency_list: { ['source']: string[] }|undefined = undefined;
+  private static _dependency_list: Record<string, string[]> | undefined = undefined;
   private static _last_loading_time: number = 0;
 
   private static _threads: {[key: string]: string} = {};
@@ -136,7 +136,7 @@ export class LBRTools {
 
     LBRTools.ext_context.workspaceState.update('lbr.version', current_version);
 
-    const content: {['source']: string[]}  = LBRTools.get_dependency_list();
+    const content: Record<string, string[]> = LBRTools.get_dependency_list();
     if (!content || Object.keys(content).length === 0) {
       vscode.window.showWarningMessage('Missing source dependencies');
     }
@@ -680,7 +680,7 @@ export class LBRTools {
 
 
 
-  public static get_dependency_list(): { ['source']: string[] } {
+  public static get_dependency_list(): Record<string, string[]> {
 
     if (this._dependency_list && this._last_loading_time > (Date.now() - 10000)) { // Reuse if only 2 seconds old
       return this._dependency_list;
@@ -695,7 +695,7 @@ export class LBRTools {
 
 
 
-  public static save_dependency_list(dependency_list: { ['source']: string[] }): void {
+  public static save_dependency_list(dependency_list: Record<string, string[]>): void {
 
     const config = AppConfig.get_app_config();
     DirTool.write_json(path.join(Workspace.get_workspace(), config.general['dependency-list']), dependency_list);
@@ -710,7 +710,7 @@ export class LBRTools {
 
     const all_sources: string[] = Object.assign([], changed_sources['changed-sources'], changed_sources['new-objects']);
 
-    const dependency_list: { ['source']: string[] } = LBRTools.get_dependency_list();
+    const dependency_list: Record<string, string[]> = LBRTools.get_dependency_list();
     for (const [k, v] of Object.entries(dependency_list)) {
       for (let i = 0; i < all_sources.length; i++) {
         if (v.includes(all_sources[i]) && !all_sources.includes(k) && !dependend_sources.includes(k)) {
@@ -727,7 +727,7 @@ export class LBRTools {
 
   public static add_all_dependend_sources(dependend_sources: string[], source: string): string[] {
 
-    const dependency_list: { ['source']: string[] } = LBRTools.get_dependency_list();
+    const dependency_list: Record<string, string[]> = LBRTools.get_dependency_list();
 
     for (const [k, v] of Object.entries(dependency_list)) {
       if (v.includes(source) && source !== k && !dependend_sources.includes(k)) {
@@ -735,6 +735,7 @@ export class LBRTools {
         LBRTools.add_all_dependend_sources(dependend_sources, k);
       }
     }
+    return dependend_sources;
   }
 
 
@@ -1121,7 +1122,7 @@ export class LBRTools {
   }
 
 
-  public static update_source_infos(source_path: String, source_member: String, description: String): void {
+  public static update_source_infos(source_path: string, source_member: string, description: string): void {
 
     const config: AppConfig = AppConfig.get_app_config();
 
@@ -1219,7 +1220,7 @@ export class LBRTools {
           isMatch = wc_lib(src_lib.toLowerCase()) && wc_file(src_file.toLowerCase()) && wc_mbr(src_mbr.toLowerCase());
         }
         if (isMatch)
-          filtered_sources.push({ "source-lib": src_lib, "source-file": src_file, "source-member": src_mbr});
+          filtered_sources.push({ "source-lib": src_lib, "source-file": src_file, "source-member": src_mbr, "use-regex": source_filter['use-regex'] || false, "show-empty-folders": source_filter['show-empty-folders'] || false});
       }
     }
 

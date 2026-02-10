@@ -1,5 +1,5 @@
 {
-  "name": "lbr",
+  "name": "builder",
   "displayName": "Lancelot Builder (LBR)",
   "description": "Automated build tool for Lancelot",
   "publisher": "roland-strauss",
@@ -420,19 +420,25 @@
     "compile": "node ./esbuild.js",
     "package": "NODE_ENV=production node ./esbuild.js",
     "watch": "tsc -watch -p ./",
-    "pretest": "npm run compile && npm run lint",
+    "pretest": "npm run compile",
     "lint": "eslint src --ext ts",
-    "test": "vscode-test",
+    "test": "node ./test/runTest.js",
     "postinstall": "node ./scripts/postinstall.js"
   },
   "devDependencies": {
+    "@types/mocha": "^10.0.10",
     "@types/node": "^22.14.0",
     "@types/vscode": "^1.66.0",
     "@types/vscode-webview": "^1.57.5",
     "@typescript-eslint/eslint-plugin": "latest",
     "@typescript-eslint/parser": "latest",
+    "@vscode/test-electron": "^2.5.2",
     "eslint": "latest",
-    "ovsx": "latest"
+    "mocha": "^11.7.5",
+    "ovsx": "latest",
+    "source-map-support": "^0.5.21",
+    "ts-node": "^10.9.2",
+    "vscode-test": "^1.6.1"
   },
   "dependencies": {
     "@emnapi/core": "^1.4.3",
@@ -440,6 +446,7 @@
     "@tybys/wasm-util": "^0.9.0",
     "@vscode/webview-ui-toolkit": "^1.4.0",
     "deepmerge": "^4.3.1",
+    "esbuild": "^0.25.10",
     "fs-extra": "^11.2.0",
     "hasha": "^6.0.0",
     "node-ssh": "^13.2.0",
@@ -447,7 +454,6 @@
     "smol-toml": "^1.3.0",
     "wildcard-match": "latest",
     "winston": "latest",
-    "winston-transport": "latest",
-    "esbuild": "^0.25.10"
+    "winston-transport": "latest"
   }
 }

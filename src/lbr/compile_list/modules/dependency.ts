@@ -45,7 +45,7 @@ export function getBuildOrder(
 
   DirTool.write_json(path.join(ws, '.lbr/tmp/ordered_target_tree.json'), orderedTargetTree);
 
-  let newTargetTree = removeDuplicities(orderedTargetTree);
+  let newTargetTree: any = removeDuplicities(orderedTargetTree);
   DirTool.write_json(path.join(ws, '.lbr/tmp/new_target_tree.json'), newTargetTree);
 
   if (!appConfig) {

@@ -157,6 +157,7 @@ export class LBRConfiguration {
       LBRConfiguration._context.secrets.store('lbr|config|panel_tab', message.panel_tab);
 
     const command = message.command;
+    const payload: any = message.data || message;
 
     switch (command) {
 
@@ -297,7 +298,7 @@ export class LBRConfiguration {
 
   private static add_source_config(source: string) {
     let source_configs: SourceConfigList = AppConfig.get_source_configs() || {};
-    source_configs[source] = {"compile-cmds": [], settings: {}, steps: []};
+    source_configs[source] = {"source-cmds": {}, settings: {}, steps: []};
     DirTool.write_toml(path.join(Workspace.get_workspace(), Constants.LBR_SOURCE_CONFIG_FILE), source_configs);
   }
 
@@ -328,7 +329,7 @@ export class LBRConfiguration {
     }
 
     if ('connection' in data) {
-      new_config.connection = { ...new_config.connection, ...data['connection' as keyof typeof data] };
+      new_config.connection = { ...new_config.connection, ...(data['connection'] as any) };
     }
     const mergeRecursive = (target: any, source: any) => {
       for (const key in source) {
@@ -347,18 +348,18 @@ export class LBRConfiguration {
 
     if ('general' in data && typeof data.general === 'object' && data.general !== null) {
       //mergeRecursive(new_config.general, data.general);
-      new_config['general'] = data['general'];
+      new_config['general'] = data['general'] as any;
     }
     if ('global' in data && typeof data.global === 'object' && data.global !== null) {
       //mergeRecursive(new_config.global, data.global);
-      new_config['global'] = data['global'];
+      new_config['global'] = data['global'] as any;
     }
     if (data['global'] && data['global']['cmds'])
-      new_config.global.cmds = data['global']['cmds'];
+      new_config.global.cmds = (data['global'] as any)['cmds'];
     if (data['global'] && data['global']['steps'])
-      new_config.global.steps = data['global']['steps'];
+      new_config.global.steps = (data['global'] as any)['steps'];
     if (data['global'] && data['global']['compile-cmds'])
-      new_config.global['compile-cmds'] = data['global']['compile-cmds'];
+      new_config.global['compile-cmds'] = (data['global'] as any)['compile-cmds'];
 
     // App config
     let toml_file = path.join(workspaceUri.fsPath, Constants.LBR_APP_CONFIG_FILE);

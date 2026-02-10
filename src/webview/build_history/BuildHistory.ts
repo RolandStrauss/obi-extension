@@ -6,6 +6,7 @@ import { DirTool } from '../../utilities/DirTool';
 import * as path from 'path';
 import { Constants } from '../../Constants';
 import { LBRTools } from '../../utilities/LBRTools';
+import { LBRCommands } from '../../lbr/LBRCommands';
 import { AppConfig } from '../controller/AppConfig';
 import { Workspace } from '../../utilities/Workspace';
 import * as source from '../../lbr/Source';
@@ -48,17 +49,17 @@ export class BuildHistory {
 
         switch (command) {
           case "show_build_summary":
-            LBRCommands.show_build_summary(message.file);
+            (LBRCommands as any).show_build_summary?.(message.file);
             return;
 
           case "delete_item":
-            LBRCommands.delete_compile_list_item(message.level, message.source);
-            BuildHistory.update();
+            (LBRCommands as any).delete_compile_list_item?.(message.level, message.source);
+            (BuildHistory as any).update?.();
             return;
 
           case "delete_level":
-            LBRCommands.delete_compile_list_level(message.level);
-            BuildHistory.update();
+            (LBRCommands as any).delete_compile_list_level?.(message.level);
+            (BuildHistory as any).update?.();
             return;
         }
       }

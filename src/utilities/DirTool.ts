@@ -120,9 +120,9 @@ export class DirTool {
 
     if (files.length == 0) {
       const path_array: string[] = dir.split('/');
-      const src_lib = path_array[0] ?? null;
-      const src_file = path_array[1] ?? null;
-      return [{"source-lib": src_lib, "source-file": src_file, "source-member": ''}];
+      const src_lib = path_array[0] ?? '';
+      const src_file = path_array[1] ?? '';
+      return [{"source-lib": src_lib, "source-file": src_file, "source-member": '', "use-regex": false, "show-empty-folders": false}];
     }
 
 
@@ -133,10 +133,10 @@ export class DirTool {
         if (file_extensions == undefined || file_extensions.includes(file.name.split('.').pop())) {
           const source: string = path.join(dir, file.name).replaceAll('\\', '/');
           const source_arr: string[] = source.split('/').reverse();
-          const src_mbr = source_arr[0];
-          const src_file = source_arr[1];
-          const src_lib = source_arr[2];
-          file_list.push({"source-lib": src_lib, "source-file": src_file, "source-member": src_mbr});
+          const src_mbr = source_arr[0] || '';
+          const src_file = source_arr[1] || '';
+          const src_lib = source_arr[2] || '';
+          file_list.push({"source-lib": src_lib, "source-file": src_file, "source-member": src_mbr, "use-regex": false, "show-empty-folders": false});
         }
       }
     }

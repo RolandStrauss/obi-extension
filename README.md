@@ -3,7 +3,7 @@
 Object builder for i (LBR) is an automatic build tool.
 
 <p align="center">
-  <a href="https://www.buymeacoffee.com/prouza"><img src="https://img.shields.io/badge/%F0%9F%8D%BA-Buy%20me%20a%20beer-red?style=flat" alt="Buy me a beer"></a>
+  <a href="https://www.buymeacoffee.com/lancelot"><img src="https://img.shields.io/badge/%F0%9F%8D%BA-Buy%20me%20a%20beer-red?style=flat" alt="Buy me a beer"></a>
 </p>
 
 > Notice:
@@ -133,7 +133,7 @@ Because you work locally, you need to sync your changes with other developers.
 2. **Copy source to IFS**  
    Get your Sources to IFS (to your project folder)
    You can use my RPG program to get this job done: 
-   https://github.com/rolandstrauss/ibm-i-build-lbr/blob/main/src/prouzalib/qrpglesrc/cpysrc2ifs.sqlrpgle.pgm
+   https://github.com/rolandstrauss/ibm-i-build-lbr/blob/main/src/tobjlib/qrpglesrc/cpysrc2ifs.sqlrpgle.pgm
 
 3. Reset the compiled object list
    LBR can check which sources have changed and need to be built.  

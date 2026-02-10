@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="{{ global_stuff['asserts_uri'] }}/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="{{ global_stuff['asserts_uri'] }}/bootstrap/font/bootstrap-icons.css">
     <link rel="stylesheet" href="{{ global_stuff['asserts_uri'] }}/bootstrap/css/bootstrap-table.min.css">
-    
+
     <link rel="stylesheet" href="{{ global_stuff['styleUri'] }}">
     <link rel="stylesheet" href="{{ config_css }}">
 
@@ -20,10 +20,10 @@
       <vscode-button class="save-button" id="save_config">{{ global_stuff['get_text']('Save') | safe }}</vscode-button>
       {% include "tools/alertBox.html" %}
     </div>
-    
+
     📝 <a href='command:vscode.open?{{ source_config_file }}'>{{  global_stuff['get_text']('Open source config file') | safe }}</a>
 
-  
+
     <h2>{{ global_stuff['get_text']('Compile settings') | safe }}</h2>
     {% set settings = source_config['settings'] %}
 
@@ -58,8 +58,8 @@
           <vscode-text-field id="new_source_setting_key" placeholder="TARGET_LIB"></vscode-text-field>
         </td>
         <td>
-          <!--vscode-text-field id="new_source_setting_value" placeholder="PROUZALIB"></vscode-text-field-->
-          <vscode-text-area id="new_source_setting_value" placeholder="PROUZALIB" rows="4" resize="both">
+          <!--vscode-text-field id="new_source_setting_value" placeholder="TOBJLIB"></vscode-text-field-->
+          <vscode-text-area id="new_source_setting_value" placeholder="TOBJLIB" rows="4" resize="both">
           </vscode-text-area>
         </td>
         <td>
@@ -77,7 +77,7 @@
     </table>
 
     <hr />
-  
+
     <h2>{{ global_stuff['get_text']('Compile commands') | safe }} (<code>source-cmds</code>)</h2>
     {% set compile_cmds = source_config['source-cmds'] %}
 

@@ -79,12 +79,12 @@ This is neseccary to have the correct ```PATH``` in the IBM i shell.
     ```sh
     ssh-keygen -b 4096
     ```
-  * Enter your key name full qualified (e.g. /home/prouza/.ssh/academy_rsa)
+  * Enter your key name full qualified (e.g. /home/lancelot/.ssh/academy_rsa)
   * Then you will be asked for a password. If you set one, you will be asked for it on each Login. If not you will be logged in without any prompt.
 
   On Linux you can simple use ```ssh-copy-id``` to copy the public key to your remote system.
   ```sh
-  ssh-copy-id -i ~/.ssh/academy_rsa.pub prouza@academy
+  ssh-copy-id -i ~/.ssh/academy_rsa.pub lancelot@academy
   ```
 
 * Windows
@@ -98,7 +98,7 @@ On your local machine create the ```~/.ssh/config``` file (and directory) if not
 Host academy
   HostName academy
   IdentitiesOnly=yes
-  User prouza
+  User lancelot
   IdentityFile ~/.ssh/academy_rsa
 ```
 

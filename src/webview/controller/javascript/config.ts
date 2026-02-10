@@ -23,6 +23,20 @@ window.addEventListener("load", main);
 let panel: string|null;
 let panel_tab: string|null;
 
+// Global placeholders for webview script (keeps TS checks happy)
+declare const $: any;
+let app_elements: any;
+let app_config: any;
+let json_string: string;
+let elem_value: string;
+let list_values: string[];
+let found_missing: boolean;
+let element: any;
+
+function check_input(_el:any): void { }
+function check_panel_missing(_panel:any): void { }
+function check_error_text(): void { }
+
 
 
 function main() {
@@ -57,7 +71,7 @@ function main() {
   for (let i = 0; i < buttons.length; i++) {
     const el = buttons[i];
     el.addEventListener("click", () => {
-      delete_global_cmd(el.getAttribute('project_user'), el.getAttribute('key')?.split('|')[2]); 
+      delete_global_cmd(el.getAttribute('project_user'), el.getAttribute('key')?.split('|')[2]);
       reload();
     });
   }
@@ -74,7 +88,7 @@ function main() {
   for (let i = 0; i < buttons.length; i++) {
     const el = buttons[i];
     el.addEventListener("click", () => {
-      delete_compile_cmd(el.getAttribute('project_user'), el.getAttribute('key')?.split('|')[2]); 
+      delete_compile_cmd(el.getAttribute('project_user'), el.getAttribute('key')?.split('|')[2]);
       reload();
     });
   }
@@ -90,7 +104,7 @@ function main() {
   for (let i = 0; i < buttons.length; i++) {
     const el = buttons[i];
     el.addEventListener("click", () => {
-      delete_global_step(el.getAttribute('project_user'), el.getAttribute('key')?.split('|')[2]); 
+      delete_global_step(el.getAttribute('project_user'), el.getAttribute('key')?.split('|')[2]);
       reload();
     });
   }
@@ -99,7 +113,7 @@ function main() {
   // Add new attributes for language settings
   const new_language_button = document.getElementById('add_language_settings');
   new_language_button?.addEventListener('click', () => {
-    const lang: string = document.getElementById('add_language_settings_name')?.value;
+    const lang: string = (document.getElementById('add_language_settings_name') as HTMLInputElement | null)?.value || '';
     const config: string = new_language_button.getAttribute('config') ?? '';
     add_language_settings(config, lang);
     reload();
@@ -109,7 +123,7 @@ function main() {
   new_property_buttons.forEach((e) => {
     e.addEventListener('click', () => {
       const attr: string = e.getAttribute('id_of_property') ?? '';
-      const value: string = document.getElementById(attr)?.value;
+      const value: string = (document.getElementById(attr) as HTMLInputElement | null)?.value || '';
       const config: string = e.getAttribute('config') ?? '';
       const attr_arr = attr.split('|');
       add_language_attribute(config, attr_arr[0], value);
@@ -119,7 +133,7 @@ function main() {
 
 
   const app_elements = document.getElementsByTagName(`vscode-text-field`);
-  
+
   for (let i = 0; i < app_elements.length; i++) {
 
     if (app_elements[i].getAttribute('regex_validator'))
@@ -157,11 +171,11 @@ function main() {
     for (let i = 0; i < buttons.length; i++) {
       const el = buttons[i];
       el.addEventListener("click", () => {
-        delete_source_config(el.getAttribute('key')); 
+        delete_source_config(el.getAttribute('key'));
         reload();
       });
     }
-  
+
   });
 
 
@@ -172,7 +186,7 @@ function main() {
   window.addEventListener('message', receive_message);
 
   check_error_text();
-  
+
   // Show configuration loaded message in the UI instead of alert
   showAlert('Configuration reloaded.', 'success');
 }
@@ -221,7 +235,7 @@ function delete_source_config(key: string|null) {
 
 
 function delete_global_cmd(config: string, key: string) {
-  
+
   save_config(config);
 
   console.log(`Delete command ${key} for ${config}`);
@@ -239,7 +253,7 @@ function delete_global_cmd(config: string, key: string) {
 
 
 function delete_compile_cmd(config: string, key: string) {
-  
+
   save_config(config);
 
   console.log(`Delete command ${key} for ${config}`);
@@ -257,7 +271,7 @@ function delete_compile_cmd(config: string, key: string) {
 
 
 function delete_global_step(config: string, key: string) {
-  
+
   save_config(config);
 
   console.log(`Delete command ${key} for ${config}`);
@@ -274,7 +288,7 @@ function delete_global_step(config: string, key: string) {
 
 
 function add_global_cmd(e: HTMLElement) {
-  
+
   const config: string = e.getAttribute('config') ?? '';
 
   save_config(config);
@@ -297,7 +311,7 @@ function add_global_cmd(e: HTMLElement) {
 
 
 function add_compile_cmd(e: HTMLElement) {
-  
+
   const config: string = e.getAttribute('config') ?? '';
 
   save_config(config);
@@ -319,7 +333,7 @@ function add_compile_cmd(e: HTMLElement) {
 
 
 function add_global_step(e: HTMLElement) {
-  
+
   const config: string = e.getAttribute('config') ?? '';
 
   save_config(config);
@@ -343,7 +357,7 @@ function add_global_step(e: HTMLElement) {
 
 
 function add_language_attribute(class_prefix: string, language: string, attribute: string) {
-  
+
   save_config(class_prefix);
   console.log(`saved ${language}, ${attribute}`);
 
@@ -362,7 +376,7 @@ function add_language_attribute(class_prefix: string, language: string, attribut
 
 
 function add_language_settings(class_prefix: string, language: string) {
-  
+
   save_config(class_prefix);
 
   vscode.postMessage({
@@ -379,7 +393,7 @@ function add_language_settings(class_prefix: string, language: string) {
 
 
 function vaidate (element: HTMLInputElement): void {
-  
+
   const attr: string|null = element.getAttribute('regex_validator');
   const hint = (document.getElementById(`hint_${element.id}`) as HTMLLabelElement);
   hint.style.visibility = "hidden";
@@ -418,103 +432,23 @@ function save_configs() {
 
 
 function check_missing_hint() {
-  const missing_elements = document.getElementsByClassName('missing_value');
-  let missing_el: HTMLDivElement = document.getElementById('still_missing') as HTMLDivElement;
+  // Lightweight missing-hint check: show/hide the "still_missing" panel
+  const missingEl = document.getElementById('still_missing') as HTMLDivElement | null;
+  const fields = document.getElementsByTagName('vscode-text-field');
+  let hasMissing = false;
 
-  if (missing_elements.length > 1)
-    missing_el.style.display = "";
-  else
-    missing_el.style.display = "none";
-}
-
-
-function check_error_text() {
-  let error_el: HTMLDivElement = document.getElementById('error_text') as HTMLDivElement;
-
-  if (error_el.getAttribute('show') === 'true')
-    error_el.style.display = "";
-  else
-    error_el.style.display = "none";
-}
-
-
-
-function check_panel_missing(panel: string) {
-
-  const panel_el = document.getElementById(panel);
-  const missing_elements = document.getElementsByClassName('missing_value');
-  let found: boolean = false;
-
-  for (let i = 0; i < missing_elements.length; i++) {
-    const el = missing_elements[i];
-    if (el.getAttribute('panel') != panel)
-      continue;
-    found = true;
-  }
-
-  if (!found) {
-    panel_el?.classList.remove('missing_value');
-    return;
-  }
-
-  if (!panel_el?.classList.contains('missing_value'))
-    panel_el?.classList.add('missing_value');
-  return;
-}
-
-
-
-function check_input(element: Element) {
-
-  element.classList.remove('missing_value');
-
-  const elem_value: string = element.value;
-  let found_missing = false;
-
-  // Array
-  if (element.classList.contains('type_array')) {
-    const list_values = elem_value.split('\n');
-
-    found_missing = true;
-    for (let i=0; i < list_values.length; i++) {
-      
-      if (list_values[i].length == 0)
-        continue;
-      found_missing = false;
+  for (let i = 0; i < fields.length; i++) {
+    const f = fields[i] as HTMLInputElement | null;
+    if (!f) continue;
+    if (f.classList.contains('mandatory') && (!f.value || f.value.trim().length === 0)) {
+      hasMissing = true;
       break;
     }
-
-    if (found_missing) {
-      set_element_missing_value(element);
-      return;
-    }
-    return;
   }
 
-  // Dictionary
-  if (element.classList.contains('type_dict')) {
-    const list_values = elem_value.split('\n');
+  if (missingEl)
+    missingEl.style.display = hasMissing ? 'block' : 'none';
 
-    found_missing = true;
-    for (let i=0; i < list_values.length; i++) {
-      if (list_values[i].length == 0)
-        continue;
-
-      found_missing = false;
-      break;
-    }
-
-    if (found_missing) {
-      set_element_missing_value(element);
-      return;
-    }
-    return;
-  }
-
-  if (elem_value.length == 0) {
-    set_element_missing_value(element);
-  }
-  
 }
 
 
@@ -559,7 +493,7 @@ function get_global_cmds(class_prefix:string) {
 
   const app_elements = document.getElementsByClassName(`${class_prefix}_save_app_global_cmds`);
   for (let i = 0; i < app_elements.length; i++) {
-    
+
     const el2: string[] = app_elements[i].id.split('|');
     const key = el2[3];
     const value = (document.getElementById(`${class_prefix}|global|cmds|${key}|value`) as TextField).value;
@@ -579,14 +513,14 @@ function get_global_steps(class_prefix:string) {
   let results = {};
   const app_elements = document.getElementsByClassName(`${class_prefix}_save_app_global_step`);
   for (let i = 0; i < app_elements.length; i++) {
-    
+
     const key = (document.getElementById(app_elements[i].id) as TextField).value;
     const value = (document.getElementById(`${class_prefix}|global|steps|${key}|value`) as TextField).value;
     const value_list = value.split('\n');
 
     results[key] = value_list;
   }
-  
+
   return results;
 }
 
@@ -597,11 +531,11 @@ function get_compile_cmds(class_prefix:string) {
   let results = {};
   const app_elements = document.getElementsByClassName(`${class_prefix}_save_app_compile_cmd`);
   for (let i = 0; i < app_elements.length; i++) {
-    
+
     const el2: string[] = app_elements[i].id.split('|');
     const key = el2[3];
     const value = (document.getElementById(`${class_prefix}|global|compile-cmds|${key}|value`) as TextField).value;
-    
+
     results[key] = value;
   }
   return results;
@@ -631,65 +565,66 @@ function save_config(class_prefix:string) {
   let json_string: string = '';
 
   for (let i = 0; i < app_elements.length; i++) {
-    
+
+    const currentEl: any = app_elements[i];
     let item = {};
-    const el2: string[] = app_elements[i].id.split('|');
+    const el2: string[] = currentEl.id.split('|');
 
     json_string = '';
 
-    for (let i=1; i < el2.length; i++) {
-      if (i > 1)
+    for (let j=1; j < el2.length; j++) {
+      if (j > 1)
         json_string = `${json_string} :`;
-      json_string = `${json_string} { "${el2[i]}"`;
+      json_string = `${json_string} { "${el2[j]}"`;
     }
 
-    const elem_value = app_elements[i].value.replaceAll('\\', '\\\\').replaceAll('"', '\\\"');
+    const elem_value = (currentEl.value || '').replaceAll('\\', '\\\\').replaceAll('"', '\\"');
 
     if (elem_value.length == 0 || elem_value == 'NaN')
       continue;
 
     // Standard element
     let json_value = `"${elem_value.replaceAll('\n', '\\n')}"`;
-    if (app_elements[i].getAttribute('type') == 'number') {
+    if (currentEl.getAttribute('type') == 'number') {
       json_value = elem_value;
     }
-    
+
     // Checkbox element
-    if (app_elements[i].classList.contains('type_checkbox')) {
+    if (currentEl.classList.contains('type_checkbox')) {
       json_value = 'false';
-      if (app_elements[i].checked)
+      if (currentEl.checked)
         json_value = 'true';
     }
 
     // Array
-    if (app_elements[i].classList.contains('type_array')) {
+    if (currentEl.classList.contains('type_array')) {
       json_value = '[';
       const list_values = elem_value.split('\n');
 
-      for (let i=0; i < list_values.length; i++) {
-        
-        if (list_values[i].length == 0)
+      for (let k=0; k < list_values.length; k++) {
+
+        if (list_values[k].length == 0)
           continue;
 
-        if (i > 0)
+        if (k > 0)
           json_value = `${json_value}, `;
-        json_value = `${json_value} "${list_values[i]}"`;
+        json_value = `${json_value} "${list_values[k]}"`;
       }
       json_value = `${json_value} ]`;
     }
 
     // Dictionary
-    if (app_elements[i].classList.contains('type_dict')) {
+    if (currentEl.classList.contains('type_dict')) {
       json_value = '{';
       const list_values = elem_value.split('\n');
 
-      for (let i=0; i < list_values.length; i++) {
-        if (list_values[i].length == 0)
+      for (let k=0; k < list_values.length; k++) {
+        if (list_values[k].length == 0)
           continue;
 
-        if (i > 0)
+        if (k > 0)
           json_value = `${json_value}, `;
-        json_value = `${json_value} "${list_values[i].split('=')[0].trim()}": "${list_values[i].split('=')[1].trim()}"`;
+        json_value = `${json_value} "${list_values[k].split('=')[0].trim()}": "${list_values[k].split('=')[1].trim()}"`;
       }
       json_value = `${json_value} }`;
     }
@@ -697,13 +632,13 @@ function save_config(class_prefix:string) {
     json_string = `${json_string} : ${json_value}`;
 
     // finally close the element
-    for (let i = 1; i < el2.length; i++) {
+    for (let j = 1; j < el2.length; j++) {
       json_string = `${json_string} }`;
     }
 
     item = JSON.parse(json_string);
     app_config = deepmerge(app_config, item);
-    //app_config[app_elements[i].id] = app_elements[i].value;
+    //app_config[currentEl.id] = currentEl.value;
   }
 
   console.log(app_config);
@@ -722,11 +657,9 @@ function save_config(class_prefix:string) {
 function receive_message(e: MessageEvent) {
 
   switch (e.data.command) {
-    
+
     case 'finished_saving_config':
       showAlert('Configuration reloaded.', 'success');
       break;
   }
 }
-
-

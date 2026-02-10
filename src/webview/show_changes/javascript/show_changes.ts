@@ -24,20 +24,20 @@ function main() {
   if (loaded)
     return;
   loaded = true;
-  
+
   const run_button = document.getElementById('run_build') as Button;
   console.log(`run_button.addEventListener ${run_button}`);
   if (run_button)
     run_button.addEventListener('click', run_build);
-  
-  
+
+
   const joblogButton = document.getElementsByClassName("joblog");
-  
+
   console.log(`joblog.addEventListener ${joblogButton.length}`);
   for (let i = 0; i < joblogButton.length; i++) {
     joblogButton[i].addEventListener("click", function (e) {show_log('joblog', joblogButton[i]);});
   }
-  
+
   const splfButton = document.getElementsByClassName("stdout");
 
   for (let i = 0; i < splfButton.length; i++) {
@@ -57,7 +57,7 @@ function run_build() {
   const build_source = document.getElementsByClassName("build_source");
   const build_source_cmd = document.getElementsByClassName("build_source_cmd");
   let ignore_sources: string[] = [];
-  let ignore_sources_cmd: { [key: string]: [string] | null } = {};
+  let ignore_sources_cmd: { [key: string]: string[] | null } = {};
 
   for (let i = 0; i < build_source.length; i++) {
     const checkbox = build_source[i] as HTMLInputElement;

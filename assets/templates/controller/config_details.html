@@ -66,7 +66,7 @@
 
       <h3>{{ global_stuff['get_text']('Project locations') | safe }}</h3>
 
-      <vscode-text-field class="{{ class_prefix }}_save_app type_text" panel="{{ class_prefix }}_tab-1" id="{{ class_prefix }}|general|cloud-ws-ssh-remote-host" size="80" placeholder="andy-workspace.code.prouza.dev"
+      <vscode-text-field class="{{ class_prefix }}_save_app type_text" panel="{{ class_prefix }}_tab-1" id="{{ class_prefix }}|general|cloud-ws-ssh-remote-host" size="80" placeholder="andy-workspace.code.lancelot.dev"
         value="{{ app_config['general']['cloud-ws-ssh-remote-host'] }}">{{ global_stuff['get_text']('Cloud workspace host (ℹ️ only when using remote workspaces)') | safe }}</vscode-text-field>
       <br />
       <br />
@@ -108,7 +108,7 @@
         panel="{{ class_prefix }}_tab-1"
         id="{{ class_prefix }}|general|local-lbr-dir"
         size="80"
-        placeholder="/home/prouza/project/lbr"
+        placeholder="/home/lancelot/project/lbr"
         value="{{ app_config['general']['local-lbr-dir'] | replace('"$HOME"', '$HOME' ) }}">
         💡 {{ global_stuff['get_text']('Local LBR path (if exist)') | safe }}
       </vscode-text-field>
@@ -120,7 +120,7 @@
         panel="{{ class_prefix }}_tab-1"
         id="{{ class_prefix }}|general|remote-lbr-dir"
         size="80"
-        placeholder="/home/prouza/project/lbr"
+        placeholder="/home/lancelot/project/lbr"
         value="{{ app_config['general']['remote-lbr-dir'] | replace('"$HOME"', '$HOME' ) }}">
         💡 {{ global_stuff['get_text']('Remote LBR path') | safe }}
       </vscode-text-field>
@@ -206,7 +206,7 @@
           <td>2.</td>
           <td>{libname}</td>
           <td>&nbsp;</td>
-          <td>Name of library <br/>e.g. <code>prouzalib</code> ... target lib = prouzalib</td>
+          <td>Name of library <br/>e.g. <code>tobjlib</code> ... target lib = tobjlib</td>
         </tr>
         <tr>
           <td>&nbsp;</td>
@@ -249,21 +249,21 @@
       <br />
       <br />
       <vscode-text-field class="{{ class_prefix }}_save_app" panel="{{ class_prefix }}_tab-2" id="{{ class_prefix }}|global|settings|general|INCLUDE_BNDDIR" size="50"
-        placeholder="PROUZADIR" value="{{ general_settings['INCLUDE_BNDDIR'] }}">INCLUDE_BNDDIR</vscode-text-field>
+        placeholder="LANCELOTDIR" value="{{ general_settings['INCLUDE_BNDDIR'] }}">INCLUDE_BNDDIR</vscode-text-field>
       <br />
       <br />
       <vscode-text-field class="{{ class_prefix }}_save_app" panel="{{ class_prefix }}_tab-2" id="{{ class_prefix }}|global|settings|general|INCDIR_RPGLE" size="80"
-        placeholder="'./src/prouzalib' './src/prouzalib2'"
+        placeholder="'./src/tobjlib' './src/tobjlib2'"
         value="{{ general_settings['INCDIR_RPGLE'] | replace('"$HOME"', '$HOME' ) }}">INCDIR RPGLE</vscode-text-field>
       <br />
       <br />
       <vscode-text-field class="{{ class_prefix }}_save_app" panel="{{ class_prefix }}_tab-2" id="{{ class_prefix }}|global|settings|general|INCDIR_SQLRPGLE" size="80"
-        placeholder="''./src/prouzalib'' ''./src/prouzalib2''"
+        placeholder="''./src/tobjlib'' ''./src/tobjlib2''"
         value="{{ general_settings['INCDIR_SQLRPGLE'] | replace('"$HOME"', '$HOME' ) }}">INCDIR SQLRPGLE</vscode-text-field>
       <br />
       <br />
       <vscode-text-area class="{{ class_prefix }}_save_app type_dict" cols="20" rows="{{ general_settings['TARGET_LIB_MAPPING']|length }}" resize="both"  panel="{{ class_prefix }}_tab-2" id="{{ class_prefix }}|global|settings|general|TARGET_LIB_MAPPING"
-        placeholder="prouzalib=prouzat1&#10;prouzalib2=prouzat2"
+        placeholder="tobjlib=lancelott1&#10;tobjlib2=lancelott2"
         value="{% for k, v in general_settings['TARGET_LIB_MAPPING'] %}{% if loop.index0 > 0 %}{{ '\n' }}{% endif %}{{ k }}={{ v }}{% endfor %}">TARGET_LIB_MAPPING</vscode-text-area>
       <br />
 

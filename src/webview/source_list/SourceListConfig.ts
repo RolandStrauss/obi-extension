@@ -142,7 +142,7 @@ export class SourceListConfig {
         break;
 
       case "add_filter":
-        SourceListConfig.add_filter(message.lib, message.file, message.member, message.regex);
+        SourceListConfig.add_filter(message.lib, message.file, message.member, message.regex, message.show_empty_folders ?? false);
         SourceListConfig.update();
         break;
     }

@@ -68,10 +68,10 @@ function delete_filter(id: string) {
 
 function add_filter() {
 
-  const new_libs: string[] = document.getElementById("new_lib").value.split(',');
-  const new_files: string[] = document.getElementById("new_file").value.split(',');
-  const new_members: string[] = document.getElementById("new_member").value.split(',');
-  const regex: boolean = document.getElementById("new_regex").checked;
+  const new_libs: string[] = (document.getElementById("new_lib") as HTMLInputElement).value.split(',');
+  const new_files: string[] = (document.getElementById("new_file") as HTMLInputElement).value.split(',');
+  const new_members: string[] = (document.getElementById("new_member") as HTMLInputElement).value.split(',');
+  const regex: boolean = (document.getElementById("new_regex") as HTMLInputElement).checked;
 
   console.log(`Add filter ${new_libs}, ${new_files}, ${new_members}, regex: ${regex}`);
 
@@ -105,15 +105,14 @@ function save_config() {
   let filter: source.IQualifiedSource[] = [];
   let counter = 0;
   let els = document.getElementsByClassName(`source_filter_${counter}`);
-  let [lib, file, member] = '';
 
   while (els.length > 0) {
 
-    const libs = document.getElementById(`lib_${counter}`).value.split(',');
-    const files = document.getElementById(`file_${counter}`).value.split(',');
-    const members = document.getElementById(`member_${counter}`).value.split(',');
-    const regex = document.getElementById(`regex_${counter}`).checked;
-    const show_empty_folders = document.getElementById(`show_empty_folders_${counter}`).checked;
+    const libs = (document.getElementById(`lib_${counter}`) as HTMLInputElement).value.split(',');
+    const files = (document.getElementById(`file_${counter}`) as HTMLInputElement).value.split(',');
+    const members = (document.getElementById(`member_${counter}`) as HTMLInputElement).value.split(',');
+    const regex = (document.getElementById(`regex_${counter}`) as HTMLInputElement).checked;
+    const show_empty_folders = (document.getElementById(`show_empty_folders_${counter}`) as HTMLInputElement).checked;
 
     for (let lib of libs) {
       for (let file of files) {

@@ -230,9 +230,9 @@ export class SourceListProvider implements vscode.TreeDataProvider<SourceListIte
   async change_source_description(item: SourceListItem | vscode.Uri): Promise<void> {
 
     const config: AppConfig = AppConfig.get_app_config();
-    let lib: String = '';
-    let file: String = '';
-    let member: String = '';
+    let lib: string = '';
+    let file: string = '';
+    let member: string = '';
     let source_path: string = '';
     let description: string = '';
 
@@ -287,21 +287,31 @@ export class SourceListProvider implements vscode.TreeDataProvider<SourceListIte
 
   // lbr.source-filter.add-source-file
   async rename_source_member(item: SourceListItem | vscode.Uri): Promise<void> {
-
     const app_config = AppConfig.get_app_config();
 
+    // Determine current member name depending on the input type
+    let currentMember = '';
     if (item instanceof SourceListItem) {
       if (!item.src_lib || !item.src_file || !item.src_member) {
         throw new Error('Source member information missing');
       }
+      currentMember = item.src_member;
+    }
+    else if (item instanceof vscode.Uri) {
+      const source_path = LBRTools.convert_local_filepath_2_lbr_filepath(item.fsPath, true);
+      const match = source_path.match(/^([^\/]+)\/([^\/]+)\/(.+)$/);
+      if (!match) {
+        throw new Error(`Source path ${source_path} is not valid`);
+      }
+      currentMember = match[3];
     }
 
     const new_name: string | undefined = await vscode.window.showInputBox({
-      title: `Rename source member for ${item.src_member}`,
-      value: item.src_member,
+      title: `Rename source member for ${currentMember}`,
+      value: currentMember,
       validateInput(value) {
           if (value.replace(/[\/|\\:*?"<>]/g, " ") != value)
-            return "Not allowed characters: \\, /, |, :, *, ?, \", <, >";
+            return "Not allowed characters: \\, /, |, :, *, ?, \" , <, >";
           const ext = path.extname(value).replace('.', '').toLowerCase();
           if (app_config.general['supported-object-types'] && !app_config.general['supported-object-types'].includes(ext)) {
             return `Extension ".${ext}" is not supported (supported: ${app_config.general['supported-object-types'].join(', ')})`;
@@ -313,14 +323,32 @@ export class SourceListProvider implements vscode.TreeDataProvider<SourceListIte
       throw new Error('Canceled by user. No source name provided');
     }
 
-    const from_path = path.join(Workspace.get_workspace(), item.member_path, item.src_member);
-    const to_path = path.join(Workspace.get_workspace(),item.member_path, new_name)
-    fs.renameSync(from_path, to_path);
+    if (item instanceof SourceListItem) {
+      const from_path = path.join(Workspace.get_workspace(), item.member_path || '', item.src_member || '');
+      const to_path = path.join(Workspace.get_workspace(), item.member_path || '', new_name);
+      fs.renameSync(from_path, to_path);
 
-    const source_infos: source.ISourceInfos = await LBRTools.get_source_infos();
-    if (source_infos[`${item.member_path_lbr}/${item.src_member}`]) {
-        const description: string = typeof source_infos[`${item.member_path_lbr}/${item.src_member}`].description === 'string' ? source_infos[`${item.member_path_lbr}/${item.src_member}`].description : '';
-        LBRTools.update_source_infos(item.member_path_lbr, new_name, description);
+      const source_infos: source.ISourceInfos = await LBRTools.get_source_infos();
+      if (source_infos[`${item.member_path_lbr}/${item.src_member}`]) {
+          const description: string = typeof source_infos[`${item.member_path_lbr}/${item.src_member}`].description === 'string' ? source_infos[`${item.member_path_lbr}/${item.src_member}`].description : '';
+          LBRTools.update_source_infos(item.member_path_lbr || '', new_name, description);
+      }
+    }
+    else if (item instanceof vscode.Uri) {
+      const localPath = item.fsPath;
+      const lbrPath = LBRTools.convert_local_filepath_2_lbr_filepath(localPath, true);
+      const match = lbrPath.match(/^([^\/]+)\/([^\/]+)\/(.+)$/);
+      if (!match) throw new Error('Invalid path');
+      const member_path = `${match[1]}/${match[2]}`;
+      const from_path = path.join(Workspace.get_workspace(), AppConfig.get_app_config().general['source-dir'] || 'src', member_path, match[3]);
+      const to_path = path.join(Workspace.get_workspace(), AppConfig.get_app_config().general['source-dir'] || 'src', member_path, new_name);
+      fs.renameSync(from_path, to_path);
+
+      const source_infos: source.ISourceInfos = await LBRTools.get_source_infos();
+      if (source_infos[`${member_path}/${match[3]}`]) {
+        const description: string = typeof source_infos[`${member_path}/${match[3]}`].description === 'string' ? source_infos[`${member_path}/${match[3]}`].description : '';
+        LBRTools.update_source_infos(member_path, new_name, description);
+      }
     }
 
     return;
@@ -332,13 +360,22 @@ export class SourceListProvider implements vscode.TreeDataProvider<SourceListIte
 
     const app_config = AppConfig.get_app_config();
 
+    let from_path: string;
     if (item instanceof SourceListItem) {
       if (!item.src_lib || !item.src_file || !item.src_member) {
         throw new Error('Source member information missing');
       }
+      from_path = path.join(Workspace.get_workspace(), item.member_path || '', item.src_member || '');
+    }
+    else {
+      const lbrPath = LBRTools.convert_local_filepath_2_lbr_filepath(item.fsPath, true);
+      const match = lbrPath.match(/^([^\/]+)\/([^\/]+)\/(.+)$/);
+      if (!match) throw new Error('Invalid path');
+      const member_path = `${match[1]}/${match[2]}`;
+      const src_member = match[3];
+      from_path = path.join(Workspace.get_workspace(), member_path, src_member);
     }
 
-    const from_path = path.join(Workspace.get_workspace(), item.member_path, item.src_member);
     fs.unlinkSync(from_path);
 
     return;
@@ -541,8 +578,8 @@ export class SourceListItem extends vscode.TreeItem {
     }
 
     this.iconPath = {
-      light: path.join(__filename, '..', '..', '..', '..', 'asserts', 'img', 'light', icon),
-      dark: path.join(__filename, '..', '..', '..', '..', 'asserts', 'img', 'dark', icon)
+      light: vscode.Uri.file(path.join(__filename, '..', '..', '..', '..', 'asserts', 'img', 'light', icon)),
+      dark: vscode.Uri.file(path.join(__filename, '..', '..', '..', '..', 'asserts', 'img', 'dark', icon))
     };
 
     if (list_level != 'source-member')

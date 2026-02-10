@@ -20,10 +20,10 @@ function main() {
 
   let button = document.getElementById("save_config") as Button;
   button?.addEventListener("click", save_config);
-  
+
   button = document.getElementById("add_source_setting") as Button;
   button?.addEventListener("click", add_source_setting);
-  
+
   let app_elements = document.getElementsByClassName(`delete_source_setting`);
   for (let i = 0; i < app_elements.length; i++) {
     const key = app_elements[i].getAttribute('key') || '';
@@ -31,7 +31,7 @@ function main() {
   }
 
   button = document.getElementById("add_source_cmd") as Button;
-  button?.addEventListener("click", add_source_cmd);  
+  button?.addEventListener("click", add_source_cmd);
 
   app_elements = document.getElementsByClassName(`delete_source_cmd`);
   for (let i = 0; i < app_elements.length; i++) {
@@ -48,7 +48,7 @@ function main() {
 
 
 function add_source_setting() {
-  
+
   save_config();
 
   const key:string = (document.getElementById("new_source_setting_key") as TextField).value;
@@ -71,7 +71,7 @@ function add_source_setting() {
 
 
 function delete_source_setting(key:string) {
-  
+
   save_config();
 
   console.log(`delete_source_setting: ${key}`);
@@ -87,7 +87,7 @@ function delete_source_setting(key:string) {
 
 
 function add_source_cmd() {
-  
+
   save_config();
 
   const key:string = (document.getElementById("new_source_cmd_key") as TextField).value;
@@ -107,7 +107,7 @@ function add_source_cmd() {
 
 
 function delete_source_cmd(key:string) {
-  
+
   save_config();
 
   console.log(`delete_source_cmd: ${key}`);
@@ -136,7 +136,7 @@ function receive_message(e: MessageEvent) {
   switch (e.data.command) {
 
     case 'run_finished':
- 
+
       break;
 
   }
@@ -144,7 +144,7 @@ function receive_message(e: MessageEvent) {
 
 
 type SourceSettings = {
-  [key: string]: string
+  [key: string]: string | string[]
 }
 
 type SourceCmds = {
@@ -159,7 +159,7 @@ function save_config() {
 
   console.log(`save_source_setting: ${app_elements.length}`);
   let key = '';
-  let value = '';
+  let value: string | string[] = '';
 
   for (let i = 0; i < app_elements.length; i++) {
     key = app_elements[i].getAttribute('key') || 'undefined';
@@ -190,7 +190,7 @@ function save_config() {
   console.log(`steps: ${document.getElementById("steps")}`);
   const steps_value: string = (document.getElementById("steps") as TextField).value
   let steps:string[] = [];
-  if (steps_value.length > 0) 
+  if (steps_value.length > 0)
     steps = steps_value.split('\n');
 
   vscode.postMessage({
@@ -199,5 +199,5 @@ function save_config() {
     source_cmds: source_cmds,
     steps: steps
   });
-  
+
 }

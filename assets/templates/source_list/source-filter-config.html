@@ -13,12 +13,12 @@
 
   <h1>{{ global_stuff['get_text']('Source filter config:') | safe }} <code>{{ source_list_file }}</code></h1>
 
-  
+
   <div class="save-button-wrapper">
     <vscode-button class="save-button" id="save_config">{{ global_stuff['get_text']('Save') | safe }}</vscode-button>
     {% include "tools/alertBox.html" %}
   </div>
-  
+
   <hr />
   <br/>
 
@@ -30,11 +30,11 @@
   <table id="source_list"
     class="table w-auto" data-bs-theme="{{ global_stuff['theme_mode'] }}"
     data-locale="{{ global_stuff['locale'] }}"
-    data-toggle="table" 
+    data-toggle="table"
     data-filter-control="false"
-    data-show-search-clear-button="false" 
+    data-show-search-clear-button="false"
     data-show-columns="true"
-    data-pagination="false" 
+    data-pagination="false"
     data-page-size="10"
     data-buttons-align="left">
     <thead>
@@ -78,7 +78,7 @@
       <tr><td>{{ global_stuff['get_text']('Add new') | safe }}</td></tr>
       <tr>
         <td>
-          <vscode-text-field id="new_lib" placeholder="prouzalib"></vscode-text-field>
+          <vscode-text-field id="new_lib" placeholder="tobjlib"></vscode-text-field>
         </td>
         <td>
           <vscode-text-field id="new_file" placeholder="qrpglesrc"></vscode-text-field>

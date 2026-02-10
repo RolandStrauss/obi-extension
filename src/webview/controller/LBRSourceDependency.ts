@@ -107,7 +107,7 @@ export class LBRSourceDependency {
       source_config = source_configs[LBRSourceDependency.source];
 
     const local_source_list: string[] = await LocalSourceList.get_source_list();
-    const dependencies: {['source']: string[]} = LBRTools.get_dependency_list() || {};
+    const dependencies: Record<string, string[]> = LBRTools.get_dependency_list() || {};
     let dependencies_1: string[] = [];
     let dependencies_2: string[] = [];
 
@@ -198,7 +198,7 @@ export class LBRSourceDependency {
 
   private static add_dependency(type: number, new_source: string): void {
 
-    let dependency_list: {['source']: string[]} = LBRTools.get_dependency_list();
+    let dependency_list: Record<string, string[]> = LBRTools.get_dependency_list();
 
     // Add dependency to current source
     if (type == 1) {
@@ -220,7 +220,7 @@ export class LBRSourceDependency {
 
 
   private static delete_dependency(type: number, source: string): void {
-    let dependency_list: {['source']: string[]} = LBRTools.get_dependency_list();
+    let dependency_list: Record<string, string[]> = LBRTools.get_dependency_list();
 
     let key: string;
     let value: string;
