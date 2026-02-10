@@ -1,6 +1,6 @@
 import * as path from 'path';
 import { minimatch } from "minimatch";
-import { OBIConstants } from './obi_constants';
+import { LBRConstants } from './lbr_constants';
 import { getSourceProperties } from './properties';
 import { DirTool } from '../../../utilities/DirTool';
 
@@ -144,4 +144,3 @@ function fnmatch(source: string, conditionValue: string): boolean {
   // Use minimatch for glob pattern matching
   return minimatch(source, conditionValue, { matchBase: true });
 }
-

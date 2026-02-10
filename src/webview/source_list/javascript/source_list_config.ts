@@ -4,7 +4,7 @@ import {
   Button
 } from "@vscode/webview-ui-toolkit";
 
-import * as source from '../../../obi/Source';
+import * as source from '../../../lbr/Source';
 import { showAlert } from "../../tools/javascript/alertBox";
 
 // In order to use all the Webview UI Toolkit web components they
@@ -33,7 +33,7 @@ function main() {
 
 
   const delete_buttons = document.getElementsByClassName('delete_filter');
-  
+
   for (let i = 0; i < delete_buttons.length; i++) {
     const e = delete_buttons[i];
     e.addEventListener('click', () => {
@@ -47,7 +47,7 @@ function main() {
 
 
 function delete_filter(id: string) {
-  
+
   const button = document.getElementById(id);
   let lib: string|null|undefined = button?.getAttribute('lib');
   let file: string|null|undefined = button?.getAttribute('file');
@@ -67,7 +67,7 @@ function delete_filter(id: string) {
 
 
 function add_filter() {
-  
+
   const new_libs: string[] = document.getElementById("new_lib").value.split(',');
   const new_files: string[] = document.getElementById("new_file").value.split(',');
   const new_members: string[] = document.getElementById("new_member").value.split(',');
@@ -78,13 +78,13 @@ function add_filter() {
   for (let new_lib of new_libs) {
     for (let new_file of new_files) {
       for (let new_member of new_members) {
-        if (new_lib == '') 
+        if (new_lib == '')
           new_lib = regex? '.*' : '*';
         if (new_file == '')
           new_file = regex? '.*' : '*';
         if (new_member == '')
           new_member = regex? '.*' : '*';
-    
+
         vscode.postMessage({
           command: "add_filter",
           lib: new_lib.trim(),
@@ -114,7 +114,7 @@ function save_config() {
     const members = document.getElementById(`member_${counter}`).value.split(',');
     const regex = document.getElementById(`regex_${counter}`).checked;
     const show_empty_folders = document.getElementById(`show_empty_folders_${counter}`).checked;
-    
+
     for (let lib of libs) {
       for (let file of files) {
         for (let member of members) {
@@ -124,10 +124,10 @@ function save_config() {
             file = regex? '.*' : '*';
           if (member == '')
             member = regex? '.*' : '*';
-      
+
           filter.push({
-            "source-file":file.trim(), 
-            "source-lib":lib.trim(), 
+            "source-file":file.trim(),
+            "source-lib":lib.trim(),
             "source-member":member.trim(),
             "use-regex":regex,
             "show-empty-folders":show_empty_folders,
@@ -135,7 +135,7 @@ function save_config() {
         }
       }
     }
-  
+
 
     counter++;
     els = document.getElementsByClassName(`source_filter_${counter}`);
@@ -147,4 +147,3 @@ function save_config() {
   });
 
 }
-

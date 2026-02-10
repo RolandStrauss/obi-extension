@@ -5,10 +5,10 @@ import { getNonce } from "../../utilities/getNonce";
 import { DirTool } from '../../utilities/DirTool';
 import * as path from 'path';
 import { Constants } from '../../Constants';
-import { OBITools } from '../../utilities/OBITools';
+import { LBRTools } from '../../utilities/LBRTools';
 import { AppConfig } from '../controller/AppConfig';
 import { Workspace } from '../../utilities/Workspace';
-import * as source from '../../obi/Source';
+import * as source from '../../lbr/Source';
 
 /*
 https://medium.com/@andy.neale/nunjucks-a-javascript-template-engine-7731d23eb8cc
@@ -57,7 +57,7 @@ export class SourceList {
       SourceList.currentPanel._panel.dispose();
     }
 
-    let filtered_sources_extended = await OBITools.get_filtered_sources_with_details(source_list_file) || [];
+    let filtered_sources_extended = await LBRTools.get_filtered_sources_with_details(source_list_file) || [];
 
     for (let source of filtered_sources_extended) {
       source['path'] = DirTool.get_encoded_source_URI(workspaceUri, path.join(source['source-lib'], source['source-file'], source['source-member']));
@@ -67,9 +67,9 @@ export class SourceList {
     const panel = this.createNewPanel(extensionUri);
 
     nunjucks.configure(Constants.HTML_TEMPLATE_DIR);
-    const html = nunjucks.render('source_list/index.html', 
+    const html = nunjucks.render('source_list/index.html',
       {
-        global_stuff: OBITools.get_global_stuff(panel.webview, extensionUri),
+        global_stuff: LBRTools.get_global_stuff(panel.webview, extensionUri),
         main_java_script: getUri(panel.webview, extensionUri, ["out", "webview.js"]),
         source_list: filtered_sources_extended,
         source_list_file : source_list_file
@@ -95,7 +95,7 @@ export class SourceList {
     );
 
     SourceList.currentPanel = new SourceList(panel, extensionUri);
-  
+
   }
 
 

@@ -4,7 +4,7 @@ You can define dependencies between sources.
 
 # Storage
 
-These dependencies are stored in `.obi/etc/dependency.json`.
+These dependencies are stored in `.lbr/etc/dependency.json`.
 
 The structure is quite simple:
 

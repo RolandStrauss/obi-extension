@@ -71,7 +71,7 @@ export class SSH_Tasks {
         throw new Error('Canceled by user. No user provided');
     }
 
-    let pwd: string | undefined = await SSH_Tasks.context.secrets.get(`obi|${host}|${ssh_user}`);
+    let pwd: string | undefined = await SSH_Tasks.context.secrets.get(`lbr|${host}|${ssh_user}`);
     if (! pwd && (!ssh_key || ssh_key.length == 0)) {
       pwd = await vscode.window.showInputBox({ title: `Enter your password for ${ssh_user}@${host}`, placeHolder: "password", password: true });
       if (! pwd)
@@ -118,7 +118,7 @@ export class SSH_Tasks {
 
     logger.info(`Execute: ${cmd}`);
     const result = await SSH_Tasks.ssh.execCommand(cmd);
-    
+
     logger.info(`CODE: ${result.code}`);
     logger.info(`STDOUT: ${result.stdout}`);
     if (result.stderr.length > 0)
@@ -164,11 +164,11 @@ export class SSH_Tasks {
 
     let failed: string[]=[];
     let successful: string[]=[];
-    
+
     remote = SSH_Tasks.get_finalized_remote_path(remote);
 
-    await SSH_Tasks.ssh.getDirectory(local, remote, 
-      { recursive: true, 
+    await SSH_Tasks.ssh.getDirectory(local, remote,
+      { recursive: true,
         concurrency: AppConfig.get_app_config().connection['ssh-concurrency'] ?? 5,
         validate: function(itemPath) {
           const baseName = path.basename(itemPath)
@@ -188,7 +188,7 @@ export class SSH_Tasks {
           }
         }
       });
-      
+
       if (failed.length > 0)
         logger.error(`Failed to transfer ${failed}`);
       logger.debug(`Transfered: ${successful}`);
@@ -242,15 +242,15 @@ export class SSH_Tasks {
       await SSH_Tasks.connect(func);
       return;
     }
-    
+
     const config = AppConfig.get_app_config();
     if (!config.general['remote-base-dir'] || !config.general['local-base-dir'])
       throw Error(`Config attribute 'config.general.remote_base_dir' or 'config.general.local-base-dir' missing`);
-    
+
     const source_dir: string = config.general['source-dir'] ?? 'src';
     const local_source_dir: string = path.join(Workspace.get_workspace(), config.general['local-base-dir'], source_dir);
     const remote_source_dir: string = `${config.general['remote-base-dir']}/${source_dir}`;
-    
+
     let cmds: Promise<SSHExecCommandResponse>[] = [];
 
     source_list.map((file: string) => {
@@ -277,11 +277,11 @@ export class SSH_Tasks {
       await SSH_Tasks.connect(await func);
       return return_value2;
     }
-    
+
     const config = AppConfig.get_app_config();
     if (!config.general['remote-base-dir'] || config.general['remote-base-dir'].length < 4) // to be sure it's not root!
       throw Error(`Config attribute 'config.general.remote_base_dir' invalid: ${config.general['remote-base-dir']}`);
-    
+
     const remote_base_dir: string = SSH_Tasks.get_finalized_remote_path(config.general['remote-base-dir']);
     const answer = await vscode.window.showInformationMessage(`Process with remote folder: '${remote_base_dir}'?`, { modal: true }, ...['Yes', 'No']);
     switch (answer) {
@@ -323,32 +323,32 @@ export class SSH_Tasks {
       await SSH_Tasks.connect(func);
       return;
     }
-    
+
     const config = AppConfig.get_app_config();
     if (!config.general['remote-base-dir'] || !config.general['local-base-dir'])
       throw Error(`Config attribute 'config.general.remote_base_dir' or 'config.general.local-base-dir' missing`);
-    
+
     const source_dir: string = config.general['source-dir'] ?? 'src';
     const local_source_dir: string = path.join(Workspace.get_workspace(), config.general['local-base-dir'], source_dir);
     let remote_base_dir: string = SSH_Tasks.get_finalized_remote_path(config.general['remote-base-dir']);
     let remote_source_dir: string = `${remote_base_dir}/${source_dir}`;
-    
+
     let transfer_list: FileTransfer[] = [
       {
-        local: path.join(Workspace.get_workspace(), Constants.OBI_APP_CONFIG_FILE),
-        remote: `${remote_base_dir}/${Constants.OBI_APP_CONFIG_FILE}`,
+        local: path.join(Workspace.get_workspace(), Constants.LBR_APP_CONFIG_FILE),
+        remote: `${remote_base_dir}/${Constants.LBR_APP_CONFIG_FILE}`,
       },
       {
         local: path.join(Workspace.get_workspace(), AppConfig.get_current_profile_app_config_file()),
-        remote: `${remote_base_dir}/${Constants.OBI_APP_CONFIG_USER_FILE}`,
+        remote: `${remote_base_dir}/${Constants.LBR_APP_CONFIG_USER_FILE}`,
       },
       {
-        local: path.join(Workspace.get_workspace(), '.obi', 'etc', 'constants.py'),
-        remote: `${remote_base_dir}/.obi/etc/constants.py`,
+        local: path.join(Workspace.get_workspace(), '.lbr', 'etc', 'constants.py'),
+        remote: `${remote_base_dir}/.lbr/etc/constants.py`,
       },
       {
-        local: path.join(Workspace.get_workspace(), '.obi', 'etc', 'logger_config.py'),
-        remote: `${remote_base_dir}/.obi/etc/logger_config.py`,
+        local: path.join(Workspace.get_workspace(), '.lbr', 'etc', 'logger_config.py'),
+        remote: `${remote_base_dir}/.lbr/etc/logger_config.py`,
       }
     ];
 
@@ -384,7 +384,7 @@ export class SSH_Tasks {
       await SSH_Tasks.connect(func);
       return;
     }
-    
+
     const config = AppConfig.get_app_config();
     if (!config.general['remote-base-dir'] || !config.general['local-base-dir'])
       throw Error(`Config attribute 'config.general.remote_base_dir' missing`);
@@ -430,7 +430,7 @@ export class SSH_Tasks {
     await vscode.window.withProgress({
       location: vscode.ProgressLocation.Notification,
       title: `Transfer project`,
-    }, 
+    },
     async progress => {
       progress.report({
         message: `Start transfer.`
@@ -459,7 +459,7 @@ export class SSH_Tasks {
     logger.info(final_message);
 
   }
-  
+
 
   private static async ssh_put_dir(local_dir: string, remote_dir: string, failed: string[], successful: string[], again?: boolean) {
 
@@ -474,7 +474,7 @@ export class SSH_Tasks {
     }
 
     remote_dir = SSH_Tasks.get_finalized_remote_path(remote_dir);
-    
+
     logger.debug(`Send directory. Local: ${local_dir}, remote: ${remote_dir}`);
 
     const result: boolean = await SSH_Tasks.ssh.putDirectory(local_dir, remote_dir, {

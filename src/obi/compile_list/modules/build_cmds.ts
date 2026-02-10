@@ -1,5 +1,5 @@
 import { getSourceProperties, getSetLiblCmd } from './properties';
-import { OBIConstants } from './obi_constants';
+import { LBRConstants } from './lbr_constants';
 import { getTableElement } from './toml_tools';
 import { getSteps } from './app_config_tools';
 import { DirTool } from '../../../utilities/DirTool';
@@ -32,7 +32,7 @@ export function getObjectList(source: string, appConfig: any): string {
 }
 
 export function getSourceBuildCmds(source: string, appConfig: any, extended_sources_config: any): any[] {
-  const sourcesConfig = DirTool.get_toml(path.join(Workspace.get_workspace(), OBIConstants.get('SOURCE_CONFIG_TOML')));
+  const sourcesConfig = DirTool.get_toml(path.join(Workspace.get_workspace(), LBRConstants.get('SOURCE_CONFIG_TOML')));
   let sourceConfig: any = {};
   if (sourcesConfig && sourcesConfig[source]) {
     sourceConfig = sourcesConfig[source];
@@ -86,7 +86,7 @@ export function getCmdFromStep(
 
   if (!cmd) {
     throw new Error(
-      `Step '${step}' not found in '${OBIConstants.get('CONFIG_TOML')}' or '${OBIConstants.get('CONFIG_USER_TOML')}'`
+      `Step '${step}' not found in '${LBRConstants.get('CONFIG_TOML')}' or '${LBRConstants.get('CONFIG_USER_TOML')}'`
     );
   }
 

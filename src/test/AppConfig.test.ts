@@ -4,7 +4,7 @@ import * as assert from 'assert';
 // as well as import your extension to test it
 import * as vscode from 'vscode';
 import { AppConfigDict } from '../webview/controller/AppConfigDict';
-import { OBITools } from '../utilities/OBITools';
+import { LBRTools } from '../utilities/LBRTools';
 // import * as myExtension from '../../extension';
 
 
@@ -16,7 +16,7 @@ suite('Extension Test Suite', () => {
 		let x: AppConfigDict = Object.assign({'generalx': {'local-base-dirx': 'test' }});
 
 		assert.strictEqual(x['generalx']['local-base-dirx'], 'test');
-		
+
 	});
 
 	test('Array merge test', () => {
@@ -39,9 +39,9 @@ suite('Extension Test Suite', () => {
 			y: "test y"
 		};
 
-		let z2 = OBITools.override_dict(x, y);
+		let z2 = LBRTools.override_dict(x, y);
 
 		assert.strictEqual(z, z2);
-		
+
 	});
 });

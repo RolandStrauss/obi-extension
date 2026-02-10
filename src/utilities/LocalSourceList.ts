@@ -12,10 +12,10 @@ export class LocalSourceList {
     private static source_list: string[] | undefined = undefined;
     private static last_load_time: number = 0;
     private static source_loading_promise: Promise<void>[] = [];
-    
+
     private static watcher_project: vscode.FileSystemWatcher | undefined = undefined;
     private static watcher_processing_promise: Promise<void>[] = [];
-    
+
 
 
     private static async _load_source_list(): Promise<void> {
@@ -35,23 +35,23 @@ export class LocalSourceList {
             const watch_uri = vscode.Uri.joinPath(Workspace.get_workspace_uri(), config.general['source-dir'] || 'src');
             logger.debug(`Setting up file watcher for file changes in ${watch_uri}`);
             LocalSourceList.watcher_project = vscode.workspace.createFileSystemWatcher(new vscode.RelativePattern(watch_uri, '**/*'), false, true, false);
-        
+
             // File change events
             LocalSourceList.watcher_project.onDidCreate(uri => {
                 if (LocalSourceList.watcher_processing_promise.length > 0)
                     return;
-                LocalSourceList.source_loading_promise.push(LocalSourceList.refresh_obi_stuff(uri));
+                LocalSourceList.source_loading_promise.push(LocalSourceList.refresh_lbr_stuff(uri));
             });
             LocalSourceList.watcher_project?.onDidDelete(uri => {
                 if (LocalSourceList.watcher_processing_promise.length > 0)
                     return;
-                LocalSourceList.source_loading_promise.push(LocalSourceList.refresh_obi_stuff(uri));
+                LocalSourceList.source_loading_promise.push(LocalSourceList.refresh_lbr_stuff(uri));
             });
         }
     }
 
 
-    private static async refresh_obi_stuff(uri: vscode.Uri) {
+    private static async refresh_lbr_stuff(uri: vscode.Uri) {
 
         const config: AppConfig = AppConfig.get_app_config();
         const ext = uri.fsPath.split('.').pop() ?? '';
@@ -62,7 +62,7 @@ export class LocalSourceList {
 
         logger.debug(`Reload some stuff`);
         await LocalSourceList.load_source_list();
-        await vscode.commands.executeCommand("obi.source-filter.update");
+        await vscode.commands.executeCommand("lbr.source-filter.update");
         LocalSourceList.source_loading_promise = [];
     }
 

@@ -15,7 +15,7 @@
 
 
 <body>
-  
+
   <div id="still_missing"><br/><b>⚠️ {{ global_stuff['get_text']('There are still missing values ...') | safe }}</b><br/><br/></div>
   <div id="error_text" class="error config_error" show="{%if error_text | length > 0 %}true{% else %}false{% endif %}"><b>⚠️ {{ error_text | safe }}</b></div>
 
@@ -33,16 +33,16 @@
     <vscode-panel-tab id="user_cfg"><h1>{{  global_stuff['get_text']('User configuration') + current_profile | safe }} </h1></vscode-panel-tab>
     <vscode-panel-tab id="source_cfg"><h1>{{  global_stuff['get_text']('Source configuration') | safe }}</h1></vscode-panel-tab>
 
-    
+
     <vscode-panel-view id="project_cfg-view">
-      
+
       <section>
         <br/>
-      
-        💡 {{  global_stuff['get_text']('This config will contains definitions for the whole project team (remote host, remote obi path, ...)') | safe }}
+
+        💡 {{  global_stuff['get_text']('This config will contains definitions for the whole project team (remote host, remote lbr path, ...)') | safe }}
         <br/>
         <br/>
-      
+
         📝 <a href='command:vscode.open?{{ project_config_file }}'>{{  global_stuff['get_text']('Open project config file') | safe }}</a>
         <br/>
         <br/>
@@ -52,7 +52,7 @@
         {% set app_config = project_config %}
 
         {% include "controller/config_details.html" %}
-      
+
       </section>
     </vscode-panel-view>
 
@@ -61,11 +61,11 @@
 
       <section>
         <br/>
-      
-        💡 {{  global_stuff['get_text']('This config will override the project config and should contain user specific definitions (target lib mapping, local obi path, ...)') | safe }}
+
+        💡 {{  global_stuff['get_text']('This config will override the project config and should contain user specific definitions (target lib mapping, local lbr path, ...)') | safe }}
         <br/>
         <br/>
-      
+
         📝 <a href='command:vscode.open?{{ user_config_file }}'>{{  global_stuff['get_text']('Open user config file') | safe }}</a>
         <br/>
         <br/>
@@ -83,7 +83,7 @@
     <vscode-panel-view id="source_cfg-view">
 
       <section>
-        
+
         📝 <a href='command:vscode.open?{{ source_config_file }}'>{{  global_stuff['get_text']('Open source config file') | safe }}</a>
         <br/>
         <br/>
@@ -104,7 +104,7 @@
 
   <br />
 
-  
+
   <script src="{{ global_stuff['asserts_uri'] }}/js/jquery.min.js"></script>
   <script src="{{ global_stuff['asserts_uri'] }}/bootstrap/js/bootstrap-table.min.js"></script>
   <script src="{{ global_stuff['asserts_uri'] }}/bootstrap/js/bootstrap-table-de.js"></script>

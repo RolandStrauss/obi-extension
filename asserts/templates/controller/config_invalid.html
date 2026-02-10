@@ -6,8 +6,8 @@
     <link rel="stylesheet" href="{{ global_stuff['styleUri'] }}">
   </head>
   <body>
-    
-    <h2>{{ global_stuff['get_text']('OBI invalid!') | safe }}</h2>
+
+    <h2>{{ global_stuff['get_text']('LBR invalid!') | safe }}</h2>
     <br/>
     {{ global_stuff['get_text']('Please finish configuration first') | safe }}
     <br/>
@@ -17,7 +17,7 @@
     <br/>
     <br/>
     <br/>
-    {{ global_stuff['get_text']('Or initialize your current folder with OBI:') | safe }}
+    {{ global_stuff['get_text']('Or initialize your current folder with LBR:') | safe }}
     <br/>
     <br/>
     <vscode-button id="initialize_folder">{{ global_stuff['get_text']('Initialize') | safe }}</vscode-button>
@@ -25,6 +25,6 @@
 
 
     <script type="module" nonce="{{ global_stuff['nonce'] }}" src="{{ main_java_script }}"></script>
-    
+
   </body>
 </html>

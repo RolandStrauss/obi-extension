@@ -3,7 +3,7 @@ import { Disposable, Webview, WebviewPanel, window, Uri, ViewColumn } from "vsco
 import { getUri } from "../../utilities/getUri";
 import { getNonce } from "../../utilities/getNonce";
 import { DirTool } from '../../utilities/DirTool';
-import { OBITools } from '../../utilities/OBITools';
+import { LBRTools } from '../../utilities/LBRTools';
 import { Constants } from '../../Constants';
 
 /*
@@ -19,7 +19,7 @@ const nunjucks = require('nunjucks');
 export class Welcome implements vscode.WebviewViewProvider {
 
 
-	public static readonly viewType = 'obi-welcome';
+	public static readonly viewType = 'lbr-welcome';
 
 	private _view?: vscode.WebviewView;
 	private _context?: vscode.WebviewViewResolveContext;
@@ -57,7 +57,7 @@ export class Welcome implements vscode.WebviewViewProvider {
 		nunjucks.configure(Constants.HTML_TEMPLATE_DIR);
 		const html = nunjucks.render(html_template,
 			{
-				global_stuff: OBITools.get_global_stuff(webviewView.webview, this._extensionUri),
+				global_stuff: LBRTools.get_global_stuff(webviewView.webview, this._extensionUri),
 				main_java_script: getUri(webviewView.webview, this._extensionUri, ["out", "welcome.js"]),
 				workspace_exist: vscode.workspace.workspaceFolders != undefined
 			}
@@ -73,7 +73,7 @@ export class Welcome implements vscode.WebviewViewProvider {
 					}
 				case 'initialize_folder':
 					{
-						OBITools.initialize_folder();
+						LBRTools.initialize_folder();
 						break;
 					}
 				case 'reload_window':

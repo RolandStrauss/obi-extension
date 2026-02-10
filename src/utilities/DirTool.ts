@@ -6,7 +6,7 @@ import { logger } from './Logger';
 import { AppConfig } from "../webview/controller/AppConfig";
 
 import * as path from 'path';
-import * as source from "../obi/Source";
+import * as source from "../lbr/Source";
 import * as fs from 'fs';
 import { Workspace } from "./Workspace";
 
@@ -31,10 +31,10 @@ export class DirTool {
 
 
   public static *get_all_files_in_dir(rootdir:string, dir: string, file_extensions: string[]): Generator<string> | undefined {
-    
+
     if (!DirTool.dir_exists(path.join(rootdir, dir)))
       return undefined;
-    
+
     const fs = require('fs');
     const files = fs.readdirSync(path.join(rootdir, dir), { withFileTypes: true });
 
@@ -52,16 +52,16 @@ export class DirTool {
   /**
    * List files in a directory recursive
    * It's async for better performance
-   * @param rootdir 
-   * @param dir 
-   * @param file_extensions 
-   * @returns 
+   * @param rootdir
+   * @param dir
+   * @param file_extensions
+   * @returns
    */
   public static async get_all_files_in_dir2(rootdir:string, dir: string, file_extensions: string[], replace_backslash: boolean = false): Promise<string[] | undefined> {
-    
+
     if (!DirTool.dir_exists(path.join(rootdir, dir)))
       return undefined;
-    
+
     let file_list: string[] = [];
     let call_list = [];
 
@@ -80,7 +80,7 @@ export class DirTool {
         if (file_extensions.includes(file.name.split('.').pop())) {
 
           file_path = path.join(dir, file.name)
-          
+
           if (replace_backslash)
             file_path = file_path.replace(/\\/g, '/');
           file_list.push(file_path);
@@ -97,21 +97,21 @@ export class DirTool {
     return file_list;
   }
 
-  
+
 
   /**
    * List files in a directory recursive
    * It's async for better performance
-   * @param rootdir 
-   * @param dir 
-   * @param file_extensions 
-   * @returns 
+   * @param rootdir
+   * @param dir
+   * @param file_extensions
+   * @returns
    */
   public static async get_all_files_in_dir3(rootdir:string, dir: string, file_extensions: string[]|undefined): Promise<source.IQualifiedSource[] | undefined> {
-    
+
     if (!DirTool.dir_exists(path.join(rootdir, dir)))
       return undefined;
-    
+
     let file_list: source.IQualifiedSource[] = [];
     let call_list = [];
 
@@ -163,7 +163,7 @@ export class DirTool {
 
 
   public static file_exists(path: string): boolean {
-            
+
     path = DirTool.resolve_env_in_path(path);
 
     if (!fs.existsSync(path))
@@ -178,9 +178,9 @@ export class DirTool {
 
 
   public static dir_exists(path: string): boolean {
-    
+
     path = DirTool.resolve_env_in_path(path);
-    
+
     if (!fs.existsSync(path))
       return false;
 
@@ -201,19 +201,19 @@ export class DirTool {
 
 
   public static get_json(path: string): any|undefined {
-    
+
     path = DirTool.resolve_env_in_path(path);
-    
+
     logger.debug(`Read json ${path}`);
     if (!DirTool.file_exists(path)) {
       logger.warn(`File does not exist: ${path}`);
       return undefined
     }
 
-    const fs = require("fs"); 
-    
+    const fs = require("fs");
+
     let json_string = fs.readFileSync(path);
-    // Converting to JSON 
+    // Converting to JSON
     try {
       return JSON.parse(json_string);
     }
@@ -222,11 +222,11 @@ export class DirTool {
       logger.debug(`JSON content: ${json_string}`);
       logger.error(`Parsing JSON content on line ${e.line}, column ${e.column}: ${e.message}`);
     }
-    
+
   }
 
 
-  
+
   public static get_file_changed_date(file: string) {
 
     file = DirTool.resolve_env_in_path(file);
@@ -239,9 +239,9 @@ export class DirTool {
 
 
   public static write_json(file: string, data: {}): any|undefined {
-    
+
     file = DirTool.resolve_env_in_path(file);
-    
+
     if (!DirTool.dir_exists(path.dirname(file))) {
       fs.mkdirSync(path.dirname(file), { recursive: true });
     }
@@ -249,7 +249,7 @@ export class DirTool {
       // Read the TOML file into a string
       const text = JSON.stringify(data, null, 2);
       logger.info(`Writing JSON to file 2: ${path.resolve(file)}`);
-      
+
       fs.writeFileSync(file, text, 'utf8');
     }
     catch (e: any) {
@@ -341,7 +341,7 @@ export class DirTool {
     }
     const toml = require('smol-toml');
     try{
-      
+
       // Read the TOML file into a string
       const text = toml.stringify(data);
 
@@ -361,7 +361,7 @@ export class DirTool {
     file = DirTool.resolve_env_in_path(file);
 
     logger.info(`Write data to ${file}`);
-    
+
     try{
       if (!DirTool.dir_exists(path.dirname(file)))
         fs.mkdirSync(path.dirname(file), {recursive: true});
@@ -385,7 +385,7 @@ export class DirTool {
     let key_values: {}= {};
     if (!DirTool.file_exists(file))
       return undefined;
-    
+
     try{
       // Read the TOML file into a string
       const data = fs.readFileSync(file, 'utf8');
@@ -407,7 +407,7 @@ export class DirTool {
 
     if (!DirTool.file_exists(file))
       return undefined;
-    
+
     try{
       // Read the TOML file into a string
       const data = fs.readFileSync(file, 'utf8');
@@ -441,7 +441,7 @@ export class DirTool {
     let key_values: {['key']?: string} = {};
 
     for (var i=0; i < content_list.length; i++) {
-      
+
       const line = content_list[i].trim().split('#');
       if (line[0].length == 0)
         continue;
@@ -461,12 +461,12 @@ export class DirTool {
 
 /*
   public static async get_hash_file(file:string): Promise<string> {
- 
+
     const hasha = require('hasha');
 
     // Get the MD5 hash of an image
     const fileHash = await hasha.fromFile(file, {algorithm: 'md5'});
-    
+
     return fileHash;
   }
 

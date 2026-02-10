@@ -3,7 +3,7 @@ import { Disposable, Webview, WebviewPanel, window, Uri, ViewColumn } from "vsco
 import { getUri } from "../../utilities/getUri";
 import { getNonce } from "../../utilities/getNonce";
 import { DirTool } from '../../utilities/DirTool';
-import { OBITools } from '../../utilities/OBITools';
+import { LBRTools } from '../../utilities/LBRTools';
 import { Constants } from '../../Constants';
 
 /*
@@ -19,13 +19,13 @@ const nunjucks = require('nunjucks');
 export class ConfigInvalid implements vscode.WebviewViewProvider {
 
 
-	public static readonly viewType = 'obi-config-invalid';
+	public static readonly viewType = 'lbr-config-invalid';
 
 	private _view?: vscode.WebviewView;
   private _context?: vscode.WebviewViewResolveContext;
   private readonly _extensionUri: vscode.Uri;
 
-	
+
 	constructor(extensionUri: vscode.Uri) {
     this._extensionUri = extensionUri;
    }
@@ -54,13 +54,13 @@ export class ConfigInvalid implements vscode.WebviewViewProvider {
       vscode.window.showErrorMessage('No workspace defined');
       return;
     }
-    
+
     const html_template = 'controller/config_invalid.html';
 
     nunjucks.configure(Constants.HTML_TEMPLATE_DIR);
-    const html = nunjucks.render(html_template, 
+    const html = nunjucks.render(html_template,
       {
-        global_stuff: OBITools.get_global_stuff(webviewView.webview, this._extensionUri),
+        global_stuff: LBRTools.get_global_stuff(webviewView.webview, this._extensionUri),
 				main_java_script: getUri(webviewView.webview, this._extensionUri, ["out", "config_invalid.js"])
       }
     );
@@ -70,7 +70,7 @@ export class ConfigInvalid implements vscode.WebviewViewProvider {
 			switch (data.command) {
 				case 'initialize_folder':
 					{
-						OBITools.initialize_folder();
+						LBRTools.initialize_folder();
 						break;
 					}
 				case 'reload_workspace':
@@ -80,7 +80,7 @@ export class ConfigInvalid implements vscode.WebviewViewProvider {
 					}
 				case 'config':
 					{
-						vscode.commands.executeCommand('obi.controller.config');
+						vscode.commands.executeCommand('lbr.controller.config');
 						break;
 					}
 			}

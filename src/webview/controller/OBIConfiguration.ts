@@ -5,11 +5,11 @@ import { getNonce } from "../../utilities/getNonce";
 import { DirTool } from '../../utilities/DirTool';
 import * as path from 'path';
 import { Constants } from '../../Constants';
-import { OBITools } from '../../utilities/OBITools';
+import { LBRTools } from '../../utilities/LBRTools';
 import { AppConfig, ConfigCompileSettings, SourceConfigList } from './AppConfig';
 import { Workspace } from '../../utilities/Workspace';
 import { logger } from '../../utilities/Logger';
-import { OBISourceConfiguration } from './OBISourceConfiguration';
+import { LBRSourceConfiguration } from './LBRSourceConfiguration';
 
 /*
 https://medium.com/@andy.neale/nunjucks-a-javascript-template-engine-7731d23eb8cc
@@ -21,9 +21,9 @@ const nunjucks = require('nunjucks');
 
 
 
-export class OBIConfiguration {
+export class LBRConfiguration {
 
-  public static currentPanel: OBIConfiguration | undefined;
+  public static currentPanel: LBRConfiguration | undefined;
   private readonly _panel: WebviewPanel;
   private _disposables: Disposable[] = [];
   private static _context: vscode.ExtensionContext;
@@ -55,24 +55,24 @@ export class OBIConfiguration {
    */
   public static async render(context: vscode.ExtensionContext, extensionUri: Uri) {
 
-    OBIConfiguration._context = context;
-    OBIConfiguration._extensionUri = extensionUri;
+    LBRConfiguration._context = context;
+    LBRConfiguration._extensionUri = extensionUri;
 
-    if (OBIConfiguration.currentPanel) {
+    if (LBRConfiguration.currentPanel) {
       // If the webview panel already exists reveal it
-      OBIConfiguration.currentPanel._panel.reveal(ViewColumn.One);
+      LBRConfiguration.currentPanel._panel.reveal(ViewColumn.One);
       return;
     }
 
     // If a webview panel does not already exist create and show a new one
     const panel = this.createNewPanel(extensionUri);
 
-    panel.webview.html = await OBIConfiguration.generate_html(context, extensionUri, panel.webview);
-    
+    panel.webview.html = await LBRConfiguration.generate_html(context, extensionUri, panel.webview);
+
     panel.webview.onDidReceiveMessage(this.onReceiveMessage);
 
-    OBIConfiguration.currentPanel = new OBIConfiguration(panel, extensionUri);
-  
+    LBRConfiguration.currentPanel = new LBRConfiguration(panel, extensionUri);
+
   }
 
 
@@ -90,24 +90,24 @@ export class OBIConfiguration {
 
     const error_text = AppConfig.self_check();
 
-    const pwd = await context.secrets.get(`obi|${host}|${user}`);
+    const pwd = await context.secrets.get(`lbr|${host}|${user}`);
 
     nunjucks.configure(Constants.HTML_TEMPLATE_DIR);
-    
-    const html = nunjucks.render('controller/configuration.html', 
+
+    const html = nunjucks.render('controller/configuration.html',
       {
-        global_stuff: OBITools.get_global_stuff(webview, extensionUri),
+        global_stuff: LBRTools.get_global_stuff(webview, extensionUri),
         config_css: getUri(webview, extensionUri, ["asserts/css", "config.css"]),
         main_java_script: getUri(webview, extensionUri, ["out", "config.js"]),
         icons: {debug_start: '$(preview)'},
         user_config: user_config,
         project_config: project_config,
         SSH_PASSWORD: pwd,
-        project_config_file: DirTool.get_encoded_file_URI(Constants.OBI_APP_CONFIG_FILE),
+        project_config_file: DirTool.get_encoded_file_URI(Constants.LBR_APP_CONFIG_FILE),
         user_config_file: DirTool.get_encoded_file_URI(AppConfig.get_current_profile_app_config_file()),
-        source_config_file: DirTool.get_encoded_file_URI(Constants.OBI_SOURCE_CONFIG_FILE),
-        panel: await context.secrets.get('obi|config|panel'),
-        panel_tab: await context.secrets.get('obi|config|panel_tab'),
+        source_config_file: DirTool.get_encoded_file_URI(Constants.LBR_SOURCE_CONFIG_FILE),
+        panel: await context.secrets.get('lbr|config|panel'),
+        panel_tab: await context.secrets.get('lbr|config|panel_tab'),
         config_source_list: AppConfig.get_source_configs(),
         error_text: error_text
         //filex: encodeURIComponent(JSON.stringify(fileUri)),
@@ -124,13 +124,13 @@ export class OBIConfiguration {
 
   public static async update(): Promise<void> {
 
-    const panel = OBIConfiguration.currentPanel;
-    
+    const panel = LBRConfiguration.currentPanel;
+
     if (!panel)
       return;
 
-    panel._panel.webview.html = await OBIConfiguration.generate_html(OBIConfiguration._context, OBIConfiguration._extensionUri, OBIConfiguration.currentPanel?._panel.webview);
-    
+    panel._panel.webview.html = await LBRConfiguration.generate_html(LBRConfiguration._context, LBRConfiguration._extensionUri, LBRConfiguration.currentPanel?._panel.webview);
+
   }
 
 
@@ -152,29 +152,29 @@ export class OBIConfiguration {
       return;
 
     if (message.panel)
-      OBIConfiguration._context.secrets.store('obi|config|panel', message.panel);
+      LBRConfiguration._context.secrets.store('lbr|config|panel', message.panel);
     if (message.panel_tab)
-      OBIConfiguration._context.secrets.store('obi|config|panel_tab', message.panel_tab);
+      LBRConfiguration._context.secrets.store('lbr|config|panel_tab', message.panel_tab);
 
     const command = message.command;
 
     switch (command) {
 
       case "user_save":
-        OBIConfiguration.save_config(is_user, workspaceUri, message.data);
+        LBRConfiguration.save_config(is_user, workspaceUri, message.data);
         break;
 
       case "project_save":
-        OBIConfiguration.save_config(is_project, workspaceUri, message.data);
+        LBRConfiguration.save_config(is_project, workspaceUri, message.data);
         break;
 
       case "save_ssh_password":
         config = AppConfig.get_app_config();
         const host = config['connection']['remote-host'];
         const user = config['connection']['ssh-user'];
-        OBIConfiguration._context.secrets.delete(`obi|${host}|${user}`);
+        LBRConfiguration._context.secrets.delete(`lbr|${host}|${user}`);
         if (message.password.length > 0)
-          OBIConfiguration._context.secrets.store(`obi|${host}|${user}`, message.password);
+          LBRConfiguration._context.secrets.store(`lbr|${host}|${user}`, message.password);
         break;
 
       case "add_language_attribute":
@@ -189,7 +189,7 @@ export class OBIConfiguration {
         if (config.global.settings && config.global.settings.language)
           config.global.settings.language[lang][attr] = '';
 
-        OBIConfiguration.save_config(message.user_project == 'user', workspaceUri, config);
+        LBRConfiguration.save_config(message.user_project == 'user', workspaceUri, config);
         break;
 
       case "add_language_settings":
@@ -204,7 +204,7 @@ export class OBIConfiguration {
         if (config.global.settings && config.global.settings.language)
           config.global.settings.language[lang] = new ConfigCompileSettings();
 
-        OBIConfiguration.save_config(message.user_project == 'user', workspaceUri, config);
+        LBRConfiguration.save_config(message.user_project == 'user', workspaceUri, config);
         break;
 
       case "add_global_cmd":
@@ -215,7 +215,7 @@ export class OBIConfiguration {
         else
           config = AppConfig.get_project_app_config(workspaceUri);
         config.global.cmds[message.key]=message.value;
-        OBIConfiguration.save_config(message.user_project == 'user', workspaceUri, config);
+        LBRConfiguration.save_config(message.user_project == 'user', workspaceUri, config);
         break;
 
       case "add_compile_cmd":
@@ -226,7 +226,7 @@ export class OBIConfiguration {
         else
           config = AppConfig.get_project_app_config(workspaceUri);
         config.global['compile-cmds'][message.key]=message.value;
-        OBIConfiguration.save_config(message.user_project == 'user', workspaceUri, config);
+        LBRConfiguration.save_config(message.user_project == 'user', workspaceUri, config);
         break;
 
       case "add_global_step":
@@ -237,7 +237,7 @@ export class OBIConfiguration {
         else
           config = AppConfig.get_project_app_config(workspaceUri);
         config.global.steps[message.key]=message.value.split('\n');
-        OBIConfiguration.save_config(message.user_project == 'user', workspaceUri, config);
+        LBRConfiguration.save_config(message.user_project == 'user', workspaceUri, config);
         break;
 
       case "delete_global_cmd":
@@ -247,7 +247,7 @@ export class OBIConfiguration {
         else
           config = AppConfig.get_project_app_config(workspaceUri);
         delete config.global.cmds[message.key];
-        OBIConfiguration.save_config(message.user_project == 'user', workspaceUri, config);
+        LBRConfiguration.save_config(message.user_project == 'user', workspaceUri, config);
         break;
 
       case "delete_compile_cmd":
@@ -257,7 +257,7 @@ export class OBIConfiguration {
         else
           config = AppConfig.get_project_app_config(workspaceUri);
         delete config.global['compile-cmds'][message.key];
-        OBIConfiguration.save_config(message.user_project == 'user', workspaceUri, config);
+        LBRConfiguration.save_config(message.user_project == 'user', workspaceUri, config);
         break;
 
       case "delete_global_step":
@@ -267,26 +267,26 @@ export class OBIConfiguration {
         else
           config = AppConfig.get_project_app_config(workspaceUri);
         delete config.global.steps[message.key];
-        OBIConfiguration.save_config(message.user_project == 'user', workspaceUri, config);
+        LBRConfiguration.save_config(message.user_project == 'user', workspaceUri, config);
         break;
 
       case "edit_source_config":
 
-        OBISourceConfiguration.render(OBIConfiguration._context, OBIConfiguration._extensionUri, message.source);
+        LBRSourceConfiguration.render(LBRConfiguration._context, LBRConfiguration._extensionUri, message.source);
         break;
 
       case "delete_source_config":
-        OBIConfiguration.delete_source_config(message.source);
-        OBIConfiguration.update();
+        LBRConfiguration.delete_source_config(message.source);
+        LBRConfiguration.update();
         break;
 
       case "add_source_config":
-        OBIConfiguration.add_source_config(message.source);
-        OBIConfiguration.update();
+        LBRConfiguration.add_source_config(message.source);
+        LBRConfiguration.update();
         break;
 
       case "reload":
-        OBIConfiguration.update();
+        LBRConfiguration.update();
         break;
 
     }
@@ -298,7 +298,7 @@ export class OBIConfiguration {
   private static add_source_config(source: string) {
     let source_configs: SourceConfigList = AppConfig.get_source_configs() || {};
     source_configs[source] = {"compile-cmds": [], settings: {}, steps: []};
-    DirTool.write_toml(path.join(Workspace.get_workspace(), Constants.OBI_SOURCE_CONFIG_FILE), source_configs);
+    DirTool.write_toml(path.join(Workspace.get_workspace(), Constants.LBR_SOURCE_CONFIG_FILE), source_configs);
   }
 
 
@@ -307,7 +307,7 @@ export class OBIConfiguration {
   private static delete_source_config(source: string) {
     let source_configs: SourceConfigList = AppConfig.get_source_configs() || {};
     delete source_configs[source];
-    DirTool.write_toml(path.join(Workspace.get_workspace(), Constants.OBI_SOURCE_CONFIG_FILE), source_configs);
+    DirTool.write_toml(path.join(Workspace.get_workspace(), Constants.LBR_SOURCE_CONFIG_FILE), source_configs);
   }
 
 
@@ -361,10 +361,10 @@ export class OBIConfiguration {
       new_config.global['compile-cmds'] = data['global']['compile-cmds'];
 
     // App config
-    let toml_file = path.join(workspaceUri.fsPath, Constants.OBI_APP_CONFIG_FILE);
+    let toml_file = path.join(workspaceUri.fsPath, Constants.LBR_APP_CONFIG_FILE);
     if (isUser)
       toml_file = path.join(workspaceUri.fsPath, AppConfig.get_current_profile_app_config_file());
-    
+
     DirTool.write_toml(toml_file, new_config);
     AppConfig.reset();
 
@@ -373,12 +373,12 @@ export class OBIConfiguration {
 
     AppConfig.self_check();
 }
-  
+
 
   private static createNewPanel(extensionUri : Uri) {
     return window.createWebviewPanel(
-      'obi_config', // Identifies the type of the webview. Used internally
-      'OBI config', // Title of the panel displayed to the user
+      'lbr_config', // Identifies the type of the webview. Used internally
+      'LBR config', // Title of the panel displayed to the user
       // The editor column the panel should be displayed in
       ViewColumn.One,
       // Extra panel configurations
@@ -401,7 +401,7 @@ export class OBIConfiguration {
    * Cleans up and disposes of webview resources when the webview panel is closed.
    */
   public dispose() {
-    OBIConfiguration.currentPanel = undefined;
+    LBRConfiguration.currentPanel = undefined;
 
     // Dispose of the current webview panel
     this._panel.dispose();

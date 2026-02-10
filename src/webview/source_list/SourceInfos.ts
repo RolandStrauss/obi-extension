@@ -5,10 +5,10 @@ import { getNonce } from "../../utilities/getNonce";
 import { DirTool } from '../../utilities/DirTool';
 import * as path from 'path';
 import { Constants } from '../../Constants';
-import { OBITools } from '../../utilities/OBITools';
+import { LBRTools } from '../../utilities/LBRTools';
 import { AppConfig, ConfigCompileSettings } from '../controller/AppConfig';
 import { Workspace } from '../../utilities/Workspace';
-import * as source from '../../obi/Source';
+import * as source from '../../lbr/Source';
 import { SourceListProvider } from './SourceListProvider';
 
 /*
@@ -69,11 +69,11 @@ export class SourceInfos {
     // If a webview panel does not already exist create and show a new one
     const panel = this.createNewPanel(context.extensionUri);
     panel.webview.html = await SourceInfos.generate_html(context.extensionUri, panel.webview);
-    
+
     panel.webview.onDidReceiveMessage(this.onReceiveMessage);
 
     SourceInfos.currentPanel = new SourceInfos(panel, context.extensionUri);
-  
+
   }
 
 
@@ -86,13 +86,13 @@ export class SourceInfos {
       html_template = 'source_list/source-infos-config.html';
     }
 
-    const sources = await OBITools.get_local_sources();
-    const source_list: source.IQualifiedSource[] = OBITools.get_extended_source_infos(sources)||[];
+    const sources = await LBRTools.get_local_sources();
+    const source_list: source.IQualifiedSource[] = LBRTools.get_extended_source_infos(sources)||[];
 
     nunjucks.configure(Constants.HTML_TEMPLATE_DIR);
-    const html = nunjucks.render(html_template, 
+    const html = nunjucks.render(html_template,
       {
-        global_stuff: OBITools.get_global_stuff(webview, extensionUri),
+        global_stuff: LBRTools.get_global_stuff(webview, extensionUri),
         config_css: getUri(webview, extensionUri, ["asserts/css", "config.css"]),
         main_java_script: getUri(webview, extensionUri, ["out", "source_infos.js"]),
         source_list: source_list,
@@ -109,7 +109,7 @@ export class SourceInfos {
   public static async update(): Promise<void> {
 
     const panel = SourceInfos.currentPanel;
-    
+
     if (!panel)
       return;
 
@@ -148,7 +148,7 @@ export class SourceInfos {
 
   private static save_infos(sources: source.ISourceInfos) {
 
-    const json_file: string = path.join(Workspace.get_workspace(), AppConfig.get_app_config().general['source-infos']||'.obi/etc/source-infos.json');
+    const json_file: string = path.join(Workspace.get_workspace(), AppConfig.get_app_config().general['source-infos']||'.lbr/etc/source-infos.json');
     let source_infos: source.ISourceInfos = DirTool.get_json(json_file) || [];
 
     for (const [k, v] of Object.entries(sources)) {
@@ -162,8 +162,8 @@ export class SourceInfos {
 
   private static createNewPanel(extensionUri : Uri) {
     return window.createWebviewPanel(
-      'obi_source_infos_config', // Identifies the type of the webview. Used internally
-      'OBI Source infos', // Title of the panel displayed to the user
+      'lbr_source_infos_config', // Identifies the type of the webview. Used internally
+      'LBR Source infos', // Title of the panel displayed to the user
       // The editor column the panel should be displayed in
       ViewColumn.One,
       // Extra panel configurations

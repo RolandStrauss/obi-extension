@@ -1,26 +1,24 @@
 {
-  "name": "obi",
-  "displayName": "Object Builder for IBM i (OBI)",
-  "description": "Automated build tool for IBM i",
-  "publisher": "andreas-prouza",
+  "name": "lbr",
+  "displayName": "Lancelot Builder (LBR)",
+  "description": "Automated build tool for Lancelot",
+  "publisher": "roland-strauss",
   "version": "0.6.13",
   "icon": "asserts/img/ext/logo.png",
   "keywords": [
     "ibm i",
     "ibmi",
-    "iseries",
-    "as400",
     "rpgle",
     "ile",
     "build"
   ],
   "author": {
-    "name": "Andreas Prouza",
-    "url": "https://www.prouza.at"
+    "name": "Roland Strauss",
+    "url": "https://www.momentum.co.za"
   },
   "license": "MIT",
   "repository": {
-    "url": "https://github.com/andreas-prouza/obi-extension"
+    "url": "https://github.com/rolandstrauss/lbr-extension"
   },
   "engines": {
     "vscode": "^1.66.0"
@@ -35,176 +33,176 @@
   "contributes": {
     "commands": [
       {
-        "command": "obi.show_changes",
-        "title": "%obi.show_changes%",
+        "command": "lbr.show_changes",
+        "title": "%lbr.show_changes%",
         "icon": "$(check-all)",
-        "when": "obi.contains_obi_project && obi.valid-config"
+        "when": "lbr.contains_lbr_project && lbr.valid-config"
       },
       {
-        "command": "obi.show_single_changes",
-        "title": "%obi.show_single_changes%",
+        "command": "lbr.show_single_changes",
+        "title": "%lbr.show_single_changes%",
         "icon": "$(check)",
-        "when": "obi.contains_obi_project && obi.valid-config"
+        "when": "lbr.contains_lbr_project && lbr.valid-config"
       },
       {
-        "command": "obi.run_build",
-        "title": "%obi.run_build%",
+        "command": "lbr.run_build",
+        "title": "%lbr.run_build%",
         "icon": "$(run-all)",
-        "when": "obi.contains_obi_project && obi.valid-config"
+        "when": "lbr.contains_lbr_project && lbr.valid-config"
       },
       {
-        "command": "obi.run_single_build",
-        "title": "%obi.run_single_build%",
+        "command": "lbr.run_single_build",
+        "title": "%lbr.run_single_build%",
         "icon": "$(run)",
-        "when": "obi.contains_obi_project && obi.valid-config"
+        "when": "lbr.contains_lbr_project && lbr.valid-config"
       },
       {
-        "command": "obi.source-filter.update",
-        "title": "%obi.source-filter.update%",
+        "command": "lbr.source-filter.update",
+        "title": "%lbr.source-filter.update%",
         "icon": "$(refresh)",
-        "when": "obi.contains_obi_project && obi.valid-config"
+        "when": "lbr.contains_lbr_project && lbr.valid-config"
       },
       {
-        "command": "obi.source-filter.add",
-        "title": "%obi.source-filter.add%",
+        "command": "lbr.source-filter.add",
+        "title": "%lbr.source-filter.add%",
         "icon": "$(add)",
-        "when": "obi.contains_obi_project && obi.valid-config"
+        "when": "lbr.contains_lbr_project && lbr.valid-config"
       },
       {
-        "command": "obi.get-remote-compiled-object-list",
-        "title": "%obi.get-remote-compiled-object-list%",
+        "command": "lbr.get-remote-compiled-object-list",
+        "title": "%lbr.get-remote-compiled-object-list%",
         "icon": "$(arrow-circle-down)",
-        "when": "obi.contains_obi_project && obi.valid-config && false"
+        "when": "lbr.contains_lbr_project && lbr.valid-config && false"
       },
       {
-        "command": "obi.copy-profile-config",
-        "title": "%obi.copy-profile-config%",
+        "command": "lbr.copy-profile-config",
+        "title": "%lbr.copy-profile-config%",
         "icon": "$(person-add)",
-        "when": "obi.contains_obi_project && obi.valid-config"
+        "when": "lbr.contains_lbr_project && lbr.valid-config"
       },
       {
-        "command": "obi.reset-compiled-object-list",
-        "title": "%obi.reset-compiled-object-list%",
+        "command": "lbr.reset-compiled-object-list",
+        "title": "%lbr.reset-compiled-object-list%",
         "icon": "$(extensions)",
-        "when": "obi.contains_obi_project && obi.valid-config"
+        "when": "lbr.contains_lbr_project && lbr.valid-config"
       },
       {
-        "command": "obi.get-remote-source-list",
-        "title": "%obi.get-remote-source-list%",
+        "command": "lbr.get-remote-source-list",
+        "title": "%lbr.get-remote-source-list%",
         "icon": "$(arrow-down)",
-        "when": "obi.contains_obi_project && obi.valid-config && false"
+        "when": "lbr.contains_lbr_project && lbr.valid-config && false"
       },
       {
-        "command": "obi.check-remote-sources",
-        "title": "%obi.check-remote-sources%",
+        "command": "lbr.check-remote-sources",
+        "title": "%lbr.check-remote-sources%",
         "icon": "$(tasklist)",
-        "when": "obi.contains_obi_project && obi.valid-config && false"
+        "when": "lbr.contains_lbr_project && lbr.valid-config && false"
       },
       {
-        "command": "obi.controller.config",
-        "title": "%obi.controller.config%",
+        "command": "lbr.controller.config",
+        "title": "%lbr.controller.config%",
         "icon": "$(settings-gear)",
-        "when": "obi.contains_obi_project"
+        "when": "lbr.contains_lbr_project"
       },
       {
-        "command": "obi.controller.dependency-list",
-        "title": "%obi.controller.dependency-list%",
+        "command": "lbr.controller.dependency-list",
+        "title": "%lbr.controller.dependency-list%",
         "icon": "$(outline-view-icon)",
-        "when": "obi.contains_obi_project && obi.valid-config"
+        "when": "lbr.contains_lbr_project && lbr.valid-config"
       },
       {
-        "command": "obi.source.edit-compile-config",
-        "title": "%obi.source.edit-compile-config%",
+        "command": "lbr.source.edit-compile-config",
+        "title": "%lbr.source.edit-compile-config%",
         "icon": "$(settings-gear)",
-        "when": "obi.contains_obi_project"
+        "when": "lbr.contains_lbr_project"
       },
       {
-        "command": "obi.transfer-all",
-        "title": "%obi.transfer-all%",
+        "command": "lbr.transfer-all",
+        "title": "%lbr.transfer-all%",
         "icon": "$(cloud-upload)",
-        "when": "obi.contains_obi_project && obi.valid-config"
+        "when": "lbr.contains_lbr_project && lbr.valid-config"
       },
       {
-        "command": "obi.source-filter.show-view",
-        "title": "%obi.source-filter.show-view%",
+        "command": "lbr.source-filter.show-view",
+        "title": "%lbr.source-filter.show-view%",
         "icon": "$(preview)",
-        "when": "obi.contains_obi_project && obi.valid-config"
+        "when": "lbr.contains_lbr_project && lbr.valid-config"
       },
       {
-        "command": "obi.source-filter.edit-config",
-        "title": "%obi.source-filter.edit-config%",
+        "command": "lbr.source-filter.edit-config",
+        "title": "%lbr.source-filter.edit-config%",
         "icon": "$(settings-gear)",
-        "when": "obi.contains_obi_project && obi.valid-config"
+        "when": "lbr.contains_lbr_project && lbr.valid-config"
       },
       {
-        "command": "obi.source-filter.delete-config",
-        "title": "%obi.source-filter.delete-config%",
+        "command": "lbr.source-filter.delete-config",
+        "title": "%lbr.source-filter.delete-config%",
         "icon": "$(trash)",
-        "when": "obi.contains_obi_project && obi.valid-config"
+        "when": "lbr.contains_lbr_project && lbr.valid-config"
       },
       {
-        "command": "obi.source-filter.view-source-infos",
-        "title": "%obi.source-filter.view-source-infos%",
+        "command": "lbr.source-filter.view-source-infos",
+        "title": "%lbr.source-filter.view-source-infos%",
         "icon": "$(preview)",
-        "when": "obi.contains_obi_project && obi.valid-config"
+        "when": "lbr.contains_lbr_project && lbr.valid-config"
       },
       {
-        "command": "obi.source-filter.maintain-source-infos",
-        "title": "%obi.source-filter.maintain-source-infos%",
+        "command": "lbr.source-filter.maintain-source-infos",
+        "title": "%lbr.source-filter.maintain-source-infos%",
         "icon": "$(settings-gear)",
-        "when": "obi.contains_obi_project && obi.valid-config"
+        "when": "lbr.contains_lbr_project && lbr.valid-config"
       },
       {
-        "command": "obi.source-filter.add-source-file",
-        "title": "%obi.source-filter.add-source-file%",
+        "command": "lbr.source-filter.add-source-file",
+        "title": "%lbr.source-filter.add-source-file%",
         "icon": "$(add)",
-        "when": "obi.contains_obi_project && obi.valid-config"
+        "when": "lbr.contains_lbr_project && lbr.valid-config"
       },
       {
-        "command": "obi.source-filter.add-source-member",
-        "title": "%obi.source-filter.add-source-member%",
+        "command": "lbr.source-filter.add-source-member",
+        "title": "%lbr.source-filter.add-source-member%",
         "icon": "$(add)",
-        "when": "obi.contains_obi_project && obi.valid-config"
+        "when": "lbr.contains_lbr_project && lbr.valid-config"
       },
       {
-        "command": "obi.source-filter.change-source-description",
-        "title": "%obi.source-filter.change-source-description%",
+        "command": "lbr.source-filter.change-source-description",
+        "title": "%lbr.source-filter.change-source-description%",
         "icon": "$(preview)",
-        "when": "obi.contains_obi_project && obi.valid-config"
+        "when": "lbr.contains_lbr_project && lbr.valid-config"
       },
       {
-        "command": "obi.source-filter.rename-source-member",
-        "title": "%obi.source-filter.rename-source-member%",
-        "when": "obi.contains_obi_project && obi.valid-config"
+        "command": "lbr.source-filter.rename-source-member",
+        "title": "%lbr.source-filter.rename-source-member%",
+        "when": "lbr.contains_lbr_project && lbr.valid-config"
       },
       {
-        "command": "obi.source-filter.delete-source-member",
-        "title": "%obi.source-filter.delete-source-member%",
-        "when": "obi.contains_obi_project && obi.valid-config"
+        "command": "lbr.source-filter.delete-source-member",
+        "title": "%lbr.source-filter.delete-source-member%",
+        "when": "lbr.contains_lbr_project && lbr.valid-config"
       },
       {
-        "command": "obi.source.maintain-source-dependency",
-        "title": "%obi.source.maintain-source-dependency%",
+        "command": "lbr.source.maintain-source-dependency",
+        "title": "%lbr.source.maintain-source-dependency%",
         "icon": "$(combine)",
-        "when": "obi.contains_obi_project && obi.valid-config"
+        "when": "lbr.contains_lbr_project && lbr.valid-config"
       },
       {
-        "command": "obi.deployment.maintain",
-        "title": "%obi.deployment.maintain%",
+        "command": "lbr.deployment.maintain",
+        "title": "%lbr.deployment.maintain%",
         "icon": "$(settings-gear)",
-        "when": "1==2 && obi.contains_obi_project && obi.valid-config"
+        "when": "1==2 && lbr.contains_lbr_project && lbr.valid-config"
       },
       {
-        "command": "obi.build-history.update",
+        "command": "lbr.build-history.update",
         "title": "Update Build History"
       },
       {
-        "command": "obi.build-history.delete-item",
+        "command": "lbr.build-history.delete-item",
         "title": "Delete Build History Item",
         "icon": "$(trash)"
       },
       {
-        "command": "obi.build-history.delete-date",
+        "command": "lbr.build-history.delete-date",
         "title": "Delete Build History for Date",
         "icon": "$(trash)"
       }
@@ -212,151 +210,151 @@
     "menus": {
       "view/title": [
         {
-          "command": "obi.source-filter.add",
-          "when": "obi.contains_obi_project && obi.valid-config && view == obi.source-filter",
+          "command": "lbr.source-filter.add",
+          "when": "lbr.contains_lbr_project && lbr.valid-config && view == lbr.source-filter",
           "group": "navigation@1"
         },
         {
-          "command": "obi.source-filter.view-source-infos",
-          "when": "obi.contains_obi_project && obi.valid-config && view == obi.source-filter",
+          "command": "lbr.source-filter.view-source-infos",
+          "when": "lbr.contains_lbr_project && lbr.valid-config && view == lbr.source-filter",
           "group": "navigation@2"
         },
         {
-          "command": "obi.source-filter.maintain-source-infos",
-          "when": "obi.contains_obi_project && obi.valid-config && view == obi.source-filter",
+          "command": "lbr.source-filter.maintain-source-infos",
+          "when": "lbr.contains_lbr_project && lbr.valid-config && view == lbr.source-filter",
           "group": "navigation@3"
         },
         {
-          "command": "obi.source-filter.update",
-          "when": "obi.contains_obi_project && obi.valid-config && view == obi.source-filter",
+          "command": "lbr.source-filter.update",
+          "when": "lbr.contains_lbr_project && lbr.valid-config && view == lbr.source-filter",
           "group": "navigation@5"
         },
         {
-          "command": "obi.get-remote-source-list",
-          "when": "false && obi.contains_obi_project && (view == obi.controller || (!obi.valid-config && view == obi-config-invalid))",
+          "command": "lbr.get-remote-source-list",
+          "when": "false && lbr.contains_lbr_project && (view == lbr.controller || (!lbr.valid-config && view == lbr-config-invalid))",
           "group": "navigation@20"
         },
         {
-          "command": "obi.get-remote-compiled-object-list",
-          "when": "false && obi.contains_obi_project && (view == obi.controller || (!obi.valid-config && view == obi-config-invalid))",
+          "command": "lbr.get-remote-compiled-object-list",
+          "when": "false && lbr.contains_lbr_project && (view == lbr.controller || (!lbr.valid-config && view == lbr-config-invalid))",
           "group": "navigation@30"
         },
         {
-          "command": "obi.reset-compiled-object-list",
-          "when": "obi.contains_obi_project && (view == obi.controller || (!obi.valid-config && view == obi-config-invalid))",
+          "command": "lbr.reset-compiled-object-list",
+          "when": "lbr.contains_lbr_project && (view == lbr.controller || (!lbr.valid-config && view == lbr-config-invalid))",
           "group": "navigation@40"
         },
         {
-          "command": "obi.check-remote-sources",
-          "when": "false && obi.contains_obi_project && (view == obi.controller || (!obi.valid-config && view == obi-config-invalid))",
+          "command": "lbr.check-remote-sources",
+          "when": "false && lbr.contains_lbr_project && (view == lbr.controller || (!lbr.valid-config && view == lbr-config-invalid))",
           "group": "navigation@50"
         },
         {
-          "command": "obi.transfer-all",
-          "when": "obi.contains_obi_project && (view == obi.controller || (!obi.valid-config && view == obi-config-invalid))",
+          "command": "lbr.transfer-all",
+          "when": "lbr.contains_lbr_project && (view == lbr.controller || (!lbr.valid-config && view == lbr-config-invalid))",
           "group": "navigation@60"
         },
         {
-          "command": "obi.controller.dependency-list",
-          "when": "obi.contains_obi_project && (view == obi.controller || (!obi.valid-config && view == obi-config-invalid))",
+          "command": "lbr.controller.dependency-list",
+          "when": "lbr.contains_lbr_project && (view == lbr.controller || (!lbr.valid-config && view == lbr-config-invalid))",
           "group": "navigation@65"
         },
         {
-          "command": "obi.controller.config",
-          "when": "obi.contains_obi_project && (view == obi.controller || (!obi.valid-config && view == obi-config-invalid))",
+          "command": "lbr.controller.config",
+          "when": "lbr.contains_lbr_project && (view == lbr.controller || (!lbr.valid-config && view == lbr-config-invalid))",
           "group": "navigation@70"
         },
         {
-          "command": "obi.deployment.maintain",
-          "when": "obi.contains_obi_project && obi.valid-config && view == obi.deployment",
+          "command": "lbr.deployment.maintain",
+          "when": "lbr.contains_lbr_project && lbr.valid-config && view == lbr.deployment",
           "group": "navigation@1"
         }
       ],
       "editor/title/context": [
         {
-          "command": "obi.source.edit-compile-config",
-          "when": "obi.contains_obi_project"
+          "command": "lbr.source.edit-compile-config",
+          "when": "lbr.contains_lbr_project"
         },
         {
-          "command": "obi.source-filter.change-source-description",
-          "when": "obi.contains_obi_project"
+          "command": "lbr.source-filter.change-source-description",
+          "when": "lbr.contains_lbr_project"
         },
         {
-          "command": "obi.source.maintain-source-dependency",
-          "when": "obi.contains_obi_project"
+          "command": "lbr.source.maintain-source-dependency",
+          "when": "lbr.contains_lbr_project"
         }
       ],
       "explorer/context": [
         {
-          "command": "obi.source.edit-compile-config",
-          "when": "obi.contains_obi_project"
+          "command": "lbr.source.edit-compile-config",
+          "when": "lbr.contains_lbr_project"
         },
         {
-          "command": "obi.source-filter.change-source-description",
-          "when": "obi.contains_obi_project"
+          "command": "lbr.source-filter.change-source-description",
+          "when": "lbr.contains_lbr_project"
         },
         {
-          "command": "obi.source.maintain-source-dependency",
-          "when": "obi.contains_obi_project"
+          "command": "lbr.source.maintain-source-dependency",
+          "when": "lbr.contains_lbr_project"
         }
       ],
       "view/item/context": [
         {
-          "command": "obi.source-filter.show-view",
-          "when": "obi.contains_obi_project && view == obi.source-filter && viewItem == source-list",
+          "command": "lbr.source-filter.show-view",
+          "when": "lbr.contains_lbr_project && view == lbr.source-filter && viewItem == source-list",
           "group": "inline@0"
         },
         {
-          "command": "obi.source-filter.edit-config",
-          "when": "obi.contains_obi_project && view == obi.source-filter && viewItem == source-list",
+          "command": "lbr.source-filter.edit-config",
+          "when": "lbr.contains_lbr_project && view == lbr.source-filter && viewItem == source-list",
           "group": "inline@2"
         },
         {
-          "command": "obi.source-filter.delete-config",
-          "when": "obi.contains_obi_project && view == obi.source-filter && viewItem == source-list",
+          "command": "lbr.source-filter.delete-config",
+          "when": "lbr.contains_lbr_project && view == lbr.source-filter && viewItem == source-list",
           "group": "inline@3"
         },
         {
-          "command": "obi.source.edit-compile-config",
-          "when": "obi.contains_obi_project && view == obi.source-filter && viewItem == obi-source",
+          "command": "lbr.source.edit-compile-config",
+          "when": "lbr.contains_lbr_project && view == lbr.source-filter && viewItem == lbr-source",
           "group": "inline@0"
         },
         {
-          "command": "obi.source.maintain-source-dependency",
-          "when": "obi.contains_obi_project && view == obi.source-filter && viewItem == obi-source",
+          "command": "lbr.source.maintain-source-dependency",
+          "when": "lbr.contains_lbr_project && view == lbr.source-filter && viewItem == lbr-source",
           "group": "inline@1"
         },
         {
-          "command": "obi.source-filter.change-source-description",
-          "when": "obi.contains_obi_project && view == obi.source-filter && viewItem == obi-source",
+          "command": "lbr.source-filter.change-source-description",
+          "when": "lbr.contains_lbr_project && view == lbr.source-filter && viewItem == lbr-source",
           "group": "inline@1"
         },
         {
-          "command": "obi.source-filter.rename-source-member",
-          "when": "obi.contains_obi_project && view == obi.source-filter && viewItem == obi-source"
+          "command": "lbr.source-filter.rename-source-member",
+          "when": "lbr.contains_lbr_project && view == lbr.source-filter && viewItem == lbr-source"
         },
         {
-          "command": "obi.source-filter.delete-source-member",
-          "when": "obi.contains_obi_project && view == obi.source-filter && viewItem == obi-source"
+          "command": "lbr.source-filter.delete-source-member",
+          "when": "lbr.contains_lbr_project && view == lbr.source-filter && viewItem == lbr-source"
         },
         {
-          "command": "obi.source-filter.add-source-member",
-          "when": "obi.contains_obi_project && view == obi.source-filter && viewItem == source-file",
+          "command": "lbr.source-filter.add-source-member",
+          "when": "lbr.contains_lbr_project && view == lbr.source-filter && viewItem == source-file",
           "group": "inline@0"
         },
         {
-          "command": "obi.source-filter.add-source-file",
-          "when": "obi.contains_obi_project && view == obi.source-filter && viewItem == source-lib",
+          "command": "lbr.source-filter.add-source-file",
+          "when": "lbr.contains_lbr_project && view == lbr.source-filter && viewItem == source-lib",
           "group": "inline@0"
         },
         {
-          "command": "obi.build-history.delete-item",
-          "when": "view == obi.build-history && viewItem == buildHistoryFile",
+          "command": "lbr.build-history.delete-item",
+          "when": "view == lbr.build-history && viewItem == buildHistoryFile",
           "group": "inline"
         },
         {
-          "command": "obi.build-history.delete-date",
-          "when": "view == obi.build-history && viewItem == buildHistoryDate",
+          "command": "lbr.build-history.delete-date",
+          "when": "view == lbr.build-history && viewItem == buildHistoryDate",
           "group": "inline"
         }
       ]
@@ -364,55 +362,55 @@
     "viewsContainers": {
       "activitybar": [
         {
-          "id": "obi-bar",
+          "id": "lbr-bar",
           "title": "Object Builder for i",
           "icon": "$(code)"
         }
       ]
     },
     "views": {
-      "obi-bar": [
+      "lbr-bar": [
         {
           "type": "webview",
-          "id": "obi.controller",
-          "name": "OBI Build",
-          "when": "obi.contains_obi_project && obi.valid-config"
+          "id": "lbr.controller",
+          "name": "LBR Build",
+          "when": "lbr.contains_lbr_project && lbr.valid-config"
         },
         {
           "type": "tree",
-          "id": "obi.build-history",
+          "id": "lbr.build-history",
           "name": "Build history",
-          "when": "obi.contains_obi_project && obi.valid-config"
+          "when": "lbr.contains_lbr_project && lbr.valid-config"
         },
         {
           "type": "tree",
-          "id": "obi.source-filter",
+          "id": "lbr.source-filter",
           "name": "%Source filters%",
-          "when": "obi.contains_obi_project && obi.valid-config"
+          "when": "lbr.contains_lbr_project && lbr.valid-config"
         },
         {
           "type": "webview",
-          "id": "obi.quick-settings",
+          "id": "lbr.quick-settings",
           "name": "%Quick settings%",
-          "when": "false && obi.contains_obi_project && obi.valid-config"
+          "when": "false && lbr.contains_lbr_project && lbr.valid-config"
         },
         {
           "type": "webview",
-          "id": "obi.deployment",
+          "id": "lbr.deployment",
           "name": "%deployment%",
-          "when": "1==2 && obi.contains_obi_project && obi.valid-config"
+          "when": "1==2 && lbr.contains_lbr_project && lbr.valid-config"
         },
         {
           "type": "webview",
-          "id": "obi-welcome",
+          "id": "lbr-welcome",
           "name": "%Welcome%",
-          "when": "obi.contains_obi_project == false"
+          "when": "lbr.contains_lbr_project == false"
         },
         {
           "type": "webview",
-          "id": "obi-config-invalid",
+          "id": "lbr-config-invalid",
           "name": "%Invalid config%",
-          "when": "obi.contains_obi_project && !obi.valid-config"
+          "when": "lbr.contains_lbr_project && !lbr.valid-config"
         }
       ]
     }

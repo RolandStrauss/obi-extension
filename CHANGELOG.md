@@ -99,7 +99,7 @@
 
 ## [0.5.1]
 
-* Generate build list without OBI python client
+* Generate build list without LBR python client
 * Build summary design
 * Bugfixes
 
@@ -136,7 +136,7 @@
 
 ## [0.4.14]
 
-* Update obi config template
+* Update lbr config template
 
 
 ## [0.4.13]
@@ -146,7 +146,7 @@
 
 ## [0.4.12]
 
-* Update OBI backend
+* Update LBR backend
 
 
 ## [0.4.11]
@@ -257,7 +257,7 @@
 
 ## [0.3.26]
 
-* Prints error message from OBI
+* Prints error message from LBR
 * npm update
 
 
@@ -318,7 +318,7 @@
 
 ## [0.3.14]
 
-* Log output if local OBI failed
+* Log output if local LBR failed
 * Now you can just transfer a minimum setup to remote IBM i, when if remote IFS directory doesn't exist yet
 
 
@@ -507,7 +507,7 @@
   
 ### Changed
 
-* Better support for local OBI if exist
+* Better support for local LBR if exist
 * Optimized some SSH commands
 
 

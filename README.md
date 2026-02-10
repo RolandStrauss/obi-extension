@@ -1,6 +1,6 @@
-# OBI README
+# LBR README
 
-Object builder for i (OBI) is an automatic build tool.
+Object builder for i (LBR) is an automatic build tool.
 
 <p align="center">
   <a href="https://www.buymeacoffee.com/prouza"><img src="https://img.shields.io/badge/%F0%9F%8D%BA-Buy%20me%20a%20beer-red?style=flat" alt="Buy me a beer"></a>
@@ -61,9 +61,9 @@ Final release will be available soon.
 ## Requirements
 
 * On IBM i SSH is necessary  
-  https://github.com/andreas-prouza/ibm-i-build/blob/main/docs/pages/SSH.md
-* You need to clone the OBI project on your IBM i:  
-  https://github.com/andreas-prouza/obi
+  https://github.com/rolandstrauss/ibm-i-build/blob/main/docs/pages/SSH.md
+* You need to clone the LBR project on your IBM i:  
+  https://github.com/rolandstrauss/lbr
 
 
 
@@ -85,16 +85,16 @@ Because you work locally, you need to sync your changes with other developers.
 
 1. On your PC create an empty project folder
 2. In vscode open that folder
-3. Switch to the OBI view
+3. Switch to the LBR view
    
    You will see the welcome screen.  
-   Here you can initialize the project with OBI
+   Here you can initialize the project with LBR
 
     <img src="asserts/img/ext/welcome3.png" style="width: 300px">
 
-   This creates a new folder ```.obi``` including some initial config files
+   This creates a new folder ```.lbr``` including some initial config files
 
-4. Then OBI opens the config where you need to define some mandatory settings (server, user credentials, ifs locations, ...)
+4. Then LBR opens the config where you need to define some mandatory settings (server, user credentials, ifs locations, ...)
    
      <img src="asserts/img/ext/config-minimum.png" style="width: 800px">
 
@@ -104,25 +104,25 @@ Because you work locally, you need to sync your changes with other developers.
 
      When you finished configuration, save it and your project gets reloaded automatically.
 
-5. Now, OBI is ready. It comes with an sample source in the ```Source Filters``` area
-   <img src="asserts/img/ext/obi-after-init.png" style="width: 800px">
+5. Now, LBR is ready. It comes with an sample source in the ```Source Filters``` area
+   <img src="asserts/img/ext/lbr-after-init.png" style="width: 800px">
 
 
 6.  On your IBM i
-    Clone OBI from GitHub somewhere in the IFS and run the setup script.
+    Clone LBR from GitHub somewhere in the IFS and run the setup script.
     
     ```sh
-    git clone https://github.com/andreas-prouza/obi /ifs/path/obi
-    cd /ifs/path/obi
+    git clone https://github.com/rolandstrauss/lbr /ifs/path/lbr
+    cd /ifs/path/lbr
     ./setup.sh
     ```
 
     (Copy the path in your project config)
 
-    <img src="asserts/img/ext/obi-path.png" style="width: 800px">
+    <img src="asserts/img/ext/lbr-path.png" style="width: 800px">
 
 
-### Start migrating your source to OBI
+### Start migrating your source to LBR
 
 1. **GIT**  
   If you are working in a Team you should use git
@@ -133,10 +133,10 @@ Because you work locally, you need to sync your changes with other developers.
 2. **Copy source to IFS**  
    Get your Sources to IFS (to your project folder)
    You can use my RPG program to get this job done: 
-   https://github.com/andreas-prouza/ibm-i-build-obi/blob/main/src/prouzalib/qrpglesrc/cpysrc2ifs.sqlrpgle.pgm
+   https://github.com/rolandstrauss/ibm-i-build-lbr/blob/main/src/prouzalib/qrpglesrc/cpysrc2ifs.sqlrpgle.pgm
 
 3. Reset the compiled object list
-   OBI can check which sources have changed and need to be built.  
+   LBR can check which sources have changed and need to be built.  
    Therefore, a hash value is stored for each source.
    
    <img src="asserts/img/ext/compiled-obj-list.png" style="width: 300px">
@@ -145,12 +145,12 @@ Because you work locally, you need to sync your changes with other developers.
 
 4.   When you are motivated, you can create a dependency list.
     
-     With a dependency list OBI creates the correct build order and includes all dependend objects. (E.g. for SRVPGM, files, ...)
-     (See [dependency list](https://github.com/andreas-prouza/ibm-i-build-obi/blob/main/docs/pages/configuration.md#etcdependencytoml))
+     With a dependency list LBR creates the correct build order and includes all dependend objects. (E.g. for SRVPGM, files, ...)
+     (See [dependency list](https://github.com/rolandstrauss/ibm-i-build-lbr/blob/main/docs/pages/configuration.md#etcdependencytoml))
     
 5.  Sync all changes to your git repo
 
-If no OBI config could be found, you will see the welcome screen:
+If no LBR config could be found, you will see the welcome screen:
 
 <img src="asserts/img/ext/welcome.png" style="width: 300px">
 
@@ -161,8 +161,8 @@ If no OBI config could be found, you will see the welcome screen:
 
 * [Source dependencies](asserts/docs/dependencies.md)
 * [SSH setup](asserts/docs/ssh.md)
-* [OBI: the build tool running on IBM i](https://github.com/andreas-prouza/obi)
-* [OBI: detailed description](https://github.com/andreas-prouza/ibm-i-build-obi)
-* [OBI: vscode extension](https://github.com/andreas-prouza/obi-extension)
+* [LBR: the build tool running on IBM i](https://github.com/rolandstrauss/lbr)
+* [LBR: detailed description](https://github.com/rolandstrauss/ibm-i-build-lbr)
+* [LBR: vscode extension](https://github.com/rolandstrauss/lbr-extension)
 
 **Happy ever after!**

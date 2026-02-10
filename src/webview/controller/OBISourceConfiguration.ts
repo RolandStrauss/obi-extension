@@ -5,7 +5,7 @@ import { getNonce } from "../../utilities/getNonce";
 import { DirTool } from '../../utilities/DirTool';
 import * as path from 'path';
 import { Constants } from '../../Constants';
-import { OBITools } from '../../utilities/OBITools';
+import { LBRTools } from '../../utilities/LBRTools';
 import { AppConfig, ConfigCompileSettings, SourceConfig, SourceConfigList } from './AppConfig';
 import { Workspace } from '../../utilities/Workspace';
 import { logger } from '../../utilities/Logger';
@@ -35,9 +35,9 @@ env.addFilter("typename", (obj: any) => {
 
 
 
-export class OBISourceConfiguration {
+export class LBRSourceConfiguration {
 
-  public static currentPanel: OBISourceConfiguration | undefined;
+  public static currentPanel: LBRSourceConfiguration | undefined;
   private readonly _panel: WebviewPanel;
   private _disposables: Disposable[] = [];
   private static _context: vscode.ExtensionContext;
@@ -70,22 +70,22 @@ export class OBISourceConfiguration {
    */
   public static async render(context: vscode.ExtensionContext, extensionUri: Uri, source_config: string) {
 
-    OBISourceConfiguration._context = context;
-    OBISourceConfiguration._extensionUri = extensionUri;
-    OBISourceConfiguration.source_config = OBITools.convert_local_filepath_2_obi_filepath(source_config);
+    LBRSourceConfiguration._context = context;
+    LBRSourceConfiguration._extensionUri = extensionUri;
+    LBRSourceConfiguration.source_config = LBRTools.convert_local_filepath_2_lbr_filepath(source_config);
 
-    if (OBISourceConfiguration.currentPanel) {
-      OBISourceConfiguration.currentPanel.dispose();
+    if (LBRSourceConfiguration.currentPanel) {
+      LBRSourceConfiguration.currentPanel.dispose();
     }
     // If a webview panel does not already exist create and show a new one
     const panel = this.createNewPanel(extensionUri);
 
-    panel.webview.html = await OBISourceConfiguration.generate_html(extensionUri, panel.webview);
-    
+    panel.webview.html = await LBRSourceConfiguration.generate_html(extensionUri, panel.webview);
+
     panel.webview.onDidReceiveMessage(this.onReceiveMessage);
 
-    OBISourceConfiguration.currentPanel = new OBISourceConfiguration(panel, extensionUri);
-  
+    LBRSourceConfiguration.currentPanel = new LBRSourceConfiguration(panel, extensionUri);
+
   }
 
 
@@ -98,19 +98,19 @@ export class OBISourceConfiguration {
     const config: AppConfig = AppConfig.get_app_config();
 
     let source_config: SourceConfig|undefined;
-    
+
     if (source_configs)
-      source_config = source_configs[OBISourceConfiguration.source_config];
-    
-    const html = env.render('controller/config_source_details.html', 
+      source_config = source_configs[LBRSourceConfiguration.source_config];
+
+    const html = env.render('controller/config_source_details.html',
       {
-        global_stuff: OBITools.get_global_stuff(webview, extensionUri),
+        global_stuff: LBRTools.get_global_stuff(webview, extensionUri),
         config_css: getUri(webview, extensionUri, ["asserts/css", "config.css"]),
         main_java_script: getUri(webview, extensionUri, ["out", "source_config.js"]),
         icons: {debug_start: '$(preview)'},
-        source: OBISourceConfiguration.source_config,
-        source_file: DirTool.get_encoded_file_URI(path.join(config.general['source-dir']||'src', OBISourceConfiguration.source_config)),
-        source_config_file: DirTool.get_encoded_file_URI(Constants.OBI_SOURCE_CONFIG_FILE),
+        source: LBRSourceConfiguration.source_config,
+        source_file: DirTool.get_encoded_file_URI(path.join(config.general['source-dir']||'src', LBRSourceConfiguration.source_config)),
+        source_config_file: DirTool.get_encoded_file_URI(Constants.LBR_SOURCE_CONFIG_FILE),
         source_config: source_config
       }
     );
@@ -123,13 +123,13 @@ export class OBISourceConfiguration {
 
   public static async update(): Promise<void> {
 
-    const panel = OBISourceConfiguration.currentPanel;
-    
+    const panel = LBRSourceConfiguration.currentPanel;
+
     if (!panel)
       return;
 
-    panel._panel.webview.html = await OBISourceConfiguration.generate_html(OBISourceConfiguration._extensionUri, OBISourceConfiguration.currentPanel?._panel.webview);
-    
+    panel._panel.webview.html = await LBRSourceConfiguration.generate_html(LBRSourceConfiguration._extensionUri, LBRSourceConfiguration.currentPanel?._panel.webview);
+
   }
 
 
@@ -149,11 +149,11 @@ export class OBISourceConfiguration {
     switch (command) {
 
       case "add_source_cmd":
-        OBISourceConfiguration.add_source_cmd(message.key, message.value);
+        LBRSourceConfiguration.add_source_cmd(message.key, message.value);
         break;
 
       case "delete_source_cmd":
-        OBISourceConfiguration.delete_source_cmd(message.key);
+        LBRSourceConfiguration.delete_source_cmd(message.key);
         break;
 
       case "add_source_setting":
@@ -163,19 +163,19 @@ export class OBISourceConfiguration {
             message.value = message.value.split(/\r?\n/);
             break;
         }
-        OBISourceConfiguration.add_source_setting(message.key, message.value);
+        LBRSourceConfiguration.add_source_setting(message.key, message.value);
         break;
 
       case "delete_source_setting":
-        OBISourceConfiguration.delete_source_setting(message.key);
+        LBRSourceConfiguration.delete_source_setting(message.key);
         break;
 
       case "save_config":
-        OBISourceConfiguration.save_config(message.settings, message.source_cmds, message.steps);
+        LBRSourceConfiguration.save_config(message.settings, message.source_cmds, message.steps);
         break;
 
       case "reload":
-        OBISourceConfiguration.update();
+        LBRSourceConfiguration.update();
         break;
     }
     return;
@@ -185,26 +185,26 @@ export class OBISourceConfiguration {
 
   private static delete_source_setting(key:string) {
     let source_configs: SourceConfigList|undefined = AppConfig.get_source_configs();
-    const source_name:string = OBISourceConfiguration.source_config;
+    const source_name:string = LBRSourceConfiguration.source_config;
 
     if (source_configs && source_configs[source_name] && source_configs[source_name].settings){
       delete source_configs[source_name].settings[key];
     }
 
-    DirTool.write_toml(path.join(Workspace.get_workspace(), Constants.OBI_SOURCE_CONFIG_FILE), source_configs || {});
+    DirTool.write_toml(path.join(Workspace.get_workspace(), Constants.LBR_SOURCE_CONFIG_FILE), source_configs || {});
   }
 
 
 
   private static delete_source_cmd(key:string) {
     let source_configs: SourceConfigList|undefined = AppConfig.get_source_configs();
-    const source_name:string = OBISourceConfiguration.source_config;
+    const source_name:string = LBRSourceConfiguration.source_config;
 
     if (source_configs && source_configs[source_name] && source_configs[source_name]['source-cmds']){
       delete source_configs[source_name]['source-cmds'][key];
     }
 
-    DirTool.write_toml(path.join(Workspace.get_workspace(), Constants.OBI_SOURCE_CONFIG_FILE), source_configs || {});
+    DirTool.write_toml(path.join(Workspace.get_workspace(), Constants.LBR_SOURCE_CONFIG_FILE), source_configs || {});
   }
 
 
@@ -212,7 +212,7 @@ export class OBISourceConfiguration {
   private static add_source_cmd(key:string, value:string) {
     let source_configs: SourceConfigList|undefined = AppConfig.get_source_configs();
     let source_config: SourceConfig = {"source-cmds": {key: value}, settings: {}, steps: []};
-    const source_name:string = OBISourceConfiguration.source_config;
+    const source_name:string = LBRSourceConfiguration.source_config;
 
     if (!source_configs || !source_configs[source_name]){
       source_configs = {source_name : source_config};
@@ -225,7 +225,7 @@ export class OBISourceConfiguration {
       source_configs[source_name]['source-cmds'][key] = value;
     }
 
-    DirTool.write_toml(path.join(Workspace.get_workspace(), Constants.OBI_SOURCE_CONFIG_FILE), source_configs);
+    DirTool.write_toml(path.join(Workspace.get_workspace(), Constants.LBR_SOURCE_CONFIG_FILE), source_configs);
   }
 
 
@@ -233,7 +233,7 @@ export class OBISourceConfiguration {
   private static add_source_setting(key:string, value:string) {
     let source_configs: SourceConfigList|undefined = AppConfig.get_source_configs();
     let source_config: SourceConfig = {"source-cmds": {}, settings: {key: value}, steps: []};
-    const source_name:string = OBISourceConfiguration.source_config;
+    const source_name:string = LBRSourceConfiguration.source_config;
 
     if (!source_configs || !source_configs[source_name]){
       source_configs = {source_name : source_config};
@@ -246,7 +246,7 @@ export class OBISourceConfiguration {
       source_configs[source_name].settings[key] = value;
     }
 
-    DirTool.write_toml(path.join(Workspace.get_workspace(), Constants.OBI_SOURCE_CONFIG_FILE), source_configs);
+    DirTool.write_toml(path.join(Workspace.get_workspace(), Constants.LBR_SOURCE_CONFIG_FILE), source_configs);
   }
 
 
@@ -255,14 +255,14 @@ export class OBISourceConfiguration {
 
     let source_configs: SourceConfigList|undefined = AppConfig.get_source_configs();
     let source_config: SourceConfig = {"source-cmds": source_cmds, settings: settings, steps: steps};
-    const source_name:string = OBISourceConfiguration.source_config;
+    const source_name:string = LBRSourceConfiguration.source_config;
 
     if (!source_configs)
       source_configs = {source_name : source_config};
     else
       source_configs[source_name] = source_config;
 
-    DirTool.write_toml(path.join(Workspace.get_workspace(), Constants.OBI_SOURCE_CONFIG_FILE), source_configs);
+    DirTool.write_toml(path.join(Workspace.get_workspace(), Constants.LBR_SOURCE_CONFIG_FILE), source_configs);
 
     vscode.window.showInformationMessage('Source configuration saved');
 
@@ -272,8 +272,8 @@ export class OBISourceConfiguration {
 
   private static createNewPanel(extensionUri : Uri) {
     return window.createWebviewPanel(
-      'obi_source_config', // Identifies the type of the webview. Used internally
-      'OBI source config', // Title of the panel displayed to the user
+      'lbr_source_config', // Identifies the type of the webview. Used internally
+      'LBR source config', // Title of the panel displayed to the user
       // The editor column the panel should be displayed in
       ViewColumn.One,
       // Extra panel configurations
@@ -296,7 +296,7 @@ export class OBISourceConfiguration {
    * Cleans up and disposes of webview resources when the webview panel is closed.
    */
   public dispose() {
-    OBISourceConfiguration.currentPanel = undefined;
+    LBRSourceConfiguration.currentPanel = undefined;
 
     // Dispose of the current webview panel
     this._panel.dispose();

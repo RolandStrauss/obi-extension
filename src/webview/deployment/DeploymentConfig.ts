@@ -4,7 +4,7 @@ import { getUri } from "../../utilities/getUri";
 import { DirTool } from '../../utilities/DirTool';
 import * as path from 'path';
 import { Constants } from '../../Constants';
-import { OBITools } from '../../utilities/OBITools';
+import { LBRTools } from '../../utilities/LBRTools';
 import { Workspace } from '../../utilities/Workspace';
 import { I_Releaser } from './I_Releaser';
 
@@ -23,7 +23,7 @@ export type Config = {
     "default-workflow"?: string,
     "main-branch"?: string,
     "auth-token"?: string
-  } 
+  }
 }
 
 
@@ -77,11 +77,11 @@ export class DeploymentConfig {
     const panel = this.createNewPanel(context.extensionUri);
 
     panel.webview.html = await DeploymentConfig.generate_html(context, context.extensionUri, panel.webview);
-    
+
     panel.webview.onDidReceiveMessage(this.onReceiveMessage);
 
     DeploymentConfig.currentPanel = new DeploymentConfig(panel, context.extensionUri);
-  
+
   }
 
 
@@ -102,13 +102,13 @@ export class DeploymentConfig {
 
     const config = DeploymentConfig.get_deployment_config();
 
-    const auth_token = await context.secrets.get(`obi|deployment|http_auth_token`);
+    const auth_token = await context.secrets.get(`lbr|deployment|http_auth_token`);
 
     nunjucks.configure(Constants.HTML_TEMPLATE_DIR);
-    
-    const html = nunjucks.render('deployment/deployment-config.html', 
+
+    const html = nunjucks.render('deployment/deployment-config.html',
       {
-        global_stuff: OBITools.get_global_stuff(webview, extensionUri),
+        global_stuff: LBRTools.get_global_stuff(webview, extensionUri),
         config_css: getUri(webview, extensionUri, ["asserts/css", "config.css"]),
         main_java_script: getUri(webview, extensionUri, ["out", "deployment_config.js"]),
         auth_token: auth_token,
@@ -125,12 +125,12 @@ export class DeploymentConfig {
   public static async update(): Promise<void> {
 
     const panel = DeploymentConfig.currentPanel;
-    
+
     if (!panel)
       return;
 
     panel._panel.webview.html = await DeploymentConfig.generate_html(DeploymentConfig._context, DeploymentConfig._extensionUri, DeploymentConfig.currentPanel?._panel.webview);
-    
+
   }
 
 
@@ -167,7 +167,7 @@ export class DeploymentConfig {
 
     const toml_file: string = path.join(Workspace.get_workspace(), Constants.DEPLOYMENT_CONFIG_FILE);
     data['i-releaser']['auth-token']
-    OBITools.ext_context.secrets.store('obi|deployment|http_auth_token', data['i-releaser']['auth-token'] || '');
+    LBRTools.ext_context.secrets.store('lbr|deployment|http_auth_token', data['i-releaser']['auth-token'] || '');
     delete data['i-releaser']['auth-token'];
     DirTool.write_toml(toml_file, data);
     I_Releaser.refresh();
@@ -178,7 +178,7 @@ export class DeploymentConfig {
 
   private static createNewPanel(extensionUri : Uri) {
     return window.createWebviewPanel(
-      'obi_deployment_config', // Identifies the type of the webview. Used internally
+      'lbr_deployment_config', // Identifies the type of the webview. Used internally
       'i-Releaser config', // Title of the panel displayed to the user
       // The editor column the panel should be displayed in
       ViewColumn.One,

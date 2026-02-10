@@ -4,7 +4,7 @@ import * as path from 'path';
 import { DirTool } from '../../utilities/DirTool';
 import { Constants } from '../../Constants';
 import { logger } from '../../utilities/Logger';
-import * as source from '../../obi/Source';
+import * as source from '../../lbr/Source';
 import { Workspace } from '../../utilities/Workspace';
 
 
@@ -124,23 +124,23 @@ export class BuildHistoryProvider implements vscode.TreeDataProvider<BuildHistor
     };
 
     // build
-    vscode.window.registerTreeDataProvider('obi.build-history', this);
+    vscode.window.registerTreeDataProvider('lbr.build-history', this);
 
     // create
-    const tree = vscode.window.createTreeView('obi.build-history', options);
+    const tree = vscode.window.createTreeView('lbr.build-history', options);
 
-    vscode.commands.registerCommand('obi.build-history.update', () => {
+    vscode.commands.registerCommand('lbr.build-history.update', () => {
       this.refresh();
     });
 
-    vscode.commands.registerCommand('obi.build-history.delete-item', (item: BuildHistoryItem) => {
+    vscode.commands.registerCommand('lbr.build-history.delete-item', (item: BuildHistoryItem) => {
       if (item && item.file_path && DirTool.dir_exists(item.file_path)) {
         fs.rmSync(item.file_path, { recursive: true, force: true });
         this.refresh();
       }
     });
 
-    vscode.commands.registerCommand('obi.build-history.delete-date', (item: BuildHistoryItem) => {
+    vscode.commands.registerCommand('lbr.build-history.delete-date', (item: BuildHistoryItem) => {
       const build_history_path = path.join(this.workspaceRoot, Constants.BUILD_HISTORY_DIR);
       if (item && item.date && DirTool.dir_exists(build_history_path)) {
         const build_history_dirs = DirTool.list_dir(build_history_path);
@@ -210,7 +210,7 @@ export class BuildHistoryItem extends vscode.TreeItem {
       this.contextValue = 'buildHistoryFile';
 
       this.command = {
-        command: 'obi.open_build_summary',
+        command: 'lbr.open_build_summary',
         title: 'Open Build Summary',
         arguments: [path.join(this.file_path, 'compile-list.json')]
       };

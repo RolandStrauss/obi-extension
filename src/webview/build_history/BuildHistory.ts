@@ -5,10 +5,10 @@ import { getNonce } from "../../utilities/getNonce";
 import { DirTool } from '../../utilities/DirTool';
 import * as path from 'path';
 import { Constants } from '../../Constants';
-import { OBITools } from '../../utilities/OBITools';
+import { LBRTools } from '../../utilities/LBRTools';
 import { AppConfig } from '../controller/AppConfig';
 import { Workspace } from '../../utilities/Workspace';
-import * as source from '../../obi/Source';
+import * as source from '../../lbr/Source';
 
 /*
 https://medium.com/@andy.neale/nunjucks-a-javascript-template-engine-7731d23eb8cc
@@ -48,16 +48,16 @@ export class BuildHistory {
 
         switch (command) {
           case "show_build_summary":
-            OBICommands.show_build_summary(message.file);
+            LBRCommands.show_build_summary(message.file);
             return;
 
           case "delete_item":
-            OBICommands.delete_compile_list_item(message.level, message.source);
+            LBRCommands.delete_compile_list_item(message.level, message.source);
             BuildHistory.update();
             return;
 
           case "delete_level":
-            OBICommands.delete_compile_list_level(message.level);
+            LBRCommands.delete_compile_list_level(message.level);
             BuildHistory.update();
             return;
         }

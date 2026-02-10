@@ -4,7 +4,7 @@ import { getUri } from "../../utilities/getUri";
 import { getNonce } from "../../utilities/getNonce";
 import { DirTool } from '../../utilities/DirTool';
 import { Constants } from '../../Constants';
-import { OBITools } from '../../utilities/OBITools';
+import { LBRTools } from '../../utilities/LBRTools';
 import * as path from 'path';
 import { AppConfig } from '../controller/AppConfig';
 import { BuildSummary } from './BuildSummary';
@@ -61,7 +61,7 @@ export class LogOutput {
     const log_content = LogOutput.get_log_content(workspaceUri, log_type, level, source, cmd_index);
 
     nunjucks.configure(Constants.HTML_TEMPLATE_DIR);
-    const html = nunjucks.render('show_changes/show_log.html', 
+    const html = nunjucks.render('show_changes/show_log.html',
       {
         log_type: log_type,
         source: source,
@@ -71,7 +71,7 @@ export class LogOutput {
     panel.webview.html = html;
 
     LogOutput.currentPanel = new LogOutput(panel);
-  
+
   }
 
 
@@ -96,8 +96,8 @@ export class LogOutput {
 
   private static get_log_content(workspaceUri: Uri, log_type: string, level: number, source: string, cmd_index: number): string {
 
-    const fs = require("fs"); 
-    
+    const fs = require("fs");
+
     const config = AppConfig.get_app_config();
     let compile_list = BuildSummary.get_compile_list();
 
@@ -117,12 +117,12 @@ export class LogOutput {
         return i_source['cmds'][cmd_index][log_type];
 
       }
-      
+
     }
 
     return ''
   }
-  
+
 
   /**
    * Cleans up and disposes of webview resources when the webview panel is closed.

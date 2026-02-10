@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import { OBIConstants } from './obi_constants';
+import { LBRConstants } from './lbr_constants';
 import { deepListMerge } from './dict_tools';
 import { addBuildCmds } from './build_cmds';
 import { AppConfig } from '../../../webview/controller/AppConfig';
@@ -14,22 +14,22 @@ export function getBuildOrder(
   targetList: string[] = [],
   appConfig?: any
 ): any {
-  
+
   if (!appConfig) {
     appConfig = AppConfig.get_app_config();
   }
   const objectsTree = getTargetsDependedObjects(dependencyDict, targetList);
   const ws = Workspace.get_workspace();
 
-  DirTool.write_json(path.join(ws, '.obi/tmp/objects_tree.json'), objectsTree);
+  DirTool.write_json(path.join(ws, '.lbr/tmp/objects_tree.json'), objectsTree);
 
   const dependendObjects = getTargetsOnlyDependedObjects(dependencyDict, targetList);
-  DirTool.write_json(path.join(ws, OBIConstants.get('DEPENDEND_OBJECT_LIST')), dependendObjects);
+  DirTool.write_json(path.join(ws, LBRConstants.get('DEPENDEND_OBJECT_LIST')), dependendObjects);
 
   const allObjectsToBuild = Array.from(new Set([...targetList, ...dependendObjects]));
 
   let orderedTargetTree = getTargetsByLevel(objectsTree);
-  
+
   if (appConfig.general?.ALWAYS_TRANSFER_RELATED_COPYBOOKS) {
     const copySources = getCopySources(dependencyDict, allObjectsToBuild);
     logger.info(`Found copy sources: ${copySources.join(', ')}`);
@@ -43,15 +43,15 @@ export function getBuildOrder(
 
 
 
-  DirTool.write_json(path.join(ws, '.obi/tmp/ordered_target_tree.json'), orderedTargetTree);
+  DirTool.write_json(path.join(ws, '.lbr/tmp/ordered_target_tree.json'), orderedTargetTree);
 
   let newTargetTree = removeDuplicities(orderedTargetTree);
-  DirTool.write_json(path.join(ws, '.obi/tmp/new_target_tree.json'), newTargetTree);
+  DirTool.write_json(path.join(ws, '.lbr/tmp/new_target_tree.json'), newTargetTree);
 
   if (!appConfig) {
     appConfig = AppConfig.get_app_config();
   }
-  const extended_sources_config = DirTool.get_toml(OBIConstants.get('EXTENDED_SOURCE_PROCESS_CONFIG_TOML'));
+  const extended_sources_config = DirTool.get_toml(LBRConstants.get('EXTENDED_SOURCE_PROCESS_CONFIG_TOML'));
 
   addBuildCmds(newTargetTree, appConfig, extended_sources_config);
 
@@ -139,7 +139,7 @@ export function getTargetOnlyDependedObjects(
 }
 
 export function removeDuplicities(targetTree: any[] = []): any[] {
-  
+
   logger.debug('Sort target tree by level');
 
   const sortedTree = [...targetTree].sort((a, b) => a.level - b.level);
@@ -166,7 +166,7 @@ export function removeDuplicities(targetTree: any[] = []): any[] {
 
   const optimizeTree = (sortedTree) => {
     const seenSources = new Set();
-    
+
     // 1. Reverse the tree to start from the highest level (Level 5 -> Level 1)
     // We use slice() to avoid mutating the original array order during iteration
     const reversedTree = [...sortedTree].reverse();

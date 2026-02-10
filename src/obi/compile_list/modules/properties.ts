@@ -1,4 +1,4 @@
-import { OBIConstants } from './obi_constants';
+import { LBRConstants } from './lbr_constants';
 import { getTableElement } from './toml_tools';
 import { DirTool } from '../../../utilities/DirTool';
 import path from 'path';
@@ -7,7 +7,7 @@ import { Workspace } from '../../../utilities/Workspace';
 
 
 export function getSourceProperties(config: any, source: string): any {
-  const sourceConfig = DirTool.get_toml(path.join(Workspace.get_workspace(), OBIConstants.get('SOURCE_CONFIG_TOML')));
+  const sourceConfig = DirTool.get_toml(path.join(Workspace.get_workspace(), LBRConstants.get('SOURCE_CONFIG_TOML')));
   const srcSuffixes = source.split('.').slice(1).join('.');
   //const fileExtensions = srcSuffixes.split('.').slice(-2).join('');
   const fileExtensions = source.split('.').slice(-2).join('.');
