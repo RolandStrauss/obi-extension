@@ -41,7 +41,7 @@ suite('Extension Test Suite', () => {
 
 		let z2 = LBRTools.override_dict(x, y);
 
-		assert.strictEqual(z, z2);
+		assert.deepStrictEqual(z, z2);
 
 	});
 });

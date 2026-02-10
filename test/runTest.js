@@ -4,7 +4,8 @@ const { runTests } = require('@vscode/test-electron');
 async function main() {
   try {
     const extensionDevelopmentPath = path.resolve(__dirname, '..');
-    const extensionTestsPath = path.resolve(__dirname, 'extensionTests.js');
+    // Use compiled test runner under out/test/runTest.js which the harness expects
+    const extensionTestsPath = path.resolve(extensionDevelopmentPath, 'out', 'test', 'simpleRunner.js');
 
     await runTests({ extensionDevelopmentPath, extensionTestsPath });
   }

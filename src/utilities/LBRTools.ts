@@ -495,13 +495,17 @@ export class LBRTools {
 
 
   public static override_dict(from_dict: {}, to_dict: {}): any {
+    if (from_dict == undefined)
+      from_dict = {};
     if (to_dict == undefined)
       to_dict = {};
 
-    for (let [k, v] of Object.entries(from_dict)) {
-      if (typeof v === 'object' && v !== null && to_dict[k] && !(v instanceof Array) && !(v instanceof Date))
-        v = LBRTools.override_dict(from_dict[k], to_dict[k]);
+    // Start with a shallow clone of from_dict so values from `to_dict` will
+    // override them (equivalent to {...from_dict, ...to_dict} for shallow merge)
+    const result: any = JSON.parse(JSON.stringify(from_dict));
 
+    for (let [k, v] of Object.entries(to_dict)) {
+      // Skip undefined or empty values (preserve existing from_dict value)
       if (v == undefined)
         continue;
       if ((typeof v == 'string') && v.length == 0)
@@ -509,10 +513,18 @@ export class LBRTools {
       if (v instanceof Array && v.length == 0)
         continue;
 
-      to_dict[k] = v;
+      // If both sides are plain objects (not Array/Date), merge recursively
+      if (typeof v === 'object' && v !== null && !(v instanceof Array) && !(v instanceof Date)
+        && typeof result[k] === 'object' && result[k] !== null && !(result[k] instanceof Array) && !(result[k] instanceof Date)) {
+        result[k] = LBRTools.override_dict(result[k], v);
+      }
+      else {
+        // Otherwise, to_dict wins (overrides from_dict)
+        result[k] = v;
+      }
     }
-    //return {...to_dict, ...from_dict};
-    return to_dict;
+
+    return result;
   }
 
 
