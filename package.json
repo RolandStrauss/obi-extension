@@ -423,7 +423,7 @@
     "pretest": "npm run compile && npm run lint",
     "lint": "eslint src --ext ts",
     "test": "vscode-test",
-    "postinstall": "rm -rf node_modules/ssh2/test"
+    "postinstall": "node ./scripts/postinstall.js"
   },
   "devDependencies": {
     "@types/node": "^22.14.0",
