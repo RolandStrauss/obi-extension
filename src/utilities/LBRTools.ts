@@ -465,7 +465,7 @@ export class LBRTools {
 
   public static get_global_stuff(webview: vscode.Webview, extensionUri: vscode.Uri) {
 
-    const styleUri = getUri(webview, extensionUri, ["asserts/css", "style.css"]);
+    const styleUri = getUri(webview, extensionUri, ["assets/css", "style.css"]);
 
     const asserts_uri = webview.asWebviewUri(vscode.Uri.joinPath(extensionUri, 'asserts'));
     const nonce = getNonce();

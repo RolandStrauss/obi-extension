@@ -124,7 +124,7 @@ export class LBRSourceDependency {
     const html = env.render('source_list/maintain-source-dependency.html',
       {
         global_stuff: LBRTools.get_global_stuff(webview, extensionUri),
-        config_css: getUri(webview, extensionUri, ["asserts/css", "config.css"]),
+        config_css: getUri(webview, extensionUri, ["assets/css", "config.css"]),
         main_java_script: getUri(webview, extensionUri, ["out", "source_dependency.js"]),
         icons: {debug_start: '$(preview)'},
         src_folder: DirTool.get_encoded_file_URI(source_dir),

@@ -88,7 +88,7 @@ export class SourceListConfig {
     const html = nunjucks.render('source_list/source-filter-config.html',
       {
         global_stuff: LBRTools.get_global_stuff(webview, extensionUri),
-        config_css: getUri(webview, extensionUri, ["asserts/css", "config.css"]),
+        config_css: getUri(webview, extensionUri, ["assets/css", "config.css"]),
         main_java_script: getUri(webview, extensionUri, ["out", "source_list_config.js"]),
         source_list: source_list,
         source_list_file: SourceListConfig.source_list_file.replace('.json', ''),

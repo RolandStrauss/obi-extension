@@ -97,7 +97,7 @@ export class LBRConfiguration {
     const html = nunjucks.render('controller/configuration.html',
       {
         global_stuff: LBRTools.get_global_stuff(webview, extensionUri),
-        config_css: getUri(webview, extensionUri, ["asserts/css", "config.css"]),
+        config_css: getUri(webview, extensionUri, ["assets/css", "config.css"]),
         main_java_script: getUri(webview, extensionUri, ["out", "config.js"]),
         icons: {debug_start: '$(preview)'},
         user_config: user_config,

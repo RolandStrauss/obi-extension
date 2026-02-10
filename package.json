@@ -4,7 +4,7 @@
   "description": "Automated build tool for Lancelot",
   "publisher": "roland-strauss",
   "version": "0.6.13",
-  "icon": "asserts/img/ext/logo.png",
+  "icon": "assets/img/ext/logo.png",
   "keywords": [
     "ibm i",
     "ibmi",

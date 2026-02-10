@@ -109,7 +109,7 @@ export class DeploymentConfig {
     const html = nunjucks.render('deployment/deployment-config.html',
       {
         global_stuff: LBRTools.get_global_stuff(webview, extensionUri),
-        config_css: getUri(webview, extensionUri, ["asserts/css", "config.css"]),
+        config_css: getUri(webview, extensionUri, ["assets/css", "config.css"]),
         main_java_script: getUri(webview, extensionUri, ["out", "deployment_config.js"]),
         auth_token: auth_token,
         deploy_config: config

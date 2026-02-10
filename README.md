@@ -15,20 +15,20 @@ Final release will be available soon.
 
 * Use different profiles for your build settings (LIBL, target lib, build cmd, ...)
   
-  <img src="asserts/img/ext/controller-1.png" style="width: 200px">
+  <img src="assets/img/ext/controller-1.png" style="width: 200px">
 
 * Individual source lists
   
-  ![img](asserts/img/ext/source-filter-1.png)
+  ![img](assets/img/ext/source-filter-1.png)
 
 * Open source filter as table  
   There you can filter, sort
 
-  ![img](asserts/img/ext/source-filter-2.png)
+  ![img](assets/img/ext/source-filter-2.png)
 
 * Maintain source descriptions
   
-  ![img](asserts/img/ext/source-filter-3.png)
+  ![img](assets/img/ext/source-filter-3.png)
   
 * Check for changes
   
@@ -41,12 +41,12 @@ Final release will be available soon.
 
   E.g. if a table or view has changed, all objects which use them will be compiled too
 
-  ![img](asserts/img/ext/show-changes.png)
+  ![img](assets/img/ext/show-changes.png)
 
 
 * Compile in correct order
   
-  Tables before programs etc. based on the [dependency list](asserts/docs/dependencies.md)
+  Tables before programs etc. based on the [dependency list](assets/docs/dependencies.md)
 
 
 * See which objects has been compiled and their details  
@@ -55,7 +55,7 @@ Final release will be available soon.
   * spool file
   * error output
 
-  ![img](asserts/img/ext/build-summary.png)
+  ![img](assets/img/ext/build-summary.png)
 
 
 ## Requirements
@@ -77,7 +77,7 @@ Only for compile process, sources will be synchronised to the IFS.
 Because you work locally, you need to sync your changes with other developers.
 --> This is where **git** came in.
 
-![img](asserts/img/ext/concept.png)
+![img](assets/img/ext/concept.png)
 
 ## Following steps you need to do
 
@@ -90,13 +90,13 @@ Because you work locally, you need to sync your changes with other developers.
    You will see the welcome screen.  
    Here you can initialize the project with LBR
 
-    <img src="asserts/img/ext/welcome3.png" style="width: 300px">
+    <img src="assets/img/ext/welcome3.png" style="width: 300px">
 
    This creates a new folder ```.lbr``` including some initial config files
 
 4. Then LBR opens the config where you need to define some mandatory settings (server, user credentials, ifs locations, ...)
    
-     <img src="asserts/img/ext/config-minimum.png" style="width: 800px">
+    <img src="assets/img/ext/config-minimum.png" style="width: 800px">
 
      >**```Project configuration```** contains settings shared with all team members
 
@@ -105,7 +105,7 @@ Because you work locally, you need to sync your changes with other developers.
      When you finished configuration, save it and your project gets reloaded automatically.
 
 5. Now, LBR is ready. It comes with an sample source in the ```Source Filters``` area
-   <img src="asserts/img/ext/lbr-after-init.png" style="width: 800px">
+  <img src="assets/img/ext/lbr-after-init.png" style="width: 800px">
 
 
 6.  On your IBM i
@@ -119,7 +119,7 @@ Because you work locally, you need to sync your changes with other developers.
 
     (Copy the path in your project config)
 
-    <img src="asserts/img/ext/lbr-path.png" style="width: 800px">
+    <img src="assets/img/ext/lbr-path.png" style="width: 800px">
 
 
 ### Start migrating your source to LBR
@@ -139,7 +139,7 @@ Because you work locally, you need to sync your changes with other developers.
    LBR can check which sources have changed and need to be built.  
    Therefore, a hash value is stored for each source.
    
-   <img src="asserts/img/ext/compiled-obj-list.png" style="width: 300px">
+  <img src="assets/img/ext/compiled-obj-list.png" style="width: 300px">
 
    From now, the ```Show changes``` action only shows changed sources.
 
@@ -152,15 +152,15 @@ Because you work locally, you need to sync your changes with other developers.
 
 If no LBR config could be found, you will see the welcome screen:
 
-<img src="asserts/img/ext/welcome.png" style="width: 300px">
+<img src="assets/img/ext/welcome.png" style="width: 300px">
 
 
 
 
 ## For more information
 
-* [Source dependencies](asserts/docs/dependencies.md)
-* [SSH setup](asserts/docs/ssh.md)
+* [Source dependencies](assets/docs/dependencies.md)
+* [SSH setup](assets/docs/ssh.md)
 * [LBR: the build tool running on IBM i](https://github.com/rolandstrauss/lbr)
 * [LBR: detailed description](https://github.com/rolandstrauss/ibm-i-build-lbr)
 * [LBR: vscode extension](https://github.com/rolandstrauss/lbr-extension)

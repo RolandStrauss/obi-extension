@@ -105,7 +105,7 @@ export class LBRSourceConfiguration {
     const html = env.render('controller/config_source_details.html',
       {
         global_stuff: LBRTools.get_global_stuff(webview, extensionUri),
-        config_css: getUri(webview, extensionUri, ["asserts/css", "config.css"]),
+        config_css: getUri(webview, extensionUri, ["assets/css", "config.css"]),
         main_java_script: getUri(webview, extensionUri, ["out", "source_config.js"]),
         icons: {debug_start: '$(preview)'},
         source: LBRSourceConfiguration.source_config,
